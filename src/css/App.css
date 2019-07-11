@@ -19,15 +19,15 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.github {
+  filter: invert(81%) sepia(9%) saturate(6%) hue-rotate(28deg) brightness(109%) contrast(92%);
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.discord {
+  filter: invert(81%) sepia(9%) saturate(6%) hue-rotate(28deg) brightness(109%) contrast(92%);
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-top: 4px;
 }

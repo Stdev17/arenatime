@@ -7,7 +7,6 @@ import {
 } from 'react-konva';
 
 import { party } from './SetParty';
-import '../css/block.css';
 
 interface coord {
   XCoord: number, YCoord: number
@@ -15,8 +14,9 @@ interface coord {
 
 interface IBlockProps {
   character: string,
-  x: number,
-  y: number
+  setX: number,
+  setY: number,
+  reset: boolean
 }
 
 interface IBlockState {
@@ -28,7 +28,7 @@ interface IBlockState {
 }
 
 let konva = require('konva');
-let scale = 76;
+let scale = 38;
 
 export class Block extends React.Component<IBlockProps, IBlockState> {
   constructor(props: any) {
@@ -61,6 +61,18 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
         this.state.image.getLayer().draw();
       }*/);
     };
+    if (party.includes(this.props.character)) {
+      this.setState({
+        str: 4,
+        opacity: 1
+      });
+    }
+    if (this.props.reset) {
+      this.setState({
+        str: 0,
+        opacity: 0.5
+      });
+    }
   }
   ClickChar() {
     if (party.includes(this.props.character)) {
@@ -77,13 +89,13 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
       });
       party.push(this.props.character);
     }
-    
+
   }
   render() {
     return (
       <Image
-      x={this.state.x+5}
-      y={this.state.y+5}
+      x={this.props.setX+8}
+      y={this.props.setY+5}
       width={scale}
       height={scale}
       image={this.state.image}
@@ -91,8 +103,8 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
       crop = {{
         x: this.state.x,
         y: this.state.y,
-        width: scale,
-        height: scale
+        width: 76,
+        height: 76
       }}
       stroke={'#bb3333'}
       strokeWidth={this.state.str}
@@ -113,5 +125,68 @@ const char = [
   'Empty',
   'Makoto',
   'Mitsuki',
-  'Jyun'
+  'Jyun',
+  'Kaori',
+  'Shiori',
+  'Suzuna',
+  'Arisa',
+  'Tamaki',
+  'Saren',
+  'Nozomi',
+  'Kokkoro',
+  'Hiyori',
+  'Ilya',
+  'Akari',
+  'Kyaru',
+  'Shizuru',
+  'Kyouka',
+  'Miyako',
+  'Djeeta',
+  'Monika',
+  'Kuuka',
+  'Shinobu',
+  'Pekorinne',
+  'Eriko',
+  'SummerPekorinne',
+  'Akino',
+  'Mimi',
+  'Tsumugi',
+  'Hatsune',
+  'Ayane',
+  'Yui',
+  'SummerKokkoro',
+  'Yukari',
+  'Misato',
+  'Anna',
+  'Ninon',
+  'Rino',
+  'Yori',
+  'Misogi',
+  'Yuki',
+  'Maho',
+  'Rei',
+  'Kurumi',
+  'Misaki',
+  'Mifuyu',
+  'Chika',
+  'Rima',
+  'Rin',
+  'Mahiru',
+  'Io',
+  'Aoi',
+  'Suzume'
+  /*
+  'SummerKyaru',
+  'SummerTamaki',
+  'Tomo',
+  'SummerMifuyu',
+  'HalloweenMiyako',
+  'HalloweenShinobu',
+  'SummerSuzume',
+  'Matsuri',
+  'HalloweenMisaki',
+  'Christina',
+  'Ruka',
+  'Nanaka',
+  */
 ];

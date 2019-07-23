@@ -6,7 +6,7 @@ export function getChar() {
     return c;
 }
 
-const dist: Record<string, number> = {
+export const dist: Record<string, number> = {
     
      //Front Line
      "Rima": 105,

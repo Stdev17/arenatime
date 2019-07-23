@@ -8,6 +8,8 @@ import {
 
 import { party } from './SetParty';
 
+import { char } from '../util/char';
+
 interface coord {
   XCoord: number, YCoord: number
 }
@@ -120,73 +122,3 @@ export function getCoord(num: number) {
   let res: coord = {XCoord: x, YCoord: y};
   return res;
 }
-
-const char = [
-  'Empty',
-  'Makoto',
-  'Mitsuki',
-  'Jyun',
-  'Kaori',
-  'Shiori',
-  'Suzuna',
-  'Arisa',
-  'Tamaki',
-  'Saren',
-  'Nozomi',
-  'Kokkoro',
-  'Hiyori',
-  'Ilya',
-  'Akari',
-  'Kyaru',
-  'Shizuru',
-  'Kyouka',
-  'Miyako',
-  'Djeeta',
-  'Monika',
-  'Kuuka',
-  'Shinobu',
-  'Pekorinne',
-  'Eriko',
-  'SummerPekorinne',
-  'Akino',
-  'Mimi',
-  'Tsumugi',
-  'Hatsune',
-  'Ayane',
-  'Yui',
-  'SummerKokkoro',
-  'Yukari',
-  'Misato',
-  'Anna',
-  'Ninon',
-  'Rino',
-  'Yori',
-  'Misogi',
-  'Yuki',
-  'Maho',
-  'Rei',
-  'Kurumi',
-  'Misaki',
-  'Mifuyu',
-  'Chika',
-  'Rima',
-  'Rin',
-  'Mahiru',
-  'Io',
-  'Aoi',
-  'Suzume'
-  /*
-  'SummerKyaru',
-  'SummerTamaki',
-  'Tomo',
-  'SummerMifuyu',
-  'HalloweenMiyako',
-  'HalloweenShinobu',
-  'SummerSuzume',
-  'Matsuri',
-  'HalloweenMisaki',
-  'Christina',
-  'Ruka',
-  'Nanaka',
-  */
-];

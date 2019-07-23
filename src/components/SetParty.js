@@ -5,13 +5,14 @@ import {
   Button
 } from 'react-bootstrap';
 import { Cutter } from './Cutter.js';
+import { Party } from './Party.js';
 
 import '../css/daum.css';
 import '../css/text.css';
 
 export var party = [];
 
-export class Party extends React.Component {
+export class SetParty extends React.Component {
 
   constructor(props, context) {
     super(props, context);
@@ -43,6 +44,8 @@ export class Party extends React.Component {
         <Button variant="primary" onClick={this.handleShow}>
           파티 설정
         </Button>
+        <br/>
+        
 
         <Modal
           show={this.state.show}

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Button
 } from 'react-bootstrap';
-import { Party } from './SetParty';
+import { SetParty } from './SetParty';
 
 import '../css/daum.css';
 import '../css/text.css';
@@ -28,7 +28,7 @@ export const search = (
   </h1>
   <h2 style={subText}>
     <br/>
-    <Party/>
+    <SetParty/>
   </h2>
   </div>
 );

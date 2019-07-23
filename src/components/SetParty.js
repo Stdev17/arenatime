@@ -36,6 +36,7 @@ export class SetParty extends React.Component {
     fontSize: 14,
     fontColor: '#333333'
   }
+  
 
   render() {
     return (
@@ -45,7 +46,8 @@ export class SetParty extends React.Component {
           파티 설정
         </Button>
         <br/>
-        
+        <br/>
+        <Party party={party}/>
 
         <Modal
           show={this.state.show}

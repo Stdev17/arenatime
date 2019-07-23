@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-  Button
-} from 'react-bootstrap';
 import { SetParty } from './SetParty';
 
 import '../css/daum.css';

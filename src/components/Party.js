@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Stage,
   Layer,
-  Rect,
   Image
 } from 'react-konva';
 import { Konva } from 'konva';
@@ -24,10 +23,18 @@ class Slot extends React.Component {
   }
   componentDidMount() {
     const image = new window.Image();
+    image.src = "./characters.jpg";
     if (this.props.character === "Empty") {
-      image.src = "./gray.jpeg";
+      this.setState({
+        x: 1100,
+        y: 760
+      });
     } else {
-      image.src = "./characters.jpg";
+      let c = this.props.character;
+      this.setState({
+        x: getCoord(char.indexOf(c)).XCoord,
+        y: getCoord(char.indexOf(c)).YCoord
+      });
     }
     image.onload = () => {
       // setState will redraw layer
@@ -37,12 +44,28 @@ class Slot extends React.Component {
       });
     };
   }
+  componentDidUpdate(newProps) {
+    const oldProps = this.props;
+    if(oldProps.character !== newProps.character) {
+      if (this.props.character === "Empty") {
+        this.setState({
+          x: 1100,
+          y: 760
+        });
+      } else {
+        let c = this.props.character;
+        this.setState({
+          x: getCoord(char.indexOf(c)).XCoord,
+          y: getCoord(char.indexOf(c)).YCoord
+        });
+      }
+    }
+  }
   render() {
-    //console.log(this.props.character, this.state.image);
     return (
       <Image
-      x={this.props.setX+8}
-      y={0}
+      x={this.props.setX+2}
+      y={2}
       width={scale}
       height={scale}
       image={this.state.image}
@@ -52,6 +75,8 @@ class Slot extends React.Component {
         width: 76,
         height: 76
       }}
+      stroke={'black'}
+      strokeWidth={2}
       />
     );
   }

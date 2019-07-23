@@ -91,7 +91,6 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
       });
       party.push(this.props.character);
     }
-
   }
   render() {
     return (

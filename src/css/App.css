@@ -19,10 +19,21 @@
   color: white;
 }
 
+body {
+  background-image: url("/landsol.jpeg");
+  background-size: cover;
+}
+
+.brand {
+  margin-top: 1px;
+}
+
 .github {
   filter: invert(81%) sepia(9%) saturate(6%) hue-rotate(28deg) brightness(109%) contrast(92%);
   margin-left: 5px;
   margin-right: 5px;
+  margin-top: 0px;
+  margin-bottom: 6px;
 }
 
 .discord {
@@ -30,4 +41,6 @@
   margin-left: 5px;
   margin-right: 5px;
   padding-top: 4px;
+  margin-top: 0px;
+  margin-bottom: 6px;
 }

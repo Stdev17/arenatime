@@ -1,0 +1,22 @@
+@iterations: 85;
+@i: 0;
+
+.mixin-loop (@i) when (@i > 0) {
+  .cut:nth-child(@{i}):after {
+    position: relative;
+    clip: rect(((mod(floor(((@i)-1)/8), 8) * 76))px, (((mod(((@i)-1), 8))*2+1) * 76)px, ((mod(floor(((@i)-1)/8), 8)+1) * 76)px, ((mod(((@i)-1), 8) * 76)*2)px);
+    width: 1216px;
+    height: 836px;
+  }
+  .mixin-loop(@i - 1);
+}
+
+.mixin-loop(@iterations);
+
+/*
+.cut:nth-child(@{i}):after {
+min-width: ((mod(((@i)-1), 8) * 76)*2)px;
+    max-width: (((mod(((@i)-1), 8))*2+1) * 76)px;
+    min-height: ((mod(floor(((@i)-1)/8), 8) * 76))px;
+    max-height: ((mod(floor(((@i)-1)/8), 8)+1) * 76)px;
+    */

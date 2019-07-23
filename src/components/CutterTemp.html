@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/konva@3.4.1/konva.min.js"></script>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <div id='container'></div>
+    <script>
+    function loadImages(char, callback) {
+      let images = {};
+      let loadedImages = 0;
+      let numImages = 0;
+      for (let src in char) {
+        numImages++;
+      }
+      for (let src in char) {
+        images[src] = new Image();
+        images[src].onload = function() {
+          if (++loadedImages >= numImages) {
+            callback(images);
+          }
+        };
+        images[src].src = './characters.jpg';
+      }
+    }
+    function buildStage(images) {
+      let image = {};
+      for (let src in char) {
+        image[src] = new Konva.Image({
+          image: './characters.jpg',
+          x: getCoord(char.indexOf(src)).XCoord,
+          y: getCoord(char.indexOf(src)).YCoord
+        })
+        layer.add(image[src]);
+      }
+    
+      //lion.cache();
+      //lion.drawHitFromCache();
+    
+      stage.add(layer);
+    }
+    var stage = new Konva.Stage({
+        container: 'container',
+        width: 400,
+        height: 320
+      });
+
+      var layer = new Konva.Layer();
+
+      loadImages(char, buildStage);
+
+    const char = [
+      'Empty',
+      'Makoto',
+      'Mitsuki',
+      'Jyun'
+    ];
+
+    </script>
+  </body>
+</html>

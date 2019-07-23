@@ -1,12 +1,7 @@
 import * as React from 'react';
 import {
-  Stage,
-  Layer,
-  Rect,
   Image
 } from 'react-konva';
-
-import { party } from './SetParty';
 
 import { char } from '../util/char';
 
@@ -18,7 +13,7 @@ interface IBlockProps {
   character: string,
   setX: number,
   setY: number,
-  reset: boolean
+  party: string[] | any
 }
 
 interface IBlockState {
@@ -29,7 +24,6 @@ interface IBlockState {
   opacity: number
 }
 
-let konva = require('konva');
 let scale = 38;
 
 export class Block extends React.Component<IBlockProps, IBlockState> {
@@ -63,33 +57,29 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
         this.state.image.getLayer().draw();
       }*/);
     };
-    if (party.includes(this.props.character)) {
+    let p = this.props.party;
+    if (p.includes(this.props.character)) {
       this.setState({
         str: 4,
         opacity: 1
-      });
-    }
-    if (this.props.reset) {
-      this.setState({
-        str: 0,
-        opacity: 0.5
       });
     }
   }
   ClickChar() {
-    if (party.includes(this.props.character)) {
+    let p = this.props.party;
+    if (p.includes(this.props.character)) {
       this.setState({
         str: 0,
         opacity: 0.5
       });
-      party.splice(party.indexOf(this.props.character), 1);
+      p.splice(p.indexOf(this.props.character), 1);
     }
-    else if (party.length < 5) {
+    else if (p.length < 5) {
       this.setState({
         str: 4,
         opacity: 1
       });
-      party.push(this.props.character);
+      p.push(this.props.character);
     }
   }
   render() {

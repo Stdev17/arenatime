@@ -4,7 +4,6 @@ import {
   Layer,
   Image
 } from 'react-konva';
-import { Konva } from 'konva';
 import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
 import { char } from '../util/char.js';

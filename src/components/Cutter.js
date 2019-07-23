@@ -1,17 +1,10 @@
 import React, {Component} from 'react';
 import {
-  Card
-} from 'react-bootstrap';
-import {
   Stage,
-  Layer,
-  Rect,
-  Image
+  Layer
 } from 'react-konva';
-import { Konva } from 'konva';
 import { Block } from './Block.tsx';
 import { getChar } from '../util/distance.ts';
-import { party } from './SetParty';
 
 import '../css/cutter.css';
 
@@ -28,8 +21,6 @@ function getY() {
   return (Math.floor((netY-1) / 10)) * (38+8);
 }
 
-
-
 export class Cutter extends Component {
 
   render() {
@@ -40,7 +31,7 @@ export class Cutter extends Component {
       <Stage width={480} height={240}>
         <Layer>
           {c.map((value, index) => {
-            return <Block character={value} setX={getX()} setY={getY()} key={index}/>
+            return <Block character={value} party={this.props.party} setX={getX()} setY={getY()} key={index}/>
           })}
         </Layer>
       </Stage>

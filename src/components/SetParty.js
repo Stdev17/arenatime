@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Modal,
-  Card,
   Button
 } from 'react-bootstrap';
 import { Cutter } from './Cutter.js';
@@ -10,7 +9,7 @@ import { Party } from './Party.js';
 import '../css/daum.css';
 import '../css/text.css';
 
-export var party = [];
+var party = [];
 
 export class SetParty extends React.Component {
 
@@ -62,7 +61,7 @@ export class SetParty extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Cutter/>
+              <Cutter party={party}/>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="primary" onClick={this.handleHide}>파티 저장</Button>

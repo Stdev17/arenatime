@@ -9,13 +9,14 @@ const topicText = {
   fontSize: 28,
   fontColor: '#333333'
   }
-
+/*
 const mainText = {
   fontFamily: 'Daum',
   fontStyle: 'normal',
   fontSize: 20,
   fontColor: '#333333'
 }
+*/
 
 export const register = (
   <div class="text">

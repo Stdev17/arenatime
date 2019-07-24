@@ -11,3 +11,14 @@
   margin-left: 14px;
   margin-right: 14px;
 }
+
+.remove-underline {
+  text-decoration: none !important;
+  box-shadow: none !important;
+  color: white;
+}
+
+.remove-underline:hover {
+  text-decoration: none !important;
+  color: white;
+}

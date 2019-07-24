@@ -9,7 +9,7 @@ import { LinkContainer} from "react-router-bootstrap";
 import { Routes } from './Routes';
 
 import '../css/daum.css';
-import { render } from 'react-dom';
+import '../css/text.css';
 
 const brandText = {
   fontFamily: 'Daum',
@@ -32,7 +32,7 @@ export class Navi extends React.Component {
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand>
     <div className="brand" style={brandText}>
-    <Link to="/">
+    <Link to="/" className="remove-underline">
     <img
       alt=""
       src="/favicon.jpg"
@@ -48,10 +48,10 @@ export class Navi extends React.Component {
     <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto" style={menuText}>
       <LinkContainer to="/search">
-        <NavItem>대전 검색</NavItem>
+        <Nav.Link>대전 검색</Nav.Link>
       </LinkContainer>
       <LinkContainer to="/register">
-        <NavItem>대전 등록</NavItem>
+        <Nav.Link>대전 등록</Nav.Link>
       </LinkContainer>
     </Nav>
     </Navbar.Collapse>

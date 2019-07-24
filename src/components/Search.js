@@ -4,6 +4,8 @@ import { SetParty } from './SetParty';
 import '../css/daum.css';
 import '../css/text.css';
 
+var party = [];
+
 const topicText = {
   fontFamily: 'Daum',
   fontStyle: 'normal',
@@ -25,7 +27,7 @@ export const search = (
   </h1>
   <h2 style={subText}>
     <br/>
-    <SetParty/>
+    <SetParty party={party}/>
   </h2>
   </div>
 );

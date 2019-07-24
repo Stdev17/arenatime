@@ -9,8 +9,6 @@ import { Party } from './Party.js';
 import '../css/daum.css';
 import '../css/text.css';
 
-var party = [];
-
 export class SetParty extends React.Component {
 
   constructor(props, context) {
@@ -46,7 +44,7 @@ export class SetParty extends React.Component {
         </Button>
         <br/>
         <br/>
-        <Party party={party}/>
+        <Party party={this.props.party}/>
 
         <Modal
           show={this.state.show}
@@ -61,7 +59,7 @@ export class SetParty extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Cutter party={party}/>
+              <Cutter party={this.props.party}/>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="primary" onClick={this.handleHide}>파티 저장</Button>

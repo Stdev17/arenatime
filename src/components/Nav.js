@@ -1,9 +1,15 @@
 import React from 'react';
 import {
   Navbar,
-  Nav
+  Nav,
+  NavItem
 } from 'react-bootstrap';
+import { Link, Router, HashRouter } from 'react-router-dom';
+import { LinkContainer} from "react-router-bootstrap";
+import { Routes } from './Routes';
+
 import '../css/daum.css';
+import { render } from 'react-dom';
 
 const brandText = {
   fontFamily: 'Daum',
@@ -19,10 +25,14 @@ const menuText = {
   fontColor: 'White'
 }
 
-export const nav = (
+export class Navi extends React.Component {
+  render() {
+  return (
+  <HashRouter>
   <Navbar bg="dark" variant="dark">
-    <Navbar.Brand href="#main">
+    <Navbar.Brand>
     <div className="brand" style={brandText}>
+    <Link to="/">
     <img
       alt=""
       src="/favicon.jpg"
@@ -31,13 +41,18 @@ export const nav = (
       float="left"
     />
     {' ArenaTime'}
+    </Link>
     </div>
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto" style={menuText}>
-    <Nav.Link href="#search">대전 검색</Nav.Link>
-    <Nav.Link href="#register">대전 등록</Nav.Link>
+      <LinkContainer to="/search">
+        <NavItem>대전 검색</NavItem>
+      </LinkContainer>
+      <LinkContainer to="/register">
+        <NavItem>대전 등록</NavItem>
+      </LinkContainer>
     </Nav>
     </Navbar.Collapse>
     <div align="right">
@@ -58,4 +73,8 @@ export const nav = (
     /></a>
     </div>
   </Navbar>
-);
+  <Routes/>
+  </HashRouter>
+  );
+  }
+}

@@ -19,7 +19,7 @@ const mainText = {
 */
 
 export const register = (
-  <div class="text">
+  <div className="text">
   <h1 style={topicText}>
     대전 등록
   </h1>

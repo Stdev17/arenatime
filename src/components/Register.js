@@ -3,7 +3,8 @@ import {
   Form,
   Col,
   Button,
-  Alert
+  Alert,
+  Modal
 } from 'react-bootstrap';
 import { SetParty } from './SetParty';
 import '../css/daum.css';
@@ -40,17 +41,32 @@ export class Register extends React.Component {
       selectedFile: null,
       loaded: false,
       overload: false,
+      msg: "",
+      errShow: false,
       form: {
         attackPower: 0,
         defencePower: 0,
         attackStar: "",
         defenceStar: "",
         result: "",
-        arena: ""
+        arena: "",
+        memo: ""
       }
     };
     this.fileHandler = this.fileHandler.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
+    this.validatePower = this.validatePower.bind(this);
+    this.checkForm = this.checkForm.bind(this);
+    this.errorShow = () => {
+      this.setState({ errShow: true });
+    };
+
+    this.errorHide = () => {
+      this.setState({ errShow: false });
+    };
+    this.resetForm = (e) => {
+      this.refs.form.reset();
+    };
   }
   fileHandler(e) {
     if (e.target.files[0] == null) {
@@ -80,6 +96,35 @@ export class Register extends React.Component {
     let eVal = e.target.value;
     this.setState({form: {...this.state.form, [eName]: eVal}});
   }
+  checkForm(e) {
+    e.preventDefault();
+    if (!this.validatePower()) {
+      return;
+    }
+    this.resetForm(e);
+  }
+  validatePower() {
+    this.setState({
+      msg: "정상 범위 내의 전투력을 입력해 주세요."
+    });
+    if (!(this.state.form.attackPower > 100)) {
+      this.errorShow();
+      return false;
+    }
+    if (!(this.state.form.attackPower < 70000)) {
+      this.errorShow();
+      return false;
+    }
+    if (!(this.state.form.defencePower > 100)) {
+      this.errorShow();
+      return false;
+    }
+    if (!(this.state.form.defencePower < 70000)) {
+      this.errorShow();
+      return false;
+    }
+    return true;
+  }
   alert() {
     if (this.state.overload) {
       return (
@@ -105,23 +150,23 @@ export class Register extends React.Component {
         대전 유형
       </h2>
       <h3 style={smallText} className="ten">
-        <Form>
+        <Form ref="form">
           <Form.Row>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>공격덱 전투력</Form.Label>
-                <Form.Control name="attackPower" onChange={this.inputHandler}/>
+                <Form.Control name="attackPower" onChange={this.inputHandler} maxLength={5}/>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>방어덱 전투력</Form.Label>
-                <Form.Control name="defencePower" onChange={this.inputHandler}/>
+                <Form.Control name="defencePower" onChange={this.inputHandler} maxLength={5}/>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>공격덱 성급</Form.Label>
-                <Form.Control placeholder="(54434)" name="attackStar" onChange={this.inputHandler}/>
+                <Form.Control placeholder="(54434)" name="attackStar" onChange={this.inputHandler} maxLength={5}/>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>방어덱 성급</Form.Label>
-                <Form.Control placeholder="(54434)" name="defenceStar" onChange={this.inputHandler}/>
+                <Form.Control placeholder="(54434)" name="defenceStar" onChange={this.inputHandler} maxLength={5}/>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>결과</Form.Label>
@@ -141,7 +186,7 @@ export class Register extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>설명</Form.Label>
-                <Form.Control as="textarea"/>
+                <Form.Control as="textarea" name="memo" onChange={this.inputHandler} maxLength={200}/>
             </Form.Group>
           </Form.Row>
         </Form>
@@ -162,10 +207,30 @@ export class Register extends React.Component {
         {this.alert()}
       </p>
       <p style={subText} className="twenty">
-        <Button variant='success'>
+        <Button variant='success' onClick={this.checkForm}>
           대전 등록
         </Button>
       </p>
+      <Modal
+          show={this.state.errShow}
+          onHide={this.errorHide}
+          dialogClassName="modal-90w"
+          aria-labelledby="example-custom-modal-styling-title"
+        >
+
+            <Modal.Header>
+              <Modal.Title>
+                등록 실패
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {this.state.msg}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={this.errorHide}>확인</Button>
+            </Modal.Footer>
+
+        </Modal>
       </div>
     );
   }

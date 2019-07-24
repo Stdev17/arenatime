@@ -45,6 +45,10 @@ export class SetParty extends React.Component {
         <br/>
         <br/>
         <Party party={this.props.party}/>
+        <br/>
+        <Button variant='success'>
+          검색 시작
+        </Button>
 
         <Modal
           show={this.state.show}

@@ -16,6 +16,7 @@ export class SetParty extends React.Component {
 
     this.state = {
       show: false,
+      text: "대상 파티  "
     };
 
     this.handleShow = () => {
@@ -34,21 +35,25 @@ export class SetParty extends React.Component {
     fontColor: '#333333'
   }
   
+  componentDidMount() {
+    if (this.props.handle == "def") {
+      this.setState({ text: "방어 파티  "});
+    }
+    if (this.props.handle == "att") {
+      this.setState({ text: "공격 파티  "});
+    }
+  }
 
   render() {
+
     return (
       <div>
-        {"대상 파티  "}
+        {this.state.text}
         <Button variant="primary" onClick={this.handleShow}>
           파티 설정
         </Button>
-        <br/>
-        <br/>
+        <h1 className="ten"/>
         <Party party={this.props.party}/>
-        <br/>
-        <Button variant='success'>
-          검색 시작
-        </Button>
 
         <Modal
           show={this.state.show}

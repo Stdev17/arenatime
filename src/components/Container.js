@@ -5,7 +5,7 @@ import {
   Card
 } from 'react-bootstrap';
 
-import { register } from './Register';
+import { Register } from './Register';
 import { search } from './Search';
 import '../css/container.css';
 
@@ -28,7 +28,7 @@ export class pageRegister extends React.Component {
       <div className="top">
       <Container>
         <Card>
-          {register}
+          <Register/>
         </Card>
       </Container>
       </div>

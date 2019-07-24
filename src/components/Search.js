@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   Form,
-  Col
+  Col,
+  Button
 } from 'react-bootstrap';
 import { SetParty } from './SetParty';
 
@@ -36,12 +37,10 @@ export const search = (
   <h1 style={topicText}>
     대전 검색
   </h1>
-  <h2 style={subText}>
-    <br/>
+  <h2 style={subText} className="twenty">
     검색 설정
-    <br/>
   </h2>
-  <h3 style={smallText}>
+  <h3 style={smallText} className="ten">
     <Form>
       <Form.Row>
         <Form.Group as={Col} controlId="formGridPosition">
@@ -86,12 +85,24 @@ export const search = (
             <option>40000 미만</option>
           </Form.Control>
         </Form.Group>
+        <Form.Group as={Col} controlId="formGridPosition">
+          <Form.Label>정렬</Form.Label>
+          <Form.Control as="select">
+            <option>순추천순</option>
+            <option>최신순</option>
+          </Form.Control>
+        </Form.Group>
       </Form.Row>
     </Form>
-    <br/>
   </h3>
-  <h4 style={subText}>
+  <h4 style={subText} className="ten">
     <SetParty party={party}/>
   </h4>
+  <p style={subText} className="twenty">
+    <Button variant='success'>
+      검색 시작
+    </Button>
+  </p>
+  
   </div>
 );

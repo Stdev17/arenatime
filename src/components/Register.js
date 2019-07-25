@@ -7,6 +7,7 @@ import {
   Modal
 } from 'react-bootstrap';
 import { SetParty } from './SetParty';
+import { sort } from './Party';
 import '../css/daum.css';
 import '../css/text.css';
 
@@ -56,6 +57,11 @@ export class Register extends React.Component {
     this.fileHandler = this.fileHandler.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
     this.validatePower = this.validatePower.bind(this);
+    this.validateStarAndDeck = this.validateStarAndDeck.bind(this);
+    this.validateFile = this.validateFile.bind(this);
+    this.setStar = this.setStar.bind(this);
+    this.setDeck = this.setDeck.bind(this);
+    this.setSelection = this.setSelection.bind(this);
     this.checkForm = this.checkForm.bind(this);
     this.errorShow = () => {
       this.setState({ errShow: true });
@@ -108,8 +114,32 @@ export class Register extends React.Component {
       return;
     }
     //set JSON
+    let f = {
+      result: "",
+      arena: "",
+      memo: this.state.form.memo,
+      attackPower: this.state.form.attackPower,
+      attackDeck: {
+        first: "", second: "", third: "", fourth: "", fifth: ""
+      },
+      attackStar: {
+        first: 0, second: 0, third: 0, fourth: 0, fifth: 0
+      },
+      defencePower: this.state.form.defencePower,
+      defenceDeck: {
+        first: "", second: "", third: "", fourth: "", fifth: ""
+      },
+      defenceStar: {
+        first: 0, second: 0, third: 0, fourth: 0, fifth: 0
+      }
+    };
+    f = this.setStar(f);
+    f = this.setDeck(f);
+    f = this.setSelection(f);
     //send image API
     //send data API
+    let body = JSON.stringify(f);
+    console.log(body);
     //reset form
     this.resetForm(e);
     defParty.splice(0, defParty.length)
@@ -178,6 +208,111 @@ export class Register extends React.Component {
       return false;
     }
     return true;
+  }
+  setStar(f) {
+    let atk = this.state.form.attackStar;
+    let aParty = attParty.length-1;
+    if (aParty >= 0) {
+      f.attackStar.first = Math.floor(atk / Math.pow(10, aParty));
+      atk -= f.attackStar.first * Math.pow(10, aParty);
+      aParty -= 1;
+    }
+    if (aParty >= 0) {
+      f.attackStar.second = Math.floor(atk / Math.pow(10, aParty));
+      atk -= f.attackStar.second * Math.pow(10, aParty);
+      aParty -= 1;
+    }
+    if (aParty >= 0) {
+      f.attackStar.third = Math.floor(atk / Math.pow(10, aParty));
+      atk -= f.attackStar.third * Math.pow(10, aParty);
+      aParty -= 1;
+    }
+    if (aParty >= 0) {
+      f.attackStar.fourth = Math.floor(atk / Math.pow(10, aParty));
+      atk -= f.attackStar.fourth * Math.pow(10, aParty);
+      aParty -= 1;
+    }
+    if (aParty >= 0) {
+      f.attackStar.fifth = Math.floor(atk / Math.pow(10, aParty));
+      atk -= f.attackStar.fifth * Math.pow(10, aParty);
+      aParty -= 1;
+    }
+    let dfc = this.state.form.defenceStar;
+    let dParty = defParty.length-1;
+    if (dParty >= 0) {
+      f.defenceStar.first = Math.floor(dfc / Math.pow(10, dParty));
+      dfc -= f.defenceStar.first * Math.pow(10, dParty);
+      dParty -= 1;
+    }
+    if (dParty >= 0) {
+      f.defenceStar.second = Math.floor(dfc / Math.pow(10, dParty));
+      dfc -= f.defenceStar.second * Math.pow(10, dParty);
+      dParty -= 1;
+    }
+    if (dParty >= 0) {
+      f.defenceStar.third = Math.floor(dfc / Math.pow(10, dParty));
+      dfc -= f.defenceStar.third * Math.pow(10, dParty);
+      dParty -= 1;
+    }
+    if (dParty >= 0) {
+      f.defenceStar.fourth = Math.floor(dfc / Math.pow(10, dParty));
+      dfc -= f.defenceStar.fourth * Math.pow(10, dParty);
+      dParty -= 1;
+    }
+    if (dParty >= 0) {
+      f.defenceStar.fifth = Math.floor(dfc / Math.pow(10, dParty));
+      dfc -= f.defenceStar.fifth * Math.pow(10, dParty);
+      dParty -= 1;
+    }
+    return f;
+  }
+  setDeck(f) {
+    let atk = sort(attParty.slice());
+    if (atk.length > 0) {
+      f.attackDeck.first = atk.pop();
+    }
+    if (atk.length > 0) {
+      f.attackDeck.second = atk.pop();
+    }
+    if (atk.length > 0) {
+      f.attackDeck.third = atk.pop();
+    }
+    if (atk.length > 0) {
+      f.attackDeck.fourth = atk.pop();
+    }
+    if (atk.length > 0) {
+      f.attackDeck.fifth = atk.pop();
+    }
+    let dfc = sort(attParty.slice());
+    if (dfc.length > 0) {
+      f.defenceDeck.first = dfc.pop();
+    }
+    if (dfc.length > 0) {
+      f.defenceDeck.second = dfc.pop();
+    }
+    if (dfc.length > 0) {
+      f.defenceDeck.third = dfc.pop();
+    }
+    if (dfc.length > 0) {
+      f.defenceDeck.fourth = dfc.pop();
+    }
+    if (dfc.length > 0) {
+      f.defenceDeck.fifth = dfc.pop();
+    }
+    return f;
+  }
+  setSelection(f) {
+    if (this.state.form.arena == "배틀 아레나") {
+      f.arena = "battleArena";
+    } else {
+      f.arena = "princessArena";
+    }
+    if (this.state.form.result == "방어덱 패배") {
+      f.result = "attackWin";
+    } else {
+      f.result = "defenceWin";
+    }
+    return f;
   }
   alert() {
     if (this.state.overload) {

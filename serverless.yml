@@ -4,9 +4,26 @@ app: arenatime
 provider:
   name: aws
   runtime: nodejs10.x
+  stage: dev
+  region: ap-northeast-2
 
-stage: dev
-region: ap-northeast-2
+environment:
+    tableName: ${self:custom.tableName}
+
+iamRoleStatements:
+  - Effect: Allow
+    Action:
+      - dynamodb:DescribeTable
+      - dynamodb:Query
+      - dynamodb:Scan
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+    # Restrict our IAM role permissions to
+    # the specific table for the stage
+    Resource:
+      - "Fn::GetAtt": [ NotesTable, Arn ]
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -43,6 +60,8 @@ plugins:
 custom:
   serverless-offline:
     port: 4000
+  stage: ${opt:stage, self:provider.stage}
+  # Set the table name here so we can use it while testing locally
 
 functions:
   hello:
@@ -92,13 +111,10 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}
+  # DynamoDB
+  - ${file(resources/dynamodb-table.yml)}
+  # S3
+  - ${file(resources/s3-bucket.yml)}

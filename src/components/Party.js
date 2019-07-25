@@ -109,7 +109,7 @@ function getX() {
   return (((netX-1) % 5) * (76+12));
 }
 
-function sort(arr) {
+export function sort(arr) {
   let tmp = arr.slice();
   let dummy = tmp.slice();
   let res = [];

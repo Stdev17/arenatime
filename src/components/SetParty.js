@@ -16,7 +16,8 @@ export class SetParty extends React.Component {
 
     this.state = {
       show: false,
-      text: "대상 파티  "
+      text: "대상 파티  ",
+      p: this.props.party
     };
 
     this.handleShow = () => {
@@ -26,6 +27,12 @@ export class SetParty extends React.Component {
     this.handleHide = () => {
       this.setState({ show: false });
     };
+
+    this.clearParty = () => {
+      let p = this.props.party;
+      p.splice(0, p.length);
+      this.forceUpdate();
+    }
   }
 
   mainText = {
@@ -44,6 +51,7 @@ export class SetParty extends React.Component {
     }
   }
 
+
   render() {
 
     return (
@@ -53,7 +61,7 @@ export class SetParty extends React.Component {
           파티 설정
         </Button>
         <h1 className="ten"/>
-        <Party party={this.props.party}/>
+        <Party party={this.state.p}/>
 
         <Modal
           show={this.state.show}
@@ -68,9 +76,10 @@ export class SetParty extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Cutter party={this.props.party}/>
+              <Cutter party={this.state.p}/>
             </Modal.Body>
             <Modal.Footer>
+              <Button variant="danger" onClick={this.clearParty}>설정 초기화</Button>
               <Button variant="primary" onClick={this.handleHide}>파티 저장</Button>
             </Modal.Footer>
 

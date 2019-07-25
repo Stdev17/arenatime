@@ -102,6 +102,9 @@ export class Register extends React.Component {
       return;
     }
     this.resetForm(e);
+    defParty.splice(0, defParty.length)
+    attParty.splice(0, attParty.length)
+    this.forceUpdate();
   }
   validatePower() {
     this.setState({

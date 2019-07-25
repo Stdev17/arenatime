@@ -23,6 +23,13 @@ function getY() {
 
 export class Cutter extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      p: this.props.party
+    };
+  }
+
   render() {
     let c = getChar();
     netX = 0;
@@ -31,7 +38,7 @@ export class Cutter extends Component {
       <Stage width={480} height={240}>
         <Layer>
           {c.map((value, index) => {
-            return <Block character={value} party={this.props.party} setX={getX()} setY={getY()} key={index}/>
+            return <Block character={value} party={this.state.p} setX={getX()} setY={getY()} key={index}/>
           })}
         </Layer>
       </Stage>

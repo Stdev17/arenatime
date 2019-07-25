@@ -43,16 +43,16 @@ class Slot extends React.Component {
       });
     };
   }
-  componentDidUpdate(newProps) {
-    const oldProps = this.props;
-    if(oldProps.character !== newProps.character) {
-      if (this.props.character === "Empty") {
+  componentDidUpdate(oldProps) {
+    const newProps = this.props;
+    if(newProps.character !== oldProps.character) {
+      if (newProps.character === "Empty") {
         this.setState({
           x: 1100,
           y: 760
         });
       } else {
-        let c = this.props.character;
+        let c = newProps.character;
         this.setState({
           x: getCoord(char.indexOf(c)).XCoord,
           y: getCoord(char.indexOf(c)).YCoord

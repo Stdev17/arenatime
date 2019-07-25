@@ -65,6 +65,16 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
       });
     }
   }
+
+  componentDidUpdate(oldProps: any) {
+    let newProps = this.props;
+    if (this.state.str == 4 && newProps.party.length == 0) {
+      this.setState({
+        str: 0,
+        opacity: 0.5
+      });
+    }
+  }
   ClickChar() {
     let p = this.props.party;
     if (p.includes(this.props.character)) {
@@ -75,11 +85,12 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
       p.splice(p.indexOf(this.props.character), 1);
     }
     else if (p.length < 5) {
+      p.push(this.props.character);
       this.setState({
         str: 4,
         opacity: 1
       });
-      p.push(this.props.character);
+
     }
   }
   render() {

@@ -101,6 +101,10 @@ export class Register extends React.Component {
     if (!this.validatePower()) {
       return;
     }
+    if (!this.validateStarAndDeck()) {
+      return;
+    }
+    //reset form
     this.resetForm(e);
     defParty.splice(0, defParty.length)
     attParty.splice(0, attParty.length)
@@ -123,6 +127,38 @@ export class Register extends React.Component {
       return false;
     }
     if (!(this.state.form.defencePower < 70000)) {
+      this.errorShow();
+      return false;
+    }
+    return true;
+  }
+  validateStarAndDeck() {
+    this.setState({
+      msg: "캐릭터 별 성급을 정확히 입력해 주세요."
+    });
+    let a = this.state.form.attackStar;
+    if (!(a % 10 > 0 && a % 10 < 6)
+    || !(a < 10 || (Math.floor(a/10) % 10 > 0 && Math.floor(a/10) % 10 < 6))
+    || !(a < 100 || (Math.floor(a/100) % 10 > 0 && Math.floor(a/100) % 10 < 6))
+    || !(a < 1000 || (Math.floor(a/1000) % 10 > 0 && Math.floor(a/1000) % 10 < 6))
+    || !(a < 10000 || (Math.floor(a/10000) % 10 > 0 && Math.floor(a/10000) % 10 < 6))) {
+      this.errorShow();
+      return false;
+    }
+    let d = this.state.form.defenceStar;
+    if (!(d % 10 > 0 && d % 10 < 6)
+    || !(d < 10 || (Math.floor(d/10) % 10 > 0 && Math.floor(d/10) % 10 < 6))
+    || !(d < 100 || (Math.floor(d/100) % 10 > 0 && Math.floor(d/100) % 10 < 6))
+    || !(d < 1000 || (Math.floor(d/1000) % 10 > 0 && Math.floor(d/1000) % 10 < 6))
+    || !(d < 10000 || (Math.floor(d/10000) % 10 > 0 && Math.floor(d/10000) % 10 < 6))) {
+      this.errorShow();
+      return false;
+    }
+    if (Math.floor(a/Math.pow(10, attParty.length-1)) < 1) {
+      this.errorShow();
+      return false;
+    }
+    if (Math.floor(d/Math.pow(10, defParty.length-1)) < 1) {
       this.errorShow();
       return false;
     }

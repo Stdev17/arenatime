@@ -48,8 +48,8 @@ export class Register extends React.Component {
         defencePower: 0,
         attackStar: "",
         defenceStar: "",
-        result: "",
-        arena: "",
+        result: "방어덱 패배",
+        arena: "배틀 아레나",
         memo: ""
       }
     };
@@ -104,6 +104,12 @@ export class Register extends React.Component {
     if (!this.validateStarAndDeck()) {
       return;
     }
+    if (!this.validateFile()) {
+      return;
+    }
+    //set JSON
+    //send image API
+    //send data API
     //reset form
     this.resetForm(e);
     defParty.splice(0, defParty.length)
@@ -160,6 +166,15 @@ export class Register extends React.Component {
     }
     if (Math.floor(d/Math.pow(10, defParty.length-1)) < 1) {
       this.errorShow();
+      return false;
+    }
+    return true;
+  }
+  validateFile() {
+    this.setState({
+      msg: "파일 크기를 조정해 주세요."
+    });
+    if (this.state.overload) {
       return false;
     }
     return true;

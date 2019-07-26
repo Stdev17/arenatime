@@ -46,9 +46,9 @@ export class Register extends React.Component {
       errShow: false,
       form: {
         attackPower: 0,
-        defencePower: 0,
+        defensePower: 0,
         attackStar: "",
-        defenceStar: "",
+        defenseStar: "",
         result: "방어덱 패배",
         arena: "배틀 아레나",
         memo: ""
@@ -120,23 +120,27 @@ export class Register extends React.Component {
       memo: this.state.form.memo,
       attackPower: this.state.form.attackPower,
       attackDeck: {
-        first: "", second: "", third: "", fourth: "", fifth: ""
+        first: ""
       },
       attackStar: {
-        first: 0, second: 0, third: 0, fourth: 0, fifth: 0
+        first: 1
       },
-      defencePower: this.state.form.defencePower,
-      defenceDeck: {
-        first: "", second: "", third: "", fourth: "", fifth: ""
+      defensePower: this.state.form.defensePower,
+      defenseDeck: {
+        first: ""
       },
-      defenceStar: {
-        first: 0, second: 0, third: 0, fourth: 0, fifth: 0
+      defenseStar: {
+        first: 1
       }
     };
     f = this.setStar(f);
     f = this.setDeck(f);
     f = this.setSelection(f);
     //send image API
+    let filePath = "empty";
+    if (this.state.loaded) {
+
+    }
     //send data API
     let body = JSON.stringify(f);
     console.log(body);
@@ -158,11 +162,11 @@ export class Register extends React.Component {
       this.errorShow();
       return false;
     }
-    if (!(this.state.form.defencePower > 100)) {
+    if (!(this.state.form.defensePower > 100)) {
       this.errorShow();
       return false;
     }
-    if (!(this.state.form.defencePower < 70000)) {
+    if (!(this.state.form.defensePower < 70000)) {
       this.errorShow();
       return false;
     }
@@ -181,7 +185,7 @@ export class Register extends React.Component {
       this.errorShow();
       return false;
     }
-    let d = this.state.form.defenceStar;
+    let d = this.state.form.defenseStar;
     if (!(d % 10 > 0 && d % 10 < 6)
     || !(d < 10 || (Math.floor(d/10) % 10 > 0 && Math.floor(d/10) % 10 < 6))
     || !(d < 100 || (Math.floor(d/100) % 10 > 0 && Math.floor(d/100) % 10 < 6))
@@ -190,11 +194,11 @@ export class Register extends React.Component {
       this.errorShow();
       return false;
     }
-    if (Math.floor(a/Math.pow(10, attParty.length-1)) < 1) {
+    if (Math.floor(a/Math.pow(10, attParty.length-1)) < 1 || (a/Math.pow(10, attParty.length-1)) >= 10) {
       this.errorShow();
       return false;
     }
-    if (Math.floor(d/Math.pow(10, defParty.length-1)) < 1) {
+    if (Math.floor(d/Math.pow(10, defParty.length-1)) < 1 || (d/Math.pow(10, defParty.length-1)) >= 10) {
       this.errorShow();
       return false;
     }
@@ -211,7 +215,7 @@ export class Register extends React.Component {
   }
   setStar(f) {
     let atk = this.state.form.attackStar;
-    let aParty = attParty.length-1;
+    let aParty = Math.floor(Math.log10(atk));
     if (aParty >= 0) {
       f.attackStar.first = Math.floor(atk / Math.pow(10, aParty));
       atk -= f.attackStar.first * Math.pow(10, aParty);
@@ -237,31 +241,31 @@ export class Register extends React.Component {
       atk -= f.attackStar.fifth * Math.pow(10, aParty);
       aParty -= 1;
     }
-    let dfc = this.state.form.defenceStar;
-    let dParty = defParty.length-1;
+    let dfs = this.state.form.defenseStar;
+    let dParty = Math.floor(Math.log10(dfs));
     if (dParty >= 0) {
-      f.defenceStar.first = Math.floor(dfc / Math.pow(10, dParty));
-      dfc -= f.defenceStar.first * Math.pow(10, dParty);
+      f.defenseStar.first = Math.floor(dfs / Math.pow(10, dParty));
+      dfs -= f.defenseStar.first * Math.pow(10, dParty);
       dParty -= 1;
     }
     if (dParty >= 0) {
-      f.defenceStar.second = Math.floor(dfc / Math.pow(10, dParty));
-      dfc -= f.defenceStar.second * Math.pow(10, dParty);
+      f.defenseStar.second = Math.floor(dfs / Math.pow(10, dParty));
+      dfs -= f.defenseStar.second * Math.pow(10, dParty);
       dParty -= 1;
     }
     if (dParty >= 0) {
-      f.defenceStar.third = Math.floor(dfc / Math.pow(10, dParty));
-      dfc -= f.defenceStar.third * Math.pow(10, dParty);
+      f.defenseStar.third = Math.floor(dfs / Math.pow(10, dParty));
+      dfs -= f.defenseStar.third * Math.pow(10, dParty);
       dParty -= 1;
     }
     if (dParty >= 0) {
-      f.defenceStar.fourth = Math.floor(dfc / Math.pow(10, dParty));
-      dfc -= f.defenceStar.fourth * Math.pow(10, dParty);
+      f.defenseStar.fourth = Math.floor(dfs / Math.pow(10, dParty));
+      dfs -= f.defenseStar.fourth * Math.pow(10, dParty);
       dParty -= 1;
     }
     if (dParty >= 0) {
-      f.defenceStar.fifth = Math.floor(dfc / Math.pow(10, dParty));
-      dfc -= f.defenceStar.fifth * Math.pow(10, dParty);
+      f.defenseStar.fifth = Math.floor(dfs / Math.pow(10, dParty));
+      dfs -= f.defenseStar.fifth * Math.pow(10, dParty);
       dParty -= 1;
     }
     return f;
@@ -283,21 +287,21 @@ export class Register extends React.Component {
     if (atk.length > 0) {
       f.attackDeck.fifth = atk.pop();
     }
-    let dfc = sort(attParty.slice());
-    if (dfc.length > 0) {
-      f.defenceDeck.first = dfc.pop();
+    let dfs = sort(defParty.slice());
+    if (dfs.length > 0) {
+      f.defenseDeck.first = dfs.pop();
     }
-    if (dfc.length > 0) {
-      f.defenceDeck.second = dfc.pop();
+    if (dfs.length > 0) {
+      f.defenseDeck.second = dfs.pop();
     }
-    if (dfc.length > 0) {
-      f.defenceDeck.third = dfc.pop();
+    if (dfs.length > 0) {
+      f.defenseDeck.third = dfs.pop();
     }
-    if (dfc.length > 0) {
-      f.defenceDeck.fourth = dfc.pop();
+    if (dfs.length > 0) {
+      f.defenseDeck.fourth = dfs.pop();
     }
-    if (dfc.length > 0) {
-      f.defenceDeck.fifth = dfc.pop();
+    if (dfs.length > 0) {
+      f.defenseDeck.fifth = dfs.pop();
     }
     return f;
   }
@@ -310,7 +314,7 @@ export class Register extends React.Component {
     if (this.state.form.result == "방어덱 패배") {
       f.result = "attackWin";
     } else {
-      f.result = "defenceWin";
+      f.result = "defenseWin";
     }
     return f;
   }
@@ -347,7 +351,7 @@ export class Register extends React.Component {
             </Form.Group>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>방어덱 전투력</Form.Label>
-                <Form.Control name="defencePower" onChange={this.inputHandler} maxLength={5}/>
+                <Form.Control name="defensePower" onChange={this.inputHandler} maxLength={5}/>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>공격덱 성급</Form.Label>
@@ -355,7 +359,7 @@ export class Register extends React.Component {
             </Form.Group>
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>방어덱 성급</Form.Label>
-                <Form.Control placeholder="(54434)" name="defenceStar" onChange={this.inputHandler} maxLength={5}/>
+                <Form.Control placeholder="(54434)" name="defenseStar" onChange={this.inputHandler} maxLength={5}/>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>결과</Form.Label>

@@ -1,87 +1,98 @@
-Resources:
-	MatchTable:
-		Type: "AWS::DynamoDB::Table"
-		Properties:
-			TableName: "match-table"
-			AttributeDefinitions:
-				- AttributeName: "matchId"
-					AttributeType: "S"
-				- AttributeName: "arenaType"
-					AttributeType: "S"
-				- AttributeName: "attackPower"
-					AttributeType: "N"
-				- AttributeName: "attackDeckId"
-					AttributeType: "N"
-				- AttributeName: "defensePower"
-					AttributeType: "N"
-				- AttributeName: "defenseDeckId"
-					AttributeType: "N"
-				- AttributeName: "result"
-					AttributeType: "S"
-				- AttributeName: "date"
-					AttributeType: "S"
-				- AttributeName: "netUpvotes"
-					AttributeType: "N"
-			KeySchema:
-				- AttributeName: "matchId"
-					KeyType: "HASH"
-			GlobalSecondaryIndexes:
-			- IndexName: "defenseVotes"
-				KeySchema:
-					- AttributeName: "defenseDeckId"
-						KeyType: "HASH"
-					- AttributeName: "netUpvotes"
-						KeyType: "RANGE"
-				Projection:
-					ProjectionType: ALL
-				ProvisionedThroughput:
-					ReadCapacityUnits: 1
-					WriteCapacityUnits: 1
-			- IndexName: "attackVotes"
-				KeySchema:
-					- AttributeName: "attackDeckId"
-						KeyType: "HASH"
-					- AttributeName: "netUpvotes"
-						KeyType: "RANGE"
-				Projection:
-					ProjectionType: ALL
-				ProvisionedThroughput:
-					ReadCapacityUnits: 1
-					WriteCapacityUnits: 1
-			- IndexName: "defenseDate"
-				KeySchema:
-					- AttributeName: "defenseDeckId"
-						KeyType: "HASH"
-					- AttributeName: "date"
-						KeyType: "RANGE"
-				Projection:
-					ProjectionType: ALL
-				ProvisionedThroughput:
-					ReadCapacityUnits: 1
-					WriteCapacityUnits: 1
-			- IndexName: "attackDate"
-				KeySchema:
-					- AttributeName: "attackDeckId"
-						KeyType: "HASH"
-					- AttributeName: "date"
-						KeyType: "RANGE"
-				Projection:
-					ProjectionType: ALL
-				ProvisionedThroughput:
-					ReadCapacityUnits: 1
-					WriteCapacityUnits: 1
-			# Set the capacity to auto-scale
-			BillingMode: PAY_PER_REQUEST
-			ProvisionedThroughput:
-				ReadCapacityUnits: 1
-				WriteCapacityUnits: 1
-			# Find matches with deckId / attackWin / prena / in 30 days / over 55000 orderedBy votes
-			# 
-			# deckId: HashKey
-			# netVotes: SortKey
-			# filter attackWin / arena / power / date
-			#
-			# main ~ deckId / netVotes
-			# GSI ~ attackId / netVotes
-			# GSI ~ deckId / date
-			# GSI ~ attackId / date
+Resources: 
+  MatchTable: 
+    Properties: 
+      AttributeDefinitions: 
+        - 
+          AttributeName: matchId
+          AttributeType: S
+        - 
+          AttributeName: arenaType
+          AttributeType: S
+        - 
+          AttributeName: attackPower
+          AttributeType: "N"
+        - 
+          AttributeName: attackDeckId
+          AttributeType: "N"
+        - 
+          AttributeName: defensePower
+          AttributeType: "N"
+        - 
+          AttributeName: defenseDeckId
+          AttributeType: "N"
+        - 
+          AttributeName: result
+          AttributeType: S
+        - 
+          AttributeName: date
+          AttributeType: S
+        - 
+          AttributeName: netUpvotes
+          AttributeType: "N"
+      BillingMode: PAY_PER_REQUEST
+      GlobalSecondaryIndexes: 
+        - 
+          IndexName: defenseVotes
+          KeySchema: 
+            - 
+              AttributeName: defenseDeckId
+              KeyType: HASH
+            - 
+              AttributeName: netUpvotes
+              KeyType: RANGE
+          Projection: 
+            ProjectionType: ALL
+          ProvisionedThroughput: 
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - 
+          IndexName: attackVotes
+          KeySchema: 
+            - 
+              AttributeName: attackDeckId
+              KeyType: HASH
+            - 
+              AttributeName: netUpvotes
+              KeyType: RANGE
+          Projection: 
+            ProjectionType: ALL
+          ProvisionedThroughput: 
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - 
+          IndexName: defenseDate
+          KeySchema: 
+            - 
+              AttributeName: defenseDeckId
+              KeyType: HASH
+            - 
+              AttributeName: date
+              KeyType: RANGE
+          Projection: 
+            ProjectionType: ALL
+          ProvisionedThroughput: 
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - 
+          IndexName: attackDate
+          KeySchema: 
+            - 
+              AttributeName: attackDeckId
+              KeyType: HASH
+            - 
+              AttributeName: date
+              KeyType: RANGE
+          Projection: 
+            ProjectionType: ALL
+          ProvisionedThroughput: 
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      KeySchema: 
+        - 
+          AttributeName: matchId
+          KeyType: HASH
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: match-table
+    Type: "AWS::DynamoDB::Table"

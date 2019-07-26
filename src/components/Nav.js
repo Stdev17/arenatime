@@ -4,7 +4,7 @@ import {
   Nav,
   NavItem
 } from 'react-bootstrap';
-import { Link, Router, HashRouter } from 'react-router-dom';
+import { Link, Router, BrowserRouter } from 'react-router-dom';
 import { LinkContainer} from "react-router-bootstrap";
 import { Routes } from './Routes';
 
@@ -28,7 +28,7 @@ const menuText = {
 export class Navi extends React.Component {
   render() {
   return (
-  <HashRouter>
+  <BrowserRouter>
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand>
     <div className="brand" style={brandText}>
@@ -74,7 +74,7 @@ export class Navi extends React.Component {
     </div>
   </Navbar>
   <Routes/>
-  </HashRouter>
+  </BrowserRouter>
   );
   }
 }

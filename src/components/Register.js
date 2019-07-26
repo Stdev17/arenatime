@@ -42,7 +42,9 @@ export class Register extends React.Component {
       selectedFile: null,
       loaded: false,
       overload: false,
+      title_msg: "",
       msg: "",
+      isSending: false,
       errShow: false,
       form: {
         attackPower: 0,
@@ -59,6 +61,8 @@ export class Register extends React.Component {
     this.validatePower = this.validatePower.bind(this);
     this.validateStarAndDeck = this.validateStarAndDeck.bind(this);
     this.validateFile = this.validateFile.bind(this);
+    this.sendDatatoS3 = this.sendDatatoS3.bind(this);
+    this.sendFiletoS3 = this.sendFiletoS3.bind(this);
     this.setStar = this.setStar.bind(this);
     this.setDeck = this.setDeck.bind(this);
     this.setSelection = this.setSelection.bind(this);
@@ -104,6 +108,9 @@ export class Register extends React.Component {
   }
   checkForm(e) {
     e.preventDefault();
+    if (this.isSending) {
+      return;
+    }
     if (!this.validatePower()) {
       return;
     }
@@ -113,6 +120,10 @@ export class Register extends React.Component {
     if (!this.validateFile()) {
       return;
     }
+    this.setState({
+      title_msg: "등록 실패",
+      isSending: true
+    });
     //set JSON
     let f = {
       result: "",
@@ -137,18 +148,24 @@ export class Register extends React.Component {
     f = this.setDeck(f);
     f = this.setSelection(f);
     //send image API
-    let filePath = "empty";
-    if (this.state.loaded) {
-
-    }
-    //send data API
-    let body = JSON.stringify(f);
-    console.log(body);
+    (async _ => {
+      let s3 = null;
+      if (this.state.loaded) {
+        s3 = await this.sendFiletoS3();
+      }
+      let dat = await this.sendDatatoS3(f, s3);
+      //reset form
+      this.resetForm(e);
+      defParty.splice(0, defParty.length)
+      attParty.splice(0, attParty.length)
+      this.forceUpdate();
+    })();
     //reset form
-    this.resetForm(e);
-    defParty.splice(0, defParty.length)
-    attParty.splice(0, attParty.length)
-    this.forceUpdate();
+    this.setState({
+      title_msg: "등록 성공",
+      msg: "대전 결과가 DB에 등록되었습니다.",
+      isSending: false
+    });
   }
   validatePower() {
     this.setState({
@@ -318,6 +335,12 @@ export class Register extends React.Component {
     }
     return f;
   }
+  sendFiletoS3 () {
+
+  }
+  sendDatatoS3 (f, res) {
+
+  }
   alert() {
     if (this.state.overload) {
       return (
@@ -413,7 +436,7 @@ export class Register extends React.Component {
 
             <Modal.Header>
               <Modal.Title>
-                등록 실패
+                {this.state.title_msg}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>

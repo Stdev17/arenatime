@@ -6,62 +6,52 @@ provider:
   runtime: nodejs10.x
   stage: dev
   region: ap-northeast-2
-  iamRoleStatements: 
+  iamRoleStatements:
     - 
-      Action: 
+      Action:
         - "dynamodb:DescribeTable"
         - "dynamodb:Query"
-        - "dynamodb:Scan"
         - "dynamodb:GetItem"
         - "dynamodb:PutItem"
         - "dynamodb:UpdateItem"
-        - "dynamodb:DeleteItem"
       Effect: Allow
-      Resource: 
+      Resource:
         ? "Fn::GetAtt"
         : 
           - MatchTable
           - Arn
     - 
-      Action: 
+      Action:
+        - "dynamodb:DescribeTable"
+        - "dynamodb:Query"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+      Effect: Allow
+      Resource:
+        ? "Fn::GetAtt"
+        : 
+          - VoterTable
+          - Arn
+    - 
+      Action:
         - "s3:PutObject"
         - "s3:GetObject"
+        - "s3:GetBucketNotification"
+        - "s3:PutBucketNotification"
       Effect: Allow
-      Resource: 
+      Resource:
         ? "Fn::Join"
         : 
           - ""
           - 
             - "arn:aws:s3:::"
-            - 
-              Ref: 
-                - "BUCKET NAME"
+            - "priconne-arenatime"
             - /*
-
-
-
-environment:
-  tableName: "match-table"
-
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
  
 plugins:
   - serverless-offline
+  - serverless-plugin-existing-s3
 
 custom:
   serverless-offline:
@@ -69,15 +59,23 @@ custom:
   # Set the table name here so we can use it while testing locally
 
 functions:
-  hello:
-    handler: handler.hello
+  putImage:
+    handler: src/lambda/putS3Image.handler
     events:
-      - http:
-          path: hello/get
-          method: get
+      - 
+        http:
+          path: api/put-s3-image
+          method: post
+  putData:
+    handler: src/lambda/putS3Data.handler
+    events:
+      - 
+        http:
+          path: api/put-s3-data
+          method: post
 
 # you can add CloudFormation resource templates here
-resources: 
-  - ${file(resources/api-gateway-errors.yml):Resources}
-  - ${file(resources/dynamo-db.yml):Resources}
-  - ${file(resources/s3-bucket.yml):Resources}
+resources:
+  - ${file(resources/api-gateway-errors.yml)}
+  - ${file(resources/dynamo-db.yml)}
+  - ${file(resources/s3-bucket.yml)}

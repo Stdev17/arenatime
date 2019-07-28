@@ -6,8 +6,6 @@ import {
 import { Block } from './Block.tsx';
 import { getChar } from '../util/distance.ts';
 
-import '../css/cutter.css';
-
 var netX = 0;
 var netY = 0;
 

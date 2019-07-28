@@ -8,8 +8,13 @@ import {
 } from 'react-bootstrap';
 import { SetParty } from './SetParty';
 import { sort } from './Party';
+//import { FormData } from 'form-data';
 import '../css/daum.css';
 import '../css/text.css';
+
+let axios = require('axios');
+
+let path = 'http://localhost:4000/';
 
 var defParty = [];
 var attParty = [];
@@ -87,7 +92,7 @@ export class Register extends React.Component {
       });
       return;
     }
-    if (e.target.files[0].size > 51200) {
+    if (e.target.files[0].size > 512000) {
       this.setState({
         selectedFile: null,
         loaded: false,
@@ -129,6 +134,7 @@ export class Register extends React.Component {
       result: "",
       arena: "",
       memo: this.state.form.memo,
+      attackNum: attParty.length,
       attackPower: this.state.form.attackPower,
       attackDeck: {
         first: ""
@@ -136,6 +142,7 @@ export class Register extends React.Component {
       attackStar: {
         first: 1
       },
+      defenseNum: defParty.length,
       defensePower: this.state.form.defensePower,
       defenseDeck: {
         first: ""
@@ -147,25 +154,47 @@ export class Register extends React.Component {
     f = this.setStar(f);
     f = this.setDeck(f);
     f = this.setSelection(f);
+    this.setState({
+      msg: "대전 업로드에 실패했습니다."
+    });
     //send image API
     (async _ => {
-      let s3 = null;
       if (this.state.loaded) {
-        s3 = await this.sendFiletoS3();
+        let s3 = await this.sendFiletoS3();
+        let dat = await this.sendDatatoS3(f, s3);
+        if (dat) {
+          this.resetForm(e);
+          defParty.splice(0, defParty.length);
+          attParty.splice(0, attParty.length);
+          this.setState({
+            title_msg: "등록 성공",
+            msg: "대전 결과가 DB에 등록되었습니다."
+          });
+          this.errorShow();
+        } else {
+          this.errorShow();
+        }
+      } else {
+        let s3 = 'Not Uploaded';
+        let dat = await this.sendDatatoS3(f, s3);
+        if (dat) {
+          this.resetForm(e);
+          defParty.splice(0, defParty.length);
+          attParty.splice(0, attParty.length);
+          this.setState({
+            title_msg: "등록 성공",
+            msg: "대전 결과가 DB에 등록되었습니다."
+          });
+          this.errorShow();
+        } else {
+          this.errorShow();
+        }
       }
-      let dat = await this.sendDatatoS3(f, s3);
       //reset form
-      this.resetForm(e);
-      defParty.splice(0, defParty.length)
-      attParty.splice(0, attParty.length)
-      this.forceUpdate();
+      this.setState({
+        isSending: false
+      });
     })();
-    //reset form
-    this.setState({
-      title_msg: "등록 성공",
-      msg: "대전 결과가 DB에 등록되었습니다.",
-      isSending: false
-    });
   }
   validatePower() {
     this.setState({
@@ -336,10 +365,81 @@ export class Register extends React.Component {
     return f;
   }
   sendFiletoS3 () {
-
+    let options = {
+      headers: {
+        "Accept": "multipart/form-data",
+        "Content-Type": "multipart/form-data"
+      }
+    };
+    let result = 'Upload Failed';
+    let mPath = path + 'api/put-s3-image';
+    return (async _ => {
+      let form = new FormData();
+      try {
+        let f = await this.getBase64(this.state.selectedFile);
+        form.append('image', f);
+        let res = await axios({
+          method: 'post',
+          url: mPath,
+          data: form,
+          headers: {
+            "Accept": "multipart/form-data",
+            "Content-Type": "multipart/form-data"
+          }
+        });
+        if (res.status == 200) {
+          result = res.data.message;
+          console.log("OK");
+        }
+      }
+      catch {
+        //
+        console.log("put image error");
+      }
+      return result;
+    })();
   }
   sendDatatoS3 (f, res) {
-
+    console.log(res);
+    if (res === undefined || res == 'Upload Failed') {
+      return false;
+    }
+    let mPath = path + 'api/put-s3-data';
+    let result = false;
+    if (res != 'Not Uploaded') {
+      f.imagePath = res;
+    }
+    let str = JSON.stringify(f);
+    return (async _ => {
+      try {
+        let resp = await axios({
+          url: mPath,
+          method: 'post',
+          data: str,
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        if (resp.status == 200) {
+          result = true;
+        } else {
+          result = false;
+        }
+      }
+      catch {
+        console.log("put data error");
+      }
+      return result;
+    })();
+  }
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
   }
   alert() {
     if (this.state.overload) {
@@ -347,9 +447,9 @@ export class Register extends React.Component {
         <div>
         <br/>
         <Alert variant="danger">
-          <p>
+          <div>
             파일 제한 용량을 초과했습니다.
-          </p>
+          </div>
         </Alert>
         </div>
       );
@@ -416,12 +516,12 @@ export class Register extends React.Component {
       <h6 style={subText} className="twenty">
         {"결과 이미지"}
       </h6>
-      <p style={smallText} className="ten">
+      <div style={smallText} className="ten">
         {"500KB 이하의 .jpg .jpeg .png 파일을 올려주세요."}
         <br/>
         <input type="file" name="file" accept=".jpg, .jpeg, .png" onChange={this.fileHandler}/>
         {this.alert()}
-      </p>
+      </div>
       <p style={subText} className="twenty">
         <Button variant='success' onClick={this.checkForm}>
           대전 등록

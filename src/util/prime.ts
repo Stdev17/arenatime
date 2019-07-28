@@ -36,7 +36,6 @@ export const primeChar: Record<string, number> = {
    "Shizuru": prime(31),
    //"Christina": prime(32),
    //"ChristmasKurumi": prime(33),
-   //additional char
 
    //Middle Line
    "Mimi": prime(34),
@@ -63,7 +62,6 @@ export const primeChar: Record<string, number> = {
    "Akari": prime(55),
    "Yori": prime(56),
    //"HalloweenMiyako": prime(57),
-   //additional char
 
    //Back Line
    "Arisa": prime(58),
@@ -94,5 +92,7 @@ export const primeChar: Record<string, number> = {
    "Yuki": prime(83),
    "Kyouka": prime(84),
    //"HalloweenMisaki": prime(85)
+
    //additional char
+   
 }

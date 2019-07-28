@@ -1,4 +1,17 @@
 Resources: 
+  VoterTable: 
+    Properties: 
+      AttributeDefinitions:
+        - 
+          AttributeName: matchId
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - 
+          AttributeName: matchId
+          KeyType: HASH
+      TableName: voter-table
+    Type: "AWS::DynamoDB::Table"
   MatchTable: 
     Properties: 
       AttributeDefinitions: 
@@ -6,23 +19,11 @@ Resources:
           AttributeName: matchId
           AttributeType: S
         - 
-          AttributeName: arenaType
-          AttributeType: S
-        - 
-          AttributeName: attackPower
-          AttributeType: "N"
-        - 
           AttributeName: attackDeckId
-          AttributeType: "N"
-        - 
-          AttributeName: defensePower
           AttributeType: "N"
         - 
           AttributeName: defenseDeckId
           AttributeType: "N"
-        - 
-          AttributeName: result
-          AttributeType: S
         - 
           AttributeName: date
           AttributeType: S
@@ -42,9 +43,6 @@ Resources:
               KeyType: RANGE
           Projection: 
             ProjectionType: ALL
-          ProvisionedThroughput: 
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
         - 
           IndexName: attackVotes
           KeySchema: 
@@ -56,9 +54,6 @@ Resources:
               KeyType: RANGE
           Projection: 
             ProjectionType: ALL
-          ProvisionedThroughput: 
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
         - 
           IndexName: defenseDate
           KeySchema: 
@@ -70,9 +65,6 @@ Resources:
               KeyType: RANGE
           Projection: 
             ProjectionType: ALL
-          ProvisionedThroughput: 
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
         - 
           IndexName: attackDate
           KeySchema: 
@@ -84,15 +76,9 @@ Resources:
               KeyType: RANGE
           Projection: 
             ProjectionType: ALL
-          ProvisionedThroughput: 
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
       KeySchema: 
         - 
           AttributeName: matchId
           KeyType: HASH
-      ProvisionedThroughput: 
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
       TableName: match-table
     Type: "AWS::DynamoDB::Table"

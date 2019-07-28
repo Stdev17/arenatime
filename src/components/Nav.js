@@ -56,19 +56,19 @@ export class Navi extends React.Component {
     </Nav>
     </Navbar.Collapse>
     <div align="right">
-    <a href="https://github.com/Stdev17/arenatime-client" target="_blank" rel="noopener noreferrer">
+    <a href="https://github.com/Stdev17/arenatime" target="_blank" rel="noopener noreferrer">
     <img
       alt=""
       src="/github-logo.svg"
-      width="30"
-      height="30"
+      width="34"
+      height="34"
       className="github"
     /></a>
     <a href="https://discord.gg/KpENFp7" target="_blank" rel="noopener noreferrer"><img
       alt=""
       src="/discord.svg"
-      width="40"
-      height="40"
+      width="50"
+      height="50"
       className="discord"
     /></a>
     </div>

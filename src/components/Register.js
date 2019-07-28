@@ -161,8 +161,9 @@ export class Register extends React.Component {
     (async _ => {
       if (this.state.loaded) {
         let s3 = await this.sendFiletoS3();
+        console.log(f);
         let dat = await this.sendDatatoS3(f, s3);
-        if (dat) {
+        if (dat == 'Succeeded Data Upload') {
           this.resetForm(e);
           defParty.splice(0, defParty.length);
           attParty.splice(0, attParty.length);
@@ -317,37 +318,49 @@ export class Register extends React.Component {
     return f;
   }
   setDeck(f) {
+    let at = f.attackNum;
     let atk = sort(attParty.slice());
-    if (atk.length > 0) {
+    if (at > 0) {
       f.attackDeck.first = atk.pop();
+      at -= 1;
     }
-    if (atk.length > 0) {
+    if (at > 0) {
       f.attackDeck.second = atk.pop();
+      at -= 1;
     }
-    if (atk.length > 0) {
+    if (at > 0) {
       f.attackDeck.third = atk.pop();
+      at -= 1;
     }
-    if (atk.length > 0) {
+    if (at > 0) {
       f.attackDeck.fourth = atk.pop();
+      at -= 1;
     }
-    if (atk.length > 0) {
+    if (at > 0) {
       f.attackDeck.fifth = atk.pop();
+      at -= 1;
     }
+    let df = f.defenseNum;
     let dfs = sort(defParty.slice());
-    if (dfs.length > 0) {
+    if (df > 0) {
       f.defenseDeck.first = dfs.pop();
+      df -= 1;
     }
-    if (dfs.length > 0) {
+    if (df > 0) {
       f.defenseDeck.second = dfs.pop();
+      df -= 1;
     }
-    if (dfs.length > 0) {
+    if (df > 0) {
       f.defenseDeck.third = dfs.pop();
+      df -= 1;
     }
-    if (dfs.length > 0) {
+    if (df > 0) {
       f.defenseDeck.fourth = dfs.pop();
+      df -= 1;
     }
-    if (dfs.length > 0) {
+    if (df > 0) {
       f.defenseDeck.fifth = dfs.pop();
+      df -= 1;
     }
     return f;
   }
@@ -389,7 +402,6 @@ export class Register extends React.Component {
         });
         if (res.status == 200) {
           result = res.data.message;
-          console.log("OK");
         }
       }
       catch {
@@ -400,12 +412,11 @@ export class Register extends React.Component {
     })();
   }
   sendDatatoS3 (f, res) {
-    console.log(res);
     if (res === undefined || res == 'Upload Failed') {
       return false;
     }
     let mPath = path + 'api/put-s3-data';
-    let result = false;
+    let result = 'Upload Failed';
     if (res != 'Not Uploaded') {
       f.imagePath = res;
     }
@@ -422,9 +433,7 @@ export class Register extends React.Component {
           }
         })
         if (resp.status == 200) {
-          result = true;
-        } else {
-          result = false;
+          result = resp.data.message;
         }
       }
       catch {

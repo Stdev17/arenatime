@@ -1,6 +1,6 @@
 var prime = require('nth-prime');
 
-export const primeChar: Record<string, number> = {
+const primeChar: Record<string, number> = {
   
    //Front Line
    "Rima": prime(1),
@@ -96,3 +96,5 @@ export const primeChar: Record<string, number> = {
    //additional char
    
 }
+
+module.exports.prime = primeChar;

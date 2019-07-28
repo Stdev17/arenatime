@@ -11,9 +11,39 @@ Resources:
           AttributeName: matchId
           KeyType: HASH
       TableName: voter-table
+      CorsConfiguration:
+        CorsRules:
+          -
+            AllowedOrigins:
+              - '*'
+              # github.io로 설정할 것
+            AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+              - DELETE
+              - HEAD
+            MaxAge: 3000
     Type: "AWS::DynamoDB::Table"
   MatchTable: 
     Properties: 
+      CorsConfiguration:
+        CorsRules:
+          -
+            AllowedOrigins:
+              - '*'
+              # github.io로 설정할 것
+            AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+              - DELETE
+              - HEAD
+            MaxAge: 3000
       AttributeDefinitions: 
         - 
           AttributeName: matchId

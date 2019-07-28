@@ -1,6 +1,6 @@
 const datePath = require('../util/datePath');
-const char = require('../util/char');
-const primeChar = require('../util/prime.ts');
+const char = require('../util/char').char;
+const primeChar = require('../util/prime').prime;
 
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
@@ -8,26 +8,31 @@ const dyn = new aws.DynamoDB();
 const moment = require('moment');
 const uuid = require('uuid/v4');
 const comb = require('js-combinatorics');
-const zlib = require('zlib');
+const {gzip, ungzip} = require('node-gzip');
+const ubase = require('uuid-base64');
 
 let parseData = function(req) {
+
   if (!validateProperties(req)) {
     return {};
   }
   if (!validateStarAndDeck(req)) {
     return {};
   }
-  console.log("second");
 
-  req.matchId = uuid();
+  if (req.memo == "") {
+    req.memo = "PlaceHolder";
+  }
+
+  req.matchId = ubase.encode(uuid());
   req.date = moment().format("YYYY-MM-DD HH:mm:ss");
   let attackId = 1;
   let defenseId = 1;
   for (let tmp in req.attackDeck) {
-    attackId *= primeChar[tmp];
+    attackId *= primeChar[req.attackDeck[tmp]];
   }
   for (let tmp in req.defenseDeck) {
-    defenseId *= primeChar[tmp];
+    defenseId *= primeChar[req.defenseDeck[tmp]];
   }
   req.attackId = attackId;
   req.defenseId = defenseId;
@@ -46,26 +51,33 @@ let parseData = function(req) {
 
 module.exports.handler = (event, context) => {
   let response = {};
-  let skip = false;
-  console.log("first");
+  let skip = true;
   let request = JSON.parse(event.body);
   let parsed = parseData(request);
-  if (parsed === {}) {
-    return 'Parse Failed', false;
+  if (parsed.downvotes === undefined) {
+    (async _ => {
+      response = {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "parse error",
+          runtime: context
+        })
+      };
+    })().then( _ => {
+      context.fail(response);
+    });
   }
-  parsed.userIp = event.sourceIP;
 
+  parsed.userIp = event.requestContext.identity.sourceIp;
+  let item = getItem(parsed);
   //
-  console.log("third");
   let dataParams = {
     TableName: "match-table",
-    Item: parsed
+    Item: item
   };
-  dyn.putItem(dataParams).promise()
-    .then(data => {
-      //
-    })
-    .catch(err => {
+  (async _ => {
+  let dataSend = await dyn.putItem(dataParams, (err, data) => {
+    if (err) {
       response = {
         statusCode: 400,
         body: JSON.stringify({
@@ -73,13 +85,18 @@ module.exports.handler = (event, context) => {
           runtime: context
         })
       };
+      console.log(err);
       skip = true;
-    });
+    } else {
+      skip = false;
+    }
+  });
+  })();
 
-  if (skip) {
+  if (!skip) {
     context.fail(response);
+    console.log("fuck");
   }
-  console.log("fourth");
 
   let vote = {
     matchId: parsed.matchId,
@@ -87,13 +104,14 @@ module.exports.handler = (event, context) => {
   };
   let voteParams = {
     TableName: "voter-table",
-    Item: vote
+    Item: {
+      matchId: {S: vote.matchId},
+      voters: {L: vote.voters}
+    }
   };
-  dyn.putItem(voteParams).promise()
-    .then(data => {
-      //
-    })
-    .catch(err => {
+  (async _ => {
+  let voteSend = await dyn.putItem(voteParams, (err, data) => {
+    if (err) {
       response = {
         statusCode: 400,
         body: JSON.stringify({
@@ -101,59 +119,56 @@ module.exports.handler = (event, context) => {
           runtime: context
         })
       };
+      console.log(err);
+      context.fail(response);
       skip = true;
-    });
+    } else {
+      skip = false;
+    }
+  });
+  })();
 
-  if (skip) {
-    context.fail(response);
-  }
-
-  response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: "Upload Succeeded",
-      runtime: context
-    })
-  };
-
-  context.succeed(response);
-
-  /*
-  let str = JSON.stringify(parsed);
-  let gzip = zlib.createGzip();
-
-  let filePath = 'data/' + datePath();
-  let fileName = unixTime(now) + ".gz";
+  let filePath = datePath();
+  let fileName = parsed.matchId + ".gz";
   let fileFullName = filePath + fileName;
-  let fileFullPath = 'priconne-arenatime/' + fileFullName;
+  let fileFullPath = 'data/' + fileFullName;
+
+  let gz;
+  (async _ => {
+  let gz = gzip(new Buffer.from(JSON.stringify(parsed)));
+  })();
 
   let params = {
     Bucket: 'priconne-arenatime',
-    //Body: 
+    Body: gz,
+    Key: fileFullPath,
+    ContentType: 'application/json',
+    ContentEncoding: 'gzip'
   };
 
-  s3.putObject(params, function(err, data) {
+  s3.putObject(params, (err, data) => {
     if (err) {
       response = {
         statusCode: 400,
         body: JSON.stringify({
-          message: err,
-          runtime: context,
-          input: event
+          message: 'Upload Failed',
+          runtime: context
         })
       };
+      context.fail(response);
+      return true;
     } else {
       response = {
         statusCode: 200,
         body: JSON.stringify({
           message: 'Succeeded Data Upload',
-          runtime: context,
-          input: event
+          runtime: context
         })
       };
+      context.succeed(response);
+      return false;
     }
   });
-  */
 }
 
 function validateProperties(f) {
@@ -171,13 +186,14 @@ function validateProperties(f) {
     return false;
   }
   //Arena
-  if (f.arena != "battleArena" || f.arena != "princessArena") {
+  if (f.arena != "battleArena" && f.arena != "princessArena") {
     return false;
   }
   //Result
-  if (f.result != "attackWin" || f.result != "defenseWin") {
+  if (f.result != "attackWin" && f.result != "defenseWin") {
     return false;
   }
+  return true;
 }
 
 function validateStarAndDeck(f) {
@@ -203,18 +219,26 @@ function validateStarAndDeck(f) {
     dStarCount += 1;
   }
   let aDeck = f.attackDeck;
-  for (let tmp in aDeck) {
+  for (let t in aDeck) {
+    let tmp = aDeck[t];
     if (!char.includes(tmp)) {
+      console.log(tmp);
       return false;
     }
-    aDeckCount += 1;
+    if (tmp != "Empty") {
+      aDeckCount += 1;
+    }
   }
   let dDeck = f.defenseDeck;
-  for (let tmp in dDeck) {
+  for (let t in dDeck) {
+    let tmp = dDeck[t];
     if (!char.includes(tmp)) {
+      console.log(tmp);
       return false;
     }
-    dDeckCount += 1;
+    if (tmp != "Empty") {
+      dDeckCount += 1;
+    }
   }
   if (f.attackNum != aStarCount || aStarCount != aDeckCount || aDeckCount != f.attackNum) {
     return false;
@@ -229,13 +253,21 @@ function getDuo(d) {
   let size = 0;
   let deck = [];
   for (let tmp in d) {
-    deck.push(tmp);
+    deck.push(primeChar[d[tmp]]);
     size += 1;
   }
   if (size < 2) {
     return [];
   }
-  let duo = comb.combination(deck, 2);
+  let du = comb.combination(deck, 2);
+  let duo = [];
+  while (a = du.next()) {
+    let sum = 1;
+    while (a.length > 0) {
+      sum *= a.pop();
+    }
+    duo.push(sum);
+  }
   return duo;
 }
 
@@ -243,12 +275,84 @@ function getTrio(d) {
   let size = 0;
   let deck = [];
   for (let tmp in d) {
-    deck.push(tmp);
+    deck.push(primeChar[d[tmp]]);
     size += 1;
   }
   if (size < 3) {
     return [];
   }
-  let trio = comb.combination(deck, 3);
+  let t = comb.combination(deck, 3);
+  let trio = [];
+  while (a = t.next()) {
+    let sum = 1;
+    while (a.length > 0) {
+      sum *= a.pop();
+    }
+    trio.push(sum);
+  }
   return trio;
+}
+
+function getItem(p) {
+  let attd = {};
+  let aDeck = p.attackDeck;
+  for (let a in aDeck) {
+    attd[a] = {S: aDeck[a]};
+  }
+  let defd = {};
+  let dDeck = p.defenseDeck;
+  for (let d in dDeck) {
+    defd[d] = {S: dDeck[d]};
+  }
+  let atts = {};
+  let aStar = p.attackStar;
+  for (let a in aStar) {
+    atts[a] = {N: aStar[a].toString()};
+  }
+  let defs = {};
+  let dStar = p.defenseStar;
+  for (let d in dStar) {
+    defs[d] = {N: dStar[d].toString()};
+  }
+  let aDuo = [];
+  for (let a in p.attackDuo) {
+    aDuo.push({N: p.attackDuo[a].toString()});
+  }
+  let dDuo = [];
+  for (let d in p.defenseDuo) {
+    dDuo.push({N: p.defenseDuo[d].toString()});
+  }
+  let aTrio = [];
+  for (let a in p.attackTrio) {
+    aTrio.push({N: p.attackTrio[a].toString()});
+  }
+  let dTrio = [];
+  for (let d in p.defenseTrio) {
+    dTrio.push({N: p.defenseTrio[d].toString()});
+  }
+  let temp = {
+    result: {S: p.result},
+    arena: {S: p.arena},
+    memo: {S: p.memo},
+    attackPower: {N: p.attackPower.toString()},
+    attackDeck: {M: attd},
+    attackStar: {M: atts},
+    defensePower: {N: p.defensePower.toString()},
+    defenseDeck: {M: defd},
+    defenseStar: {M: defs},
+    imagePath: {S: p.imagePath},
+    matchId: {S: p.matchId},
+    date: {S: p.date},
+    attackId: {N: p.attackId.toString()},
+    defenseId: {N: p.defenseId.toString()},
+    attackDuo: {L: aDuo},
+    attackTrio: {L: aTrio},
+    defenseDuo: {L: dDuo},
+    defenseTrio: {L: dTrio},
+    netUpvotes: {N: p.netUpvotes.toString()},
+    upvotes: {N: p.upvotes.toString()},
+    downvotes: {N: p.downvotes.toString()},
+    userIp: {S: p.userIp}
+  };
+  return temp;
 }

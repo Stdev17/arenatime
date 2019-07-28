@@ -1,4 +1,4 @@
-export const char = [
+const char = [
   'Empty',
   'Makoto',
   'Mitsuki',
@@ -67,3 +67,5 @@ export const char = [
   'Nanaka',
   */
 ];
+
+module.exports.char = char;

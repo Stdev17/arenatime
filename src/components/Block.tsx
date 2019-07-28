@@ -3,7 +3,7 @@ import {
   Image
 } from 'react-konva';
 
-import { char } from '../util/char';
+var char = require('../util/char').char;
 
 interface coord {
   XCoord: number, YCoord: number

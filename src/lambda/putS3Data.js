@@ -25,7 +25,7 @@ let parseData = function(req) {
   }
 
   req.matchId = ubase.encode(uuid());
-  req.date = moment().format("YYYY-MM-DD HH:mm:ss");
+  req.uploadedDate = moment().format("YYYY-MM-DD HH:mm:ss");
   let attackId = 1;
   let defenseId = 1;
   for (let tmp in req.attackDeck) {

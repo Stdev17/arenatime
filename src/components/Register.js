@@ -56,7 +56,7 @@ export class Register extends React.Component {
         defensePower: 0,
         attackStar: "",
         defenseStar: "",
-        result: "방어덱 패배",
+        matchResult: "방어덱 패배",
         arena: "배틀 아레나",
         memo: ""
       }
@@ -131,7 +131,7 @@ export class Register extends React.Component {
     });
     //set JSON
     let f = {
-      result: "",
+      matchResult: "",
       arena: "",
       memo: this.state.form.memo,
       attackNum: attParty.length,
@@ -370,10 +370,10 @@ export class Register extends React.Component {
     } else {
       f.arena = "princessArena";
     }
-    if (this.state.form.result == "방어덱 패배") {
-      f.result = "attackWin";
+    if (this.state.form.matchResult == "방어덱 패배") {
+      f.matchResult = "attackWin";
     } else {
-      f.result = "defenseWin";
+      f.matchResult = "defenseWin";
     }
     return f;
   }
@@ -495,7 +495,7 @@ export class Register extends React.Component {
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>결과</Form.Label>
-              <Form.Control as="select" name="result" onChange={this.inputHandler}>
+              <Form.Control as="select" name="matchResult" onChange={this.inputHandler}>
                 <option>방어덱 패배</option>
                 <option>방어덱 승리</option>
               </Form.Control>

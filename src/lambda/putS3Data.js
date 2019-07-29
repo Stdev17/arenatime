@@ -49,7 +49,7 @@ let parseData = function(req) {
   return req;
 }
 
-module.exports.handler = (event, context) => {
+module.exports.handler = async (event, context) => {
   let response = {};
   let skip = true;
   let request = JSON.parse(event.body);
@@ -64,7 +64,7 @@ module.exports.handler = (event, context) => {
         })
       };
     })().then( _ => {
-      context.fail(response);
+      return response;
     });
   }
 
@@ -86,17 +86,11 @@ module.exports.handler = (event, context) => {
         })
       };
       console.log(err);
-      skip = true;
+      return response;
     } else {
-      skip = false;
     }
   });
   })();
-
-  if (!skip) {
-    context.fail(response);
-    console.log("fuck");
-  }
 
   let vote = {
     matchId: parsed.matchId,
@@ -120,10 +114,8 @@ module.exports.handler = (event, context) => {
         })
       };
       console.log(err);
-      context.fail(response);
-      skip = true;
+      return response;
     } else {
-      skip = false;
     }
   });
   })();
@@ -133,10 +125,7 @@ module.exports.handler = (event, context) => {
   let fileFullName = filePath + fileName;
   let fileFullPath = 'data/' + fileFullName;
 
-  let gz;
-  (async _ => {
-  let gz = gzip(new Buffer.from(JSON.stringify(parsed)));
-  })();
+  let gz = await gzip(new Buffer.from(JSON.stringify(parsed)));
 
   let params = {
     Bucket: 'priconne-arenatime',
@@ -145,19 +134,10 @@ module.exports.handler = (event, context) => {
     ContentType: 'application/json',
     ContentEncoding: 'gzip'
   };
+  
 
-  s3.putObject(params, (err, data) => {
-    if (err) {
-      response = {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: 'Upload Failed',
-          runtime: context
-        })
-      };
-      context.fail(response);
-      return true;
-    } else {
+  return s3.putObject(params).promise()
+    .then(data => {
       response = {
         statusCode: 200,
         body: JSON.stringify({
@@ -165,10 +145,18 @@ module.exports.handler = (event, context) => {
           runtime: context
         })
       };
-      context.succeed(response);
-      return false;
-    }
-  });
+      return response;
+    })
+    .catch(err => {
+      response = {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: 'Upload Failed',
+          runtime: context
+        })
+      };
+      return response;
+    });
 }
 
 function validateProperties(f) {

@@ -73,6 +73,13 @@ functions:
         http:
           path: api/put-s3-data
           method: post
+  getSearch:
+    handler: src/lambda/getSearch.handler
+    events:
+      - 
+        http:
+          path: api/get-search
+          method: get
 
 # you can add CloudFormation resource templates here
 resources:

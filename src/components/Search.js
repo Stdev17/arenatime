@@ -101,14 +101,16 @@ export class Search extends React.Component {
         this.errorShow();
         return;
       } else {
-        let msg = JSON.parse(res.data.message);
+        let msg = res.data.message;
         let items = msg["Items"];
-        for (let i in items) {
-          results.push(i);
+        if (items != null) {
+          for (let i in items) {
+            results.push(items[i]);
+          }
+          this.setState({
+            res: JSON.stringify(results)
+          });
         }
-        this.setState({
-          res: JSON.stringify(results)
-        })
       }
     })();
   }

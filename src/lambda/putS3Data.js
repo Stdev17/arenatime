@@ -26,16 +26,16 @@ let parseData = function(req) {
 
   req.matchId = ubase.encode(uuid());
   req.uploadedDate = moment().format("YYYY-MM-DD HH:mm:ss");
-  let attackId = 1;
-  let defenseId = 1;
+  let attackDeckId = 1;
+  let defenseDeckId = 1;
   for (let tmp in req.attackDeck) {
-    attackId *= primeChar[req.attackDeck[tmp]];
+    attackDeckId *= primeChar[req.attackDeck[tmp]];
   }
   for (let tmp in req.defenseDeck) {
-    defenseId *= primeChar[req.defenseDeck[tmp]];
+    defenseDeckId *= primeChar[req.defenseDeck[tmp]];
   }
-  req.attackId = attackId;
-  req.defenseId = defenseId;
+  req.attackDeckId = attackDeckId;
+  req.defenseDeckId = defenseDeckId;
 
   req.attackDuo = getDuo(req.attackDeck);
   req.attackTrio = getTrio(req.attackDeck);
@@ -55,17 +55,14 @@ module.exports.handler = async (event, context) => {
   let request = JSON.parse(event.body);
   let parsed = parseData(request);
   if (parsed.downvotes === undefined) {
-    (async _ => {
-      response = {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: "parse error",
-          runtime: context
-        })
-      };
-    })().then( _ => {
-      return response;
-    });
+    response = {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: "parse error",
+        runtime: context
+      })
+    };
+    return response;
   }
 
   parsed.userIp = event.requestContext.identity.sourceIp;
@@ -177,8 +174,8 @@ function validateProperties(f) {
   if (f.arena != "battleArena" && f.arena != "princessArena") {
     return false;
   }
-  //Result
-  if (f.result != "attackWin" && f.result != "defenseWin") {
+  //result
+  if (f.matchResult != "attackWin" && f.matchResult != "defenseWin") {
     return false;
   }
   return true;
@@ -318,8 +315,9 @@ function getItem(p) {
   for (let d in p.defenseTrio) {
     dTrio.push({N: p.defenseTrio[d].toString()});
   }
+  console.log(p);
   let temp = {
-    result: {S: p.result},
+    matchResult: {S: p.matchResult},
     arena: {S: p.arena},
     memo: {S: p.memo},
     attackPower: {N: p.attackPower.toString()},
@@ -330,9 +328,9 @@ function getItem(p) {
     defenseStar: {M: defs},
     imagePath: {S: p.imagePath},
     matchId: {S: p.matchId},
-    date: {S: p.date},
-    attackId: {N: p.attackId.toString()},
-    defenseId: {N: p.defenseId.toString()},
+    uploadedDate: {S: p.uploadedDate},
+    attackDeckId: {N: p.attackDeckId.toString()},
+    defenseDeckId: {N: p.defenseDeckId.toString()},
     attackDuo: {L: aDuo},
     attackTrio: {L: aTrio},
     defenseDuo: {L: dDuo},

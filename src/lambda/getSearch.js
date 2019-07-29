@@ -21,8 +21,7 @@ module.exports.handler = async (event, context) => {
   let params = {
     TableName: 'match-table',
     ExpressionAttributeValues: {
-      ':deckId': {N: deckId.toString()},
-      ':netUpvoteDummy': {N: '-999'}
+      ':deckId': {N: deckId.toString()}
     }
   };
 
@@ -89,14 +88,14 @@ module.exports.handler = async (event, context) => {
 
   if (req.target == 'defense' && req.sort == 'netUpvotes') {
     params.IndexName = 'defenseVotes';
-    if (req.matchResult == 'defeat') {
+    if (req.result == 'defeat') {
       params.ExpressionAttributeValues[':result'] = {S: 'attackWin'};
     } else {
       params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
     }
-    params.KeyConditionExpression = 'defenseDeckId = :deckId and netUpvotes > :netUpvoteDummy';
+    params.KeyConditionExpression = 'defenseDeckId = :deckId';
     params.ProjectionExpression = 'attackId, attackStar, uploadedDate, defenseStar, upvotes, downvotes, matchId, matchResult';
-    params.FilterExpression = 'defensePower > :lower and defensePower < :upper and uploadedDate < :date and arena <> :arena and matchResult = :result';
+    params.FilterExpression = 'defensePower > :lower and defensePower < :upper and uploadedDate > :date and arena <> :arena and matchResult = :result';
   }
 
   let get = await dyn.query(params).promise()

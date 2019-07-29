@@ -21,7 +21,8 @@
 
 body {
   background-image: url("/landsol.jpeg");
-  background-size: cover;
+  background-size: 1920px 1080px;
+  background-repeat: repeat;
 }
 
 .brand {

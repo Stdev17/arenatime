@@ -43,10 +43,10 @@ export class SetParty extends React.Component {
   }
   
   componentDidMount() {
-    if (this.props.handle == "def") {
+    if (this.props.handle === "def") {
       this.setState({ text: "방어 파티  "});
     }
-    if (this.props.handle == "att") {
+    if (this.props.handle === "att") {
       this.setState({ text: "공격 파티  "});
     }
   }
@@ -60,7 +60,9 @@ export class SetParty extends React.Component {
         <Button variant="primary" onClick={this.handleShow}>
           파티 설정
         </Button>
-        <h1 className="ten"/>
+        <h1 className="ten">
+          {' '}
+        </h1>
         <Party party={this.state.p}/>
 
         <Modal

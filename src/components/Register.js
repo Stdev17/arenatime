@@ -163,7 +163,7 @@ export class Register extends React.Component {
         let s3 = await this.sendFiletoS3();
         console.log(f);
         let dat = await this.sendDatatoS3(f, s3);
-        if (dat == 'Succeeded Data Upload') {
+        if (dat === 'Succeeded Data Upload') {
           this.resetForm(e);
           defParty.splice(0, defParty.length);
           attParty.splice(0, attParty.length);
@@ -365,12 +365,12 @@ export class Register extends React.Component {
     return f;
   }
   setSelection(f) {
-    if (this.state.form.arena == "배틀 아레나") {
+    if (this.state.form.arena === "배틀 아레나") {
       f.arena = "battleArena";
     } else {
       f.arena = "princessArena";
     }
-    if (this.state.form.matchResult == "방어덱 패배") {
+    if (this.state.form.matchResult === "방어덱 패배") {
       f.matchResult = "attackWin";
     } else {
       f.matchResult = "defenseWin";
@@ -378,12 +378,6 @@ export class Register extends React.Component {
     return f;
   }
   sendFiletoS3 () {
-    let options = {
-      headers: {
-        "Accept": "multipart/form-data",
-        "Content-Type": "multipart/form-data"
-      }
-    };
     let result = 'Upload Failed';
     let mPath = path + 'api/put-s3-image';
     return (async _ => {
@@ -400,7 +394,7 @@ export class Register extends React.Component {
             "Content-Type": "multipart/form-data"
           }
         });
-        if (res.status == 200) {
+        if (res.status === 200) {
           result = res.data.message;
         }
       }
@@ -412,12 +406,12 @@ export class Register extends React.Component {
     })();
   }
   sendDatatoS3 (f, res) {
-    if (res === undefined || res == 'Upload Failed') {
+    if (res === undefined || res === 'Upload Failed') {
       return false;
     }
     let mPath = path + 'api/put-s3-data';
     let result = 'Upload Failed';
-    if (res != 'Not Uploaded') {
+    if (res !== 'Not Uploaded') {
       f.imagePath = res;
     }
     let str = JSON.stringify(f);
@@ -432,7 +426,7 @@ export class Register extends React.Component {
             "Content-Type": "application/json"
           }
         })
-        if (resp.status == 200) {
+        if (resp.status === 200) {
           result = resp.data.message;
         }
       }

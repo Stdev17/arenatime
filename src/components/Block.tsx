@@ -68,7 +68,7 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
 
   componentDidUpdate(oldProps: any) {
     let newProps = this.props;
-    if (this.state.str == 4 && newProps.party.length == 0) {
+    if (this.state.str === 4 && newProps.party.length === 0) {
       this.setState({
         str: 0,
         opacity: 0.5

@@ -1,10 +1,9 @@
 import React from 'react';
 import {
   Navbar,
-  Nav,
-  NavItem
+  Nav
 } from 'react-bootstrap';
-import { Link, Router, BrowserRouter } from 'react-router-dom';
+import { Link, BrowserRouter } from 'react-router-dom';
 import { LinkContainer} from "react-router-bootstrap";
 import { Routes } from './Routes';
 

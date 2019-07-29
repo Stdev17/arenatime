@@ -94,7 +94,7 @@ module.exports.handler = async (event, context) => {
       params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
     }
     params.KeyConditionExpression = 'defenseDeckId = :deckId';
-    params.ProjectionExpression = 'attackId, attackStar, uploadedDate, defenseStar, upvotes, downvotes, matchId, matchResult';
+    params.ProjectionExpression = 'attackDeck, attackStar, uploadedDate, defenseDeck, defenseStar, upvotes, downvotes, matchId, matchResult';
     params.FilterExpression = 'defensePower > :lower and defensePower < :upper and uploadedDate > :date and arena <> :arena and matchResult = :result';
   }
 

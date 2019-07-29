@@ -10,6 +10,7 @@ import { SetParty } from './SetParty';
 
 import '../css/daum.css';
 import '../css/text.css';
+import { SearchParty } from './SearchParty';
 
 var axios = require('axios');
 let path = 'http://localhost:4000/';
@@ -72,6 +73,7 @@ export class Search extends React.Component {
     };
   }
   getSearch() {
+    results = [];
     if (party.length < 1) {
       this.setState({
         title_msg: "검색 실패",
@@ -93,7 +95,7 @@ export class Search extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message == 'Query Failed') {
+      if (res.data.message === 'Query Failed') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 실패했습니다."
@@ -116,6 +118,7 @@ export class Search extends React.Component {
   }
   validateDeck(f) {
     let at = party.length;
+    f.deck = {};
     let atk = sort(party.slice());
     if (at > 0) {
       f.deck.first = atk.pop();
@@ -228,6 +231,18 @@ export class Search extends React.Component {
     let eVal = e.target.value;
     this.setState({form: {...this.state.form, [eName]: eVal}});
   }
+  queried() {
+    if (results.length > 0) {
+      //return this.state.res;
+
+      return (
+        results.map((value, index) => {
+            return <SearchParty match={value} key={index}/>
+        })
+      );
+
+    }
+  }
   render() {
     return (
       <div className="text">
@@ -300,9 +315,9 @@ export class Search extends React.Component {
           검색 시작
         </Button>
       </p>
-      <p style={subText} className="ten">
-        {this.state.res}
-      </p>
+      <div style={subText} className="ten">
+        {this.queried()}
+      </div>
       <Modal
         show={this.state.errShow}
         onHide={this.errorHide}

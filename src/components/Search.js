@@ -95,7 +95,7 @@ export class Search extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message === 'Query Failed') {
+      if (res.data.message == 'Query Failed') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 실패했습니다."
@@ -109,10 +109,9 @@ export class Search extends React.Component {
           for (let i in items) {
             results.push(items[i]);
           }
-          this.setState({
-            res: JSON.stringify(results)
-          });
         }
+        this.forceUpdate();
+        return;
       }
     })();
   }

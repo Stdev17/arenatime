@@ -155,6 +155,8 @@ export class Match extends React.Component {
     this.showResult = this.showResult.bind(this);
     this.getBack = this.getBack.bind(this);
     this.showMemo = this.showMemo.bind(this);
+    this.upClicked = this.upClicked.bind(this);
+    this.downClicked = this.downClicked.bind(this);
     
     this.state = {
       //
@@ -163,6 +165,8 @@ export class Match extends React.Component {
       upImage: null,
       downImage: null,
       resultImage: null,
+      upHighlighted: 0.5,
+      downHighlighted: 0.5,
       upvotes: "",
       downvotes: "",
       attackPower: "",
@@ -202,9 +206,7 @@ export class Match extends React.Component {
         }
       });
       if (res.data.message === 'Getting Item Failed') {
-        this.setState({
-          msg: "데이터 검색에 오류가 발생했습니다."
-        });
+        searchPath = "";
         return;
       } else {
         let msg = res.data.message;        
@@ -369,6 +371,53 @@ export class Match extends React.Component {
     return;
   }
 
+  upClicked() {
+    this.vote("up");
+  }
+
+  downClicked() {
+    this.vote("down");
+  }
+
+  vote(param) {
+    let dat = {
+      matchId: this.state.match['matchId']['S'],
+      vote: param
+    }
+    let mPath = path + 'api/vote';
+    (async _ => { 
+      let res = axios({
+        method: 'put',
+        url: mPath,
+        data: dat,
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      if (res.data.message === 'Vote Succeeded') {
+        let v = res.data.message.vote;
+        if (v.up === 'vote') {
+          this.setState({
+            upHighlighted: 1
+          });
+        } else if (v.up === 'unvote') {
+          this.setState({
+            upHighlighted: 0.5
+          });
+        }
+        if (v.down === 'vote') {
+          this.setState({
+            downHighlighted: 1
+          });
+        } else if (v.down === 'unvote') {
+          this.setState({
+            downHighlighted: 0.5
+          });
+        }
+      }
+    })();
+  }
+
   componentDidMount() {
     this.getResult();
   }
@@ -450,14 +499,18 @@ export class Match extends React.Component {
           y={103}
           width={16}
           height={16}
+          opacity={this.state.upHighlighted}
           image={this.state.upImage}
+          onClick={this.upClicked}
         />
         <Image
           x={1000}
           y={105}
           width={16}
           height={16}
+          opacity={this.state.downHighlighted}
           image={this.state.downImage}
+          onClick={this.downClicked}
         />
         <Text
           x={953}

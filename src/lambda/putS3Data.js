@@ -91,13 +91,15 @@ module.exports.handler = async (event, context) => {
 
   let vote = {
     matchId: parsed.matchId,
-    voters: []
+    upvoters: [],
+    downvoters: []
   };
   let voteParams = {
     TableName: "voter-table",
     Item: {
       matchId: {S: vote.matchId},
-      voters: {L: vote.voters}
+      upvoters: {L: vote.upvoters},
+      downvoters: {L: vote.downvoters}
     }
   };
   (async _ => {

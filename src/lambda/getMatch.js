@@ -35,5 +35,7 @@ module.exports.handler = async (event, context) => {
       return result;
     });
 
-    return get;
+    let voteParams = {
+
+    };
 }

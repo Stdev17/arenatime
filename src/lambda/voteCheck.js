@@ -3,7 +3,7 @@ const dyn = new aws.DynamoDB();
 
 module.exports.handler = async (event, context) => {
 
-  let req = event.body;
+  let req = JSON.parse(event.body);
   let myIp = event.requestContext.identity.sourceIp;
 
   let checkParams = {
@@ -36,12 +36,21 @@ module.exports.handler = async (event, context) => {
     return result;
   });
 
-  let resCheck = check.data.message['Item'];
+  let resCheck = JSON.parse(check.body)['message']['Item'];
   let checkVote = "Not Voted";
-  if (resCheck['upvoters']['L'].includes(myIp)) {
-    checkVote = 'Upvoted';
-  } else if (resCheck['downvoters']['L'].includes(myIp)) {
-    checkVote = 'Downvoted';
+  let upv = resCheck['upvoters']['L'];
+  let dov = resCheck['downvoters']['L'];
+  for (let u in upv) {
+    if (upv[u]['S'] == myIp) {
+      checkVote = 'Upvoted';
+      break;
+    }
+  }
+  for (let d in dov) {
+    if (dov[d]['S'] == myIp) {
+      checkVote = 'Downvoted';
+      break;
+    }
   }
 
   let getParams = {
@@ -75,11 +84,13 @@ module.exports.handler = async (event, context) => {
     });
 
     let exit = false;
-    let resGet = get.data.message['Item'];
+    let resGet = JSON.parse(get.body)['message']['Item'];
     let setUpvote, setDownvote;
-    let upvoteValue, downvoteValue, netUpvoteValue;
+    let upvoteValue = Number(resGet['upvotes']['N']);
+    let downvoteValue = Number(resGet['downvotes']['N']);
+    let netUpvoteValue = Number(resGet['netUpvotes']['N']);
     if (checkVote == 'Not Voted') {
-      if (req.vote == 'up') {
+      if (req['vote'] == 'up') {
         setUpvote = 'vote';
         setDownvote = 'none';
       } else {
@@ -87,14 +98,14 @@ module.exports.handler = async (event, context) => {
         setDownvote = 'vote';
       }
     } else if (checkVote == 'Upvoted') {
-      if (req.vote == 'up') {
+      if (req['vote'] == 'up') {
         exit = true;
       } else {
         setUpvote = 'unvote';
         setDownvote = 'vote';
       }
     } else {
-      if (req.vote == 'up') {
+      if (req['vote'] == 'up') {
         setUpvote = 'vote';
         setDownvote = 'unvote';
       } else {
@@ -113,28 +124,30 @@ module.exports.handler = async (event, context) => {
     }
     //
     if (setUpvote == 'vote') {
-      resCheck['upvoters']['L'].push(myIp);
-      upvoteValue = resGet['upvotes']['N'] + 1;
-      netUpvoteValue = resGet['netUpvotes']['N'] + 1;
+      resCheck['upvoters']['L'].push({S: myIp.toString()});
+      upvoteValue = Number(resGet['upvotes']['N']) + Number(1);
+      netUpvoteValue = Number(resGet['netUpvotes']['N']) + Number(1);
     } else if (setUpvote == 'unvote') {
       for (let u = 0; u < resCheck['upvoters']['L'].length; u++) {
         if (resCheck['upvoters']['L'][u] == myIp) {
           resCheck['upvoters']['L'].splice(u, 1);
-          upvoteValue = resGet['upvotes']['N'] - 1;
-          netUpvoteValue = resGet['netUpvotes']['N'] - 1;
+          upvoteValue = Number(resGet['upvotes']['N']) - Number(1);
+          netUpvoteValue = Number(resGet['netUpvotes']['N']) - Number(1);
+          break;
         }
       }
     }
     if (setDownvote == 'vote') {
-      resCheck['downvoters']['L'].push(myIp);
-      downvoteValue = resGet['downvotes']['N'] + 1;
-      netUpvoteValue = resGet['netUpvotes']['N'] - 1;
+      resCheck['downvoters']['L'].push({S: myIp.toString()});
+      downvoteValue = Number(resGet['downvotes']['N']) + Number(1);
+      netUpvoteValue = Number(resGet['netUpvotes']['N']) - Number(1);
     } else if (setDownvote == 'unvote') {
       for (let u = 0; u < resCheck['downvoters']['L'].length; u++) {
         if (resCheck['downvoters']['L'][u] == myIp) {
           resCheck['downvoters']['L'].splice(u, 1);
-          downvoteValue = resGet['downvotes']['N'] - 1;
-          netUpvoteValue = resGet['netUpvotes']['N'] + 1;
+          downvoteValue = Number(resGet['downvotes']['N']) - Number(1);
+          netUpvoteValue = Number(resGet['netUpvotes']['N']) + Number(1);
+          break;
         }
       }
     }
@@ -146,9 +159,9 @@ module.exports.handler = async (event, context) => {
       },
       UpdateExpression: 'set netUpvotes = :net, upvotes = :up, downvotes = :down',
       ExpressionAttributeValues: {
-        ':net': netUpvoteValue,
-        ':up': upvoteValue,
-        ':down': downvoteValue
+        ':net': {N: netUpvoteValue.toString()},
+        ':up': {N: upvoteValue.toString()},
+        ':down': {N: downvoteValue.toString()}
       },
     };
 
@@ -174,7 +187,7 @@ module.exports.handler = async (event, context) => {
       return result;
     });
 
-    if (updateMatch.data.message == 'Setting Votes Failed') {
+    if (JSON.parse(updateMatch.body)['message'] == 'Setting Votes Failed') {
       return updateMatch;
     }
 
@@ -185,8 +198,8 @@ module.exports.handler = async (event, context) => {
       },
       UpdateExpression: 'set upvoters = :up, downvoters = :down',
       ExpressionAttributeValues: {
-        ':up': resCheck['upvoters']['L'],
-        ':down': resCheck['downvoters']['L']
+        ':up': {L: resCheck['upvoters']['L']},
+        ':down': {L: resCheck['downvoters']['L']}
       },
     };
 
@@ -196,7 +209,7 @@ module.exports.handler = async (event, context) => {
         statusCode: 200,
         body: JSON.stringify({
           message: 'Vote Succeeded',
-          votes: {
+          vote: {
             up: setUpvote,
             down: setDownvote
           },

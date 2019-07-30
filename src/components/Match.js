@@ -31,7 +31,6 @@ var axios = require('axios');
 let path = 'http://localhost:4000/';
 
 var searchPath = "";
-var isSearched = false;
 var resultImageFile = null;
 
 const topicText = {
@@ -57,7 +56,6 @@ const smallText = {
 
 export function setSearchPath(str) {
   searchPath = str;
-  isSearched = true;
 }
 
 let scale = 72;
@@ -157,7 +155,8 @@ export class Match extends React.Component {
     this.showMemo = this.showMemo.bind(this);
     this.upClicked = this.upClicked.bind(this);
     this.downClicked = this.downClicked.bind(this);
-    
+    this.setVotes = this.setVotes.bind(this);
+    this.vote = this.vote.bind(this);
     this.state = {
       //
       attackImage: null,
@@ -186,12 +185,30 @@ export class Match extends React.Component {
     });
   }
 
+  setVotes() {
+    let uv, dv;
+    if (this.state.match['upvotes']['N'] > 99) {
+      uv = "99+";
+    } else {
+      uv = this.state.match['upvotes']['N'].toString()
+    }
+    if (this.state.match['downvotes']['N'] > 99) {
+      dv = "99+";
+    } else {
+      dv = this.state.match['downvotes']['N'].toString()
+    }
+    this.setState({
+      upvotes: uv,
+      downvotes: dv
+    });
+  }
+
   getResult() {
     //
     this.setState({
       fire: false
     });
-    if (searchPath == "") {
+    if (searchPath === "") {
       return;
     }
     (async _ => {
@@ -213,6 +230,15 @@ export class Match extends React.Component {
         this.setState({
           match: msg['Item']
         });
+        if (res.data.vote === 'Upvoted') {
+          this.setState({
+            upHighlighted: 1
+          });
+        } else if (res.data.vote === 'Downvoted') {
+          this.setState({
+            downHighlighted: 1
+          });
+        }
       }
       //
       if (this.state.match['imagePath'] !== undefined) {
@@ -237,22 +263,9 @@ export class Match extends React.Component {
       const down = new window.Image();
       const resImg = new window.Image();
       //
-      let uv, dv;
-      if (this.state.match['upvotes']['N'] > 99) {
-        uv = "99+";
-      } else {
-        uv = this.state.match['upvotes']['N'].toString()
-      }
-      if (this.state.match['downvotes']['N'] > 99) {
-        dv = "99+";
-      } else {
-        dv = this.state.match['downvotes']['N'].toString()
-      }
       let ap = "투력 " + this.state.match['attackPower']['N'].toString();
       let dp = "투력 " + this.state.match['defensePower']['N'].toString();
       this.setState({
-        upvotes: uv,
-        downvotes: dv,
         attackPower: ap,
         defensePower: dp
       });
@@ -268,6 +281,8 @@ export class Match extends React.Component {
       for (let d in defd) {
         defenseParty.push(defd[d]['S']);
       }
+      //
+      this.setVotes();
       //
       let atts = this.state.match['attackStar']['M'];
       let defs = this.state.match['defenseStar']['M'];
@@ -386,7 +401,7 @@ export class Match extends React.Component {
     }
     let mPath = path + 'api/vote';
     (async _ => { 
-      let res = axios({
+      let res = await axios({
         method: 'put',
         url: mPath,
         data: dat,
@@ -394,26 +409,39 @@ export class Match extends React.Component {
           Accept: "application/json"
         }
       });
+      console.log(res.data);
       if (res.data.message === 'Vote Succeeded') {
-        let v = res.data.message.vote;
+        let v = res.data.vote;
+        let m = this.state.match;
+        console.log(v);
         if (v.up === 'vote') {
+          m['upvotes']['N'] = Number(m['upvotes']['N']) + 1;
           this.setState({
-            upHighlighted: 1
+            upHighlighted: 1,
+            match: m
           });
         } else if (v.up === 'unvote') {
+          m['upvotes']['N'] = Number(m['upvotes']['N']) - 1;
           this.setState({
-            upHighlighted: 0.5
+            upHighlighted: 0.5,
+            match: m
           });
         }
         if (v.down === 'vote') {
+          m['downvotes']['N'] = Number(m['downvotes']['N']) + 1;
           this.setState({
-            downHighlighted: 1
+            downHighlighted: 1,
+            match: m
           });
         } else if (v.down === 'unvote') {
+          m['downvotes']['N'] = Number(m['downvotes']['N']) - 1;
           this.setState({
-            downHighlighted: 0.5
+            downHighlighted: 0.5,
+            match: m
           });
         }
+        this.setVotes();
+
       }
     })();
   }

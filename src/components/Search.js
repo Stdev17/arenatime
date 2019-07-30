@@ -106,7 +106,7 @@ export class Search extends React.Component {
         return;
       } else {
         let msg = res.data.message;
-        let items = msg["Items"];
+        let items = msg['Items'];
         if (items != null) {
           for (let i in items) {
             results.push(items[i]);

@@ -13,6 +13,9 @@ import { getCoord } from './Block.tsx';
 import { setSearchPath } from './Match';
 import { switchFire } from './Container.js';
 
+var path = 'http://localhost:4000/';
+var axios = require('axios');
+
 let scale = 64;
 
 let attackDeckX = 101;
@@ -113,6 +116,8 @@ export class SearchParty extends React.Component {
       upImage: null,
       downImage: null,
       magImage: null,
+      upHighlighted: 0.5,
+      downHighlighted: 0.5,
       upvotes: "",
       downvotes: "",
       link: false,
@@ -280,6 +285,8 @@ export class SearchParty extends React.Component {
           width={16}
           height={16}
           image={this.state.upImage}
+          opacity={this.state.upHighlighted}
+          onClick={this.upClicked}
         />
         <Image
           x={1029}
@@ -287,6 +294,8 @@ export class SearchParty extends React.Component {
           width={16}
           height={16}
           image={this.state.downImage}
+          opacity={this.state.downHighlighted}
+          onClick={this.downClicked}
         />
         <Text
           x={982}

@@ -16,6 +16,7 @@ function setId(req) {
 module.exports.handler = async (event, context) => {
 
   let req = JSON.parse(event.queryStringParameters[0]);
+  let myIp = event.requestContext.identity.sourceIp;
   let deckId = setId(req);
 
   let params = {
@@ -161,5 +162,5 @@ module.exports.handler = async (event, context) => {
       return result;
     });
 
-    return get;
+    return result;
 }

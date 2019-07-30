@@ -78,10 +78,19 @@ module.exports.handler = async (event, context) => {
 
     let resVote = voteParsed['message']['Item'];
     let checkVote = "Not Voted";
-    if (resVote['upvoters']['L'].includes(myIp)) {
-      checkVote = 'Upvoted';
-    } else if (resVote['downvoters']['L'].includes(myIp)) {
-      checkVote = 'Downvoted';
+    let upv = resVote['upvoters']['L'];
+    let dov = resVote['downvoters']['L'];
+    for (let u in upv) {
+      if (upv[u]['S'] == myIp) {
+        checkVote = 'Upvoted';
+        break;
+      }
+    }
+    for (let d in dov) {
+      if (dov[d]['S'] == myIp) {
+        checkVote = 'Downvoted';
+        break;
+      }
     }
 
     let result = {

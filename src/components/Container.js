@@ -10,6 +10,15 @@ import { Search } from './Search';
 import '../css/container.css';
 import { Match } from './Match';
 
+var fireMatch = false;
+export function switchFire() {
+  if (fireMatch) {
+    fireMatch = false;
+  } else {
+    fireMatch = true;
+  }
+}
+
 export class pageSearch extends React.Component {
   render() {
     return (
@@ -43,7 +52,7 @@ export class pageMatch extends React.Component {
       <div className="top">
       <Container>
         <Card>
-          <Match/>
+          <Match fire={fireMatch}/>
         </Card>
       </Container>
       </div>

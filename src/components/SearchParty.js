@@ -10,9 +10,11 @@ import { Redirect } from 'react-router-dom';
 import { char } from '../util/char.js';
 import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
-import { setSearched, setSearchPath, Match } from './Match';
+import { setSearchPath } from './Match';
+import { switchFire } from './Container.js';
 
 let scale = 64;
+
 let attackDeckX = 101;
 let defenseDeckX = 592;
 
@@ -20,6 +22,7 @@ class Slot extends React.Component {
   constructor(props) {
     super(props);
     let c = this.props.character;
+    this.setCoord = this.setCoord.bind(this);
     this.state = {
       image: null,
       x: getCoord(char.indexOf(c['char'])).XCoord,
@@ -103,6 +106,7 @@ export class SearchParty extends React.Component {
     super(props);
     this.goProfile = this.goProfile.bind(this);
     this.getProps = this.getProps.bind(this);
+    this.checkLink = this.checkLink.bind(this);
     this.state = {
       attackImage: null,
       defenseImage: null,
@@ -203,7 +207,7 @@ export class SearchParty extends React.Component {
   }
 
   goProfile() {
-    setSearched();
+    switchFire();
     setSearchPath(this.props.match['matchId']['S']);
     this.setState({
       link: true
@@ -222,14 +226,16 @@ export class SearchParty extends React.Component {
     }
   }
 
-  render() {
+  checkLink() {
     if (this.state.link) {
-      this.setState({
-        link: false
-      });
       return <Redirect to='/match'/>
     }
+  }
+
+  render() {
     return (
+      <div>
+        {this.checkLink()}
       <Stage width={1124} height={90}>
         <Layer>
         <Image
@@ -308,6 +314,7 @@ export class SearchParty extends React.Component {
         />
         </Layer>
       </Stage>
+      </div>
     );
   }
 }

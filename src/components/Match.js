@@ -1,8 +1,14 @@
+/* ***************** 
+*
+* fileName: Match
+* author: Leta
+* latestModified: 2019-07-30
+* Contact: https://github.com/Stdev17
+*
+********************/
+
 import React from 'react';
 import {
-  Modal,
-  Form,
-  Col,
   Button
 } from 'react-bootstrap';
 import {
@@ -12,6 +18,7 @@ import {
   Group,
   Text
 } from 'react-konva';
+import { Redirect } from 'react-router-dom';
 import { char } from '../util/char.js';
 import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
@@ -19,12 +26,13 @@ import { getCoord } from './Block.tsx';
 import '../css/daum.css';
 import '../css/text.css';
 
+var fileType = require('file-type');
 var axios = require('axios');
 let path = 'http://localhost:4000/';
 
-var isSearched = false;
-var fire = false;
 var searchPath = "";
+var isSearched = false;
+var resultImageFile = null;
 
 const topicText = {
   fontFamily: 'Daum',
@@ -47,15 +55,10 @@ const smallText = {
   fontColor: '#333333'
 }
 
-export function setSearched() {
-  isSearched = true;
-  fire = true;
-}
-
 export function setSearchPath(str) {
   searchPath = str;
+  isSearched = true;
 }
-
 
 let scale = 72;
 let attackDeckX = 111;
@@ -65,11 +68,12 @@ class Slot extends React.Component {
   constructor(props) {
     super(props);
     let c = this.props.character;
+    this.setCoord = this.setCoord.bind(this);
     this.state = {
       image: null,
       x: getCoord(char.indexOf(c['char'])).XCoord,
       y: getCoord(char.indexOf(c['char'])).YCoord,
-      star: "ddd"
+      star: ""
     };
   }
   setCoord() {
@@ -148,6 +152,10 @@ export class Match extends React.Component {
     super(props);
 
     this.getResult = this.getResult.bind(this);
+    this.showResult = this.showResult.bind(this);
+    this.getBack = this.getBack.bind(this);
+    this.showMemo = this.showMemo.bind(this);
+    
     this.state = {
       //
       attackImage: null,
@@ -155,21 +163,33 @@ export class Match extends React.Component {
       upImage: null,
       downImage: null,
       resultImage: null,
-      resultImageFile: null,
       upvotes: "",
       downvotes: "",
       attackPower: "",
       defensePower: "",
       attackSorted: [],
       defenseSorted: [],
+      link: false,
+      fire: false,
       match: {},
       date: ""
     };
   }
 
+  getBack() {
+    this.setState({
+      link: true
+    });
+  }
+
   getResult() {
     //
-    fire = false;
+    this.setState({
+      fire: false
+    });
+    if (searchPath == "") {
+      return;
+    }
     (async _ => {
       let mPath = path + 'api/get-match';
       let str = searchPath;
@@ -181,7 +201,7 @@ export class Match extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message == 'Getting Item Failed') {
+      if (res.data.message === 'Getting Item Failed') {
         this.setState({
           msg: "데이터 검색에 오류가 발생했습니다."
         });
@@ -193,21 +213,19 @@ export class Match extends React.Component {
         });
       }
       //
-      if (this.state.match['imagePath']['S'] !== undefined) {
+      if (this.state.match['imagePath'] !== undefined) {
         let sPath = path + 'api/get-image';
-        let str2 = this.state.match['imagePath'];
+        let str2 = this.state.match['imagePath']['S'];
         let img = await axios({
           method: 'get',
           url: sPath,
           params: str2
         });
-        if (res.data.message == 'Getting Image Failed') {
+        if (img.data.message === 'Getting Image Failed') {
           //
           return;
         } else {
-          this.setState({
-            resultImageFile: res.data.message
-          });
+          resultImageFile = new Buffer(img.data.message.Body.data);
         }
       }
       //
@@ -267,10 +285,13 @@ export class Match extends React.Component {
       up.src = './thumb-up.png';
       down.src = './thumb-down.png';
       //
-      if (this.state.match['imagePath']['S'] !== undefined) {
-        let fr = new FileReader();
-        fr.readAsDataURL(resultImageFile);
-        resImg.src = fr.result;
+      if (this.state.match['imagePath'] !== undefined) {
+        let fileMime = fileType(resultImageFile);
+        if (fileMime.ext === 'png') {
+          resImg.src = 'data:image/png;base64,' + resultImageFile.toString('base64');
+        } else {
+          resImg.src = 'data:image/jpeg;base64,' + resultImageFile.toString('base64');
+        }
         resImg.onload = () => {
           this.setState({
             resultImage: resImg
@@ -300,24 +321,27 @@ export class Match extends React.Component {
       this.setState({
         date: (this.state.match['uploadedDate']['S']).replace(/\s(\S)+/, "")
       });
-      this.forceUpdate();
     })();
   }
 
+
   showResult() {
-    if (this.state.match['imagePath']['S'] !== undefined) {
+    if (this.state.link) {
+      return <Redirect to='/search'/>
+    }
+    if (this.state.match['imagePath'] !== undefined) {
       return (
         <div>
         <p style={subText} className="ten">
           {'결과 이미지'}
         </p>
-        <Stage width={1124} height={150}>
+        <Stage width={1002} height={134}>
           <Layer>
             <Image
               x={1}
               y={0}
-              width={1122}
-              height={150}
+              width={1000}
+              height={134}
               image={this.state.resultImage}
             />
           </Layer>
@@ -327,8 +351,36 @@ export class Match extends React.Component {
     }
   }
 
+  showMemo() {
+    if (this.state.match['memo'] !== undefined) {
+      if (this.state.match['memo']['S'] !== 'PlaceHolder') {
+        return (
+          <div>
+            <p style={subText} className="ten">
+              {'참고사항'}
+            </p>
+            <p style={smallText} className="ten">
+              {this.state.match['memo']['S']}
+            </p>
+          </div>
+        );
+      }
+    }
+    return;
+  }
+
+  componentDidMount() {
+    this.getResult();
+  }
+
+  componentDidUpdate(oldProps, oldStates) {
+    if (oldStates.fire !== this.state.fire) {
+      this.getResult();
+    }
+  }
+
   render() {
-    if (!isSearched) {
+    if (searchPath === "" || this.state.match['matchId'] === undefined) {
       return (
         <div className="text">
           <h1 style={topicText}>
@@ -339,9 +391,6 @@ export class Match extends React.Component {
         </h2>
         </div>
       )
-    }
-    if (fire) {
-      this.getResult();
     }
     return (
       <div className="text">
@@ -389,7 +438,7 @@ export class Match extends React.Component {
           text={this.state.defensePower}
         />
         <Text
-          x={846}
+          x={810}
           y={103}
           fontSize={16}
           width={160}
@@ -397,30 +446,30 @@ export class Match extends React.Component {
           text={this.state.date}
         />
         <Image
-          x={969}
-          y={101}
+          x={940}
+          y={103}
           width={16}
           height={16}
           image={this.state.upImage}
         />
         <Image
-          x={1029}
-          y={101}
+          x={1000}
+          y={105}
           width={16}
           height={16}
           image={this.state.downImage}
         />
         <Text
-          x={982}
-          y={101}
+          x={953}
+          y={103}
           fontSize={16}
           width={48}
           align='center'
           text={this.state.upvotes}
         />
         <Text
-          x={1040}
-          y={101}
+          x={1011}
+          y={103}
           fontSize={16}
           width={48}
           align='center'
@@ -429,6 +478,12 @@ export class Match extends React.Component {
         </Layer>
         </Stage>
         {this.showResult()}
+        {this.showMemo()}
+        <p style={subText}>
+          <Button variant='success' onClick={this.getBack}>
+            {'돌아가기'}
+          </Button>
+        </p>
       </div>
     );
   }

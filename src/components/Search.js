@@ -97,7 +97,7 @@ export class Search extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message == 'Query Failed') {
+      if (res.data.message === 'Query Failed') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 오류가 발생했습니다."

@@ -28,7 +28,7 @@ module.exports.handler = async (event, context) => {
       result = {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'GetItem Failed',
+          message: 'Getting Item Failed',
           runtime: err
         })
       };

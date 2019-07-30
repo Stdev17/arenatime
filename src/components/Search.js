@@ -17,6 +17,7 @@ let path = 'http://localhost:4000/';
 
 var party = [];
 var results = [];
+var searched = false;
 
 const topicText = {
   fontFamily: 'Daum',
@@ -74,6 +75,7 @@ export class Search extends React.Component {
   }
   getSearch() {
     results = [];
+    searched = true;
     if (party.length < 1) {
       this.setState({
         title_msg: "검색 실패",
@@ -98,7 +100,7 @@ export class Search extends React.Component {
       if (res.data.message == 'Query Failed') {
         this.setState({
           title_msg: "검색 실패",
-          msg: "데이터 검색에 실패했습니다."
+          msg: "데이터 검색에 오류가 발생했습니다."
         });
         this.errorShow();
         return;
@@ -240,6 +242,12 @@ export class Search extends React.Component {
         })
       );
 
+    } else if (searched) {
+      return (
+        <p className={'ten'} style={subText}>
+          {'검색 결과가 없습니다.'}
+        </p>
+      );
     }
   }
   render() {

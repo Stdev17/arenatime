@@ -55,10 +55,10 @@ Resources:
           Projection: 
             ProjectionType: ALL
         - 
-          IndexName: defenseDate
+          IndexName: attackDate
           KeySchema: 
             - 
-              AttributeName: defenseDeckId
+              AttributeName: attackDeckId
               KeyType: HASH
             - 
               AttributeName: uploadedDate
@@ -66,10 +66,10 @@ Resources:
           Projection: 
             ProjectionType: ALL
         - 
-          IndexName: attackDate
+          IndexName: defenseDate
           KeySchema: 
             - 
-              AttributeName: attackDeckId
+              AttributeName: defenseDeckId
               KeyType: HASH
             - 
               AttributeName: uploadedDate

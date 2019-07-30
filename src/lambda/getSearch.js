@@ -110,6 +110,34 @@ module.exports.handler = async (event, context) => {
     params.FilterExpression = 'attackPower > :lower and attackPower < :upper and uploadedDate > :date and arena <> :arena and matchResult = :result';
   }
 
+  if (req.target == 'defense' && req.sort == 'latest') {
+    params.IndexName = 'defenseDate';
+    if (req.result == 'defeat') {
+      params.ExpressionAttributeValues[':result'] = {S: 'attackWin'};
+    } else {
+      params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
+    }
+    for (let i in params.ExpressionAttributeValues) {
+      console.log(params.ExpressionAttributeValues[i]);
+    }
+    params.KeyConditionExpression = 'defenseDeckId = :deckId';
+    params.ProjectionExpression = 'attackDeck, attackStar, uploadedDate, defenseDeck, defenseStar, upvotes, downvotes, matchId, matchResult';
+    params.FilterExpression = 'defensePower > :lower and defensePower < :upper and uploadedDate > :date and arena <> :arena and matchResult = :result';
+  }
+
+  if (req.target == 'attack' && req.sort == 'latest') {
+    params.IndexName = 'attackDate';
+    if (req.result == 'victory') {
+      params.ExpressionAttributeValues[':result'] = {S: 'attackWin'};
+    } else {
+      params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
+    }
+    params.KeyConditionExpression = 'attackDeckId = :deckId';
+    params.ProjectionExpression = 'attackDeck, attackStar, uploadedDate, defenseDeck, defenseStar, upvotes, downvotes, matchId, matchResult';
+    params.FilterExpression = 'attackPower > :lower and attackPower < :upper and uploadedDate > :date and arena <> :arena and matchResult = :result';
+  }
+
+
   let get = await dyn.query(params).promise()
     .then(data => {
       result = {

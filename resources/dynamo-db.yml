@@ -25,7 +25,7 @@ Resources:
           AttributeName: defenseDeckId
           AttributeType: "N"
         - 
-          AttributeName: date
+          AttributeName: uploadedDate
           AttributeType: S
         - 
           AttributeName: netUpvotes
@@ -61,7 +61,7 @@ Resources:
               AttributeName: defenseDeckId
               KeyType: HASH
             - 
-              AttributeName: date
+              AttributeName: uploadedDate
               KeyType: RANGE
           Projection: 
             ProjectionType: ALL
@@ -72,7 +72,7 @@ Resources:
               AttributeName: attackDeckId
               KeyType: HASH
             - 
-              AttributeName: date
+              AttributeName: uploadedDate
               KeyType: RANGE
           Projection: 
             ProjectionType: ALL

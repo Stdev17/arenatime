@@ -13,8 +13,9 @@ import '../css/text.css';
 var axios = require('axios');
 let path = 'http://localhost:4000/';
 
-export var isSearched = false;
-export var searchPath = "";
+var isSearched = false;
+var fire = false;
+var searchPath = "";
 var match = {};
 
 const topicText = {
@@ -38,20 +39,32 @@ const smallText = {
   fontColor: '#333333'
 }
 
+export function setSearched() {
+  isSearched = true;
+  fire = true;
+}
+
+export function setSearchPath(str) {
+  searchPath = str;
+}
+
 export class Match extends React.Component {
   constructor(props) {
     super(props);
 
+    this.getResult = this.getResult.bind(this);
     this.state = {
       //
+      msg: ""
     };
   }
 
-  componentDidMount() {
+  getResult() {
+    fire = false;
     (async _ => {
       let mPath = path + 'api/get-match';
       let str = searchPath;
-      match = await axios({
+      let res = await axios({
         method: 'get',
         url: mPath,
         params: str,
@@ -59,7 +72,25 @@ export class Match extends React.Component {
           "Accept": "application/json"
         }
       });
+      if (res.data.message == 'GetItem Failed') {
+        this.setState({
+          msg: "데이터 검색에 실패했습니다."
+        });
+        return;
+      } else {
+        let msg = res.data.message;
+        match = msg['Item'];
+        this.setState({
+          msg: JSON.stringify(match)
+        });
+        this.forceUpdate();
+        return;
+      }
     })();
+  }
+
+  componentDidMount() {
+    //this.getResult();
   }
 
   render() {
@@ -75,9 +106,12 @@ export class Match extends React.Component {
         </div>
       )
     }
+    if (fire) {
+      this.getResult();
+    }
     return (
       <div>
-
+        {this.state.msg}
       </div>
     );
   }

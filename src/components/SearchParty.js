@@ -10,7 +10,7 @@ import { Redirect } from 'react-router-dom';
 import { char } from '../util/char.js';
 import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
-import { isSearched, searchPath } from './Match';
+import { setSearched, setSearchPath, Match } from './Match';
 
 let scale = 64;
 let attackDeckX = 101;
@@ -203,8 +203,8 @@ export class SearchParty extends React.Component {
   }
 
   goProfile() {
-    isSearched = true;
-    searchPath = this.props.match['matchId']['S'];
+    setSearched();
+    setSearchPath(this.props.match['matchId']['S']);
     this.setState({
       link: true
     });
@@ -227,7 +227,7 @@ export class SearchParty extends React.Component {
       this.setState({
         link: false
       });
-      return <Redirect to='/register'/>
+      return <Redirect to='/match'/>
     }
     return (
       <Stage width={1124} height={90}>

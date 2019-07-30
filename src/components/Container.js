@@ -8,6 +8,7 @@ import {
 import { Register } from './Register';
 import { Search } from './Search';
 import '../css/container.css';
+import { Match } from './Match';
 
 export class pageSearch extends React.Component {
   render() {
@@ -29,6 +30,20 @@ export class pageRegister extends React.Component {
       <Container>
         <Card>
           <Register/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
+export class pageMatch extends React.Component {
+  render() {
+    return (
+      <div className="top">
+      <Container>
+        <Card>
+          <Match/>
         </Card>
       </Container>
       </div>

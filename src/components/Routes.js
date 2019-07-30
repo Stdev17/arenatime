@@ -2,7 +2,8 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import {
   pageRegister,
-  pageSearch
+  pageSearch,
+  pageMatch
 } from "./Container";
 
 export class Routes extends React.Component {
@@ -12,6 +13,7 @@ export class Routes extends React.Component {
       <Route path="/" exact component={pageSearch} />
       <Route path="/search" component={pageSearch} />
       <Route path="/register" component={pageRegister} />
+      <Route path="/match" component={pageMatch} />
     </Switch>
     );
   }

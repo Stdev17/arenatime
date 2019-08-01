@@ -20,6 +20,8 @@ var party = [];
 var results = [];
 var searched = false;
 var offset = 1;
+var max = 1;
+var queryItems = [];
 
 const topicText = {
   fontFamily: 'Daum',
@@ -78,16 +80,18 @@ export class Search extends React.Component {
     };
   }
   updateOffset(num) {
-    offset = num;
-    results = [];
-    console.log(this.state.items[this.state.offset-1]);
-    let items = this.state.items[this.state.offset-1]['Items'];
-    if (items != null) {
-      for (let i in items) {
-        results.push(items[i]);
+    {
+      offset = num;
+      results = [];
+      console.log(queryItems);
+      let items = queryItems[offset-1]['Items'];
+      if (items != null) {
+        for (let i in items) {
+          results.push(items[i]);
+        }
       }
+      this.forceUpdate();
     }
-    this.forceUpdate();
   }
 
   getSearch() {
@@ -114,7 +118,7 @@ export class Search extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message === 'Query Failed' || res.data.message === 'Queries Not Found') {
+      if (res.data.message === 'Query Failed' || res.data.message === 'Deck Not Found') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 오류가 발생했습니다."
@@ -124,14 +128,13 @@ export class Search extends React.Component {
       } else {
         let msg = res.data.message;
         results = [];
-        let items = msg[this.state.offset-1]['Items'];
+        max = msg.length;
+        let items = msg[offset-1]['Items'];
         if (items != null) {
           for (let i in items) {
             results.push(items[i]);
           }
-          this.setState({
-            items: msg
-          });
+          queryItems = msg;
         }
         this.forceUpdate();
         return;
@@ -258,15 +261,15 @@ export class Search extends React.Component {
     if (results.length > 0) {
       //return this.state.res;
       let items = [];
-      for (let num = this.state.offset-2; num <= this.state.offset+4; num++) {
+      for (let num = offset-2; num <= offset+4; num++) {
         if (num < 1) {
           continue;
         }
-        if (num > results.length || (num > 5 && num > this.state.offset+2)) {
+        if (num > max || (num > 5 && num > offset+2)) {
           break;
         }
         items.push(
-          <Pagination.Item key={num} active={num === this.state.offset} onClick={this.updateOffset(num)}>
+          <Pagination.Item key={num} active={num === offset} onClick={() => this.updateOffset(num)}>
             {num}           
           </Pagination.Item>,
         );
@@ -277,13 +280,57 @@ export class Search extends React.Component {
             return <SearchParty match={value} key={index}/>
         })}
         <Pagination>
-        <Pagination.First />
-        <Pagination.Prev />
+        <Pagination.First onClick={() => {
+          offset = 1;
+          results = [];
+          let items = queryItems[0]['Items'];
+          if (items != null) {
+            for (let i in items) {
+              results.push(items[i]);
+            }
+          }
+          this.forceUpdate();
+        }}/>
+        <Pagination.Prev onClick={() => {
+          if (offset > 1) {
+            offset -= 1;
+          }
+          results = [];
+          let items = queryItems[offset-1]['Items'];
+          if (items != null) {
+            for (let i in items) {
+              results.push(items[i]);
+            }
+          }
+          this.forceUpdate();
+        }}/>
         <Pagination.Ellipsis />
         {items}
         <Pagination.Ellipsis />
-        <Pagination.Next />
-        <Pagination.Last />
+        <Pagination.Next onClick={() => {
+          if (offset < max) {
+            offset += 1;
+          }
+          results = [];
+          let items = queryItems[offset-1]['Items'];
+          if (items != null) {
+            for (let i in items) {
+              results.push(items[i]);
+            }
+          }
+          this.forceUpdate();
+        }}/>
+        <Pagination.Last onClick={() => {
+          offset = max;
+          results = [];
+          let items = queryItems[offset-1]['Items'];
+          if (items != null) {
+            for (let i in items) {
+              results.push(items[i]);
+            }
+          }
+          this.forceUpdate();
+        }}/>
         </Pagination>
         </div>
       );

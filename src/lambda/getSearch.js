@@ -142,7 +142,6 @@ module.exports.handler = async (event, context) => {
 
   let queries = [];
   let res = [];
-  let end = false;
 
   let get = await dyn.query(params, async function continueQuery(err, data) {
     if (err) {
@@ -155,9 +154,9 @@ module.exports.handler = async (event, context) => {
       };
       return result;
     } else {
-      if (queries.length === 0) {
+      if (queries.length === 0 && data['Items'] !== undefined) {
         queries.push(data);
-      } else {
+      } else if (data['Items'][0] !== undefined) {
         let check = false;
         for (let i in queries) {
           console.log
@@ -171,9 +170,9 @@ module.exports.handler = async (event, context) => {
       }
       if (data.LastEvaluatedKey) {
         params.ExclusiveStartKey = data.LastEvaluatedKey;
-        return await dyn.query(params, continueQuery).promise();
+        let get = await dyn.query(params, continueQuery).promise();
+        return get;
       } else {
-        end = true;
         return {
           statusCode: 200,
           body: JSON.stringify({
@@ -197,6 +196,15 @@ module.exports.handler = async (event, context) => {
   }
 
   function finished() {
+    if (queries.length === 0) {
+      return result = {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: 'Deck Not Found',
+          runtime: err
+        })
+      };
+    }
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -204,26 +212,6 @@ module.exports.handler = async (event, context) => {
         runtime: context
       })
     };
-    if (res['Items'] !== undefined) {
-      let result = {
-        statusCode: 200,
-        body: JSON.stringify({
-          message: queries,
-          runtime: context
-        })
-      };
-      return result;
-    } else {
-      console.log(res);
-      let result = {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: 'Query Failed',
-          runtime: context
-        })
-      };
-      return result;
-    }
   }
 
 }

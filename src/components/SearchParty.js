@@ -13,9 +13,6 @@ import { getCoord } from './Block.tsx';
 import { setSearchPath } from './Match';
 import { switchFire } from './Container.js';
 
-var path = 'http://localhost:4000/';
-var axios = require('axios');
-
 let scale = 64;
 
 let attackDeckX = 101;

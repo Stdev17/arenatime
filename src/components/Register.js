@@ -183,6 +183,7 @@ export class Register extends React.Component {
           defParty.splice(0, defParty.length);
           attParty.splice(0, attParty.length);
           this.setState({
+            memo: "",
             title_msg: "등록 성공",
             msg: "대전 결과가 DB에 등록되었습니다."
           });

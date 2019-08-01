@@ -23,7 +23,8 @@ module.exports.handler = async (event, context) => {
     TableName: 'match-table',
     ExpressionAttributeValues: {
       ':deckId': {N: deckId.toString()}
-    }
+    },
+    Limit: 2
   };
 
   if (req.arena == 'battleArena') {
@@ -139,19 +140,11 @@ module.exports.handler = async (event, context) => {
     params.FilterExpression = 'attackPower > :lower and attackPower < :upper and arena <> :arena and matchResult = :result';
   }
 
+  let res = {};
+  let queries = [];
 
-  let get = await dyn.query(params).promise()
-    .then(data => {
-      result = {
-        statusCode: 200,
-        body: JSON.stringify({
-          message: data,
-          runtime: context
-        })
-      };
-      return result;
-    })
-    .catch(err => {
+  let get = await dyn.query(params, function continueQuery(err, data) {
+    if (err) {
       result = {
         statusCode: 400,
         body: JSON.stringify({
@@ -160,7 +153,22 @@ module.exports.handler = async (event, context) => {
         })
       };
       return result;
-    });
+    } else if (data.LastEvaluatedKey) {
+      params.ExclusiveStartKey = data.LastEvaluatedKey;
+      queries.push(dyn.query(params, continueQuery));
+    } else {
+      queries.push(data);
+      return;
+    }
+  });
 
-    return result;
+  res = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: queries,
+      runtime: context
+    })
+  };
+
+  return res;
 }

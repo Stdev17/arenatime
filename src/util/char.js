@@ -51,15 +51,15 @@ const char = [
   'Mahiru',
   'Io',
   'Aoi',
-  'Suzume'
-  /*
+  'Suzume',
   'SummerKyaru',
   'SummerTamaki',
   'Tomo',
   'SummerMifuyu',
   'HalloweenMiyako',
   'HalloweenShinobu',
-  'SummerSuzume',
+  'SummerSuzume'
+  /*
   'Matsuri',
   'HalloweenMisaki',
   'Christina',

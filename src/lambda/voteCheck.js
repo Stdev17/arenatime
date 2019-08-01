@@ -125,28 +125,28 @@ module.exports.handler = async (event, context) => {
     //
     if (setUpvote == 'vote') {
       resCheck['upvoters']['L'].push({S: myIp.toString()});
-      upvoteValue = Number(resGet['upvotes']['N']) + Number(1);
-      netUpvoteValue = Number(resGet['netUpvotes']['N']) + Number(1);
+      upvoteValue += Number(1);
+      netUpvoteValue += Number(1);
     } else if (setUpvote == 'unvote') {
       for (let u = 0; u < resCheck['upvoters']['L'].length; u++) {
         if (resCheck['upvoters']['L'][u]['S'] == myIp) {
           resCheck['upvoters']['L'].splice(u, 1);
-          upvoteValue = Number(resGet['upvotes']['N']) - Number(1);
-          netUpvoteValue = Number(resGet['netUpvotes']['N']) - Number(1);
+          upvoteValue -= Number(1);
+          netUpvoteValue -= Number(1);
           break;
         }
       }
     }
     if (setDownvote == 'vote') {
       resCheck['downvoters']['L'].push({S: myIp.toString()});
-      downvoteValue = Number(resGet['downvotes']['N']) + Number(1);
-      netUpvoteValue = Number(resGet['netUpvotes']['N']) - Number(1);
+      downvoteValue += Number(1);
+      netUpvoteValue -= Number(1);
     } else if (setDownvote == 'unvote') {
       for (let u = 0; u < resCheck['downvoters']['L'].length; u++) {
         if (resCheck['downvoters']['L'][u]['S'] == myIp) {
           resCheck['downvoters']['L'].splice(u, 1);
-          downvoteValue = Number(resGet['downvotes']['N']) - Number(1);
-          netUpvoteValue = Number(resGet['netUpvotes']['N']) + Number(1);
+          downvoteValue -= Number(1);
+          netUpvoteValue += Number(1);
           break;
         }
       }

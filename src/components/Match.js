@@ -515,8 +515,8 @@ export class Match extends React.Component {
           text={this.state.defensePower}
         />
         <Text
-          x={810}
-          y={103}
+          x={804}
+          y={105}
           fontSize={16}
           width={160}
           align='center'

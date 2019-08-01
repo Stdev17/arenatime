@@ -3,7 +3,8 @@ import {
   Modal,
   Form,
   Col,
-  Button
+  Button,
+  Pagination
 } from 'react-bootstrap';
 import { sort } from './Party';
 import { SetParty } from './SetParty';
@@ -60,6 +61,9 @@ export class Search extends React.Component {
       msg: "",
       errShow: false,
       res: "",
+      offset: 1,
+      active: 1,
+      items: [],
       form: {
         target: "방어",
         result: "패배",
@@ -73,6 +77,24 @@ export class Search extends React.Component {
       }
     };
   }
+  updateOffset(num) {
+    this.setState({
+      active: num,
+      offset: num
+    });
+    results = [];
+    if (this.state.items === []) {
+      return;
+    }
+    let items = this.state.items[this.state.offset-1]['Items'];
+    if (items != null) {
+      for (let i in items) {
+        results.push(items[i]);
+      }
+    }
+    this.forceUpdate();
+  }
+
   getSearch() {
     results = [];
     searched = true;
@@ -97,7 +119,7 @@ export class Search extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message === 'Query Failed') {
+      if (res.data.message === 'Query Failed' || res.data.message === 'Queries Not Found') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 오류가 발생했습니다."
@@ -106,11 +128,15 @@ export class Search extends React.Component {
         return;
       } else {
         let msg = res.data.message;
-        let items = msg['Items'];
+        results = [];
+        let items = msg[this.state.offset-1]['Items'];
         if (items != null) {
           for (let i in items) {
             results.push(items[i]);
           }
+          this.setState({
+            items: msg
+          });
         }
         this.forceUpdate();
         return;
@@ -235,11 +261,35 @@ export class Search extends React.Component {
   queried() {
     if (results.length > 0) {
       //return this.state.res;
-
+      let items = [];
+      for (let num = this.state.offset-2; num <= this.state.offset+4; num++) {
+        if (num < 1) {
+          continue;
+        }
+        if (num > results.length || (num > 5 && num > this.state.offset+2)) {
+          break;
+        }
+        items.push(
+          <Pagination.Item key={num} active={num === this.state.active}>
+            {num}           
+          </Pagination.Item>,
+        );
+      }
       return (
-        results.map((value, index) => {
+        <div>
+        {results.map((value, index) => {
             return <SearchParty match={value} key={index}/>
-        })
+        })}
+        <Pagination>
+        <Pagination.First />
+        <Pagination.Prev />
+        <Pagination.Ellipsis />
+        {items}
+        <Pagination.Ellipsis />
+        <Pagination.Next />
+        <Pagination.Last />
+        </Pagination>
+        </div>
       );
 
     } else if (searched) {

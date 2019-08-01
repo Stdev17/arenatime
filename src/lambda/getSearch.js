@@ -141,9 +141,10 @@ module.exports.handler = async (event, context) => {
   }
 
   let res = {};
+  let stack = 0;
   let queries = [];
 
-  let get = await dyn.query(params, function continueQuery(err, data) {
+  let get = await dyn.query(params, async function continueQuery(err, data) {
     if (err) {
       result = {
         statusCode: 400,
@@ -155,20 +156,58 @@ module.exports.handler = async (event, context) => {
       return result;
     } else if (data.LastEvaluatedKey) {
       params.ExclusiveStartKey = data.LastEvaluatedKey;
-      queries.push(dyn.query(params, continueQuery));
-    } else {
+      stack += 1;
       queries.push(data);
-      return;
+
+      let wait = await dyn.query(params, continueQuery).promise();
+      if (wait) {
+        //
+        stack -= 1;
+        queries.push(wait['Items']);
+      }
+      if (stack == 0) {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            message: queries,
+            runtime: context
+          })
+        };
+      }
+      return queries;
+    } else {
+      queries.push(data['Items']);
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Success',
+          runtime: context
+        })
+      };
     }
-  });
+  }).promise();
 
-  res = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: queries,
-      runtime: context
-    })
-  };
+  //console.log(queries);
+  //console.log(get);
 
-  return res;
+  if (get['Items'] !== undefined) {
+    res = {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: queries,
+        runtime: context
+      })
+    };
+    return res;
+  } else {
+    result = {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: 'Query Failed',
+        runtime: err
+      })
+    };
+    return result;
+  }
+
 }

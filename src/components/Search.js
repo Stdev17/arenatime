@@ -19,6 +19,7 @@ let path = 'http://localhost:4000/';
 var party = [];
 var results = [];
 var searched = false;
+var offset = 1;
 
 const topicText = {
   fontFamily: 'Daum',
@@ -49,6 +50,7 @@ export class Search extends React.Component {
     this.setSelection = this.setSelection.bind(this);
     this.validateDeck = this.validateDeck.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
+    this.updateOffset = this.updateOffset.bind(this);
     this.errorShow = () => {
       this.setState({ errShow: true });
     };
@@ -61,8 +63,6 @@ export class Search extends React.Component {
       msg: "",
       errShow: false,
       res: "",
-      offset: 1,
-      active: 1,
       items: [],
       form: {
         target: "방어",
@@ -78,14 +78,9 @@ export class Search extends React.Component {
     };
   }
   updateOffset(num) {
-    this.setState({
-      active: num,
-      offset: num
-    });
+    offset = num;
     results = [];
-    if (this.state.items === []) {
-      return;
-    }
+    console.log(this.state.items[this.state.offset-1]);
     let items = this.state.items[this.state.offset-1]['Items'];
     if (items != null) {
       for (let i in items) {
@@ -258,6 +253,7 @@ export class Search extends React.Component {
     let eVal = e.target.value;
     this.setState({form: {...this.state.form, [eName]: eVal}});
   }
+
   queried() {
     if (results.length > 0) {
       //return this.state.res;
@@ -270,7 +266,7 @@ export class Search extends React.Component {
           break;
         }
         items.push(
-          <Pagination.Item key={num} active={num === this.state.active}>
+          <Pagination.Item key={num} active={num === this.state.offset} onClick={this.updateOffset(num)}>
             {num}           
           </Pagination.Item>,
         );

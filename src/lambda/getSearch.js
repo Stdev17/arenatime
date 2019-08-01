@@ -140,9 +140,9 @@ module.exports.handler = async (event, context) => {
     params.FilterExpression = 'attackPower > :lower and attackPower < :upper and arena <> :arena and matchResult = :result';
   }
 
-  let res = {};
-  let stack = 0;
   let queries = [];
+  let res = [];
+  let end = false;
 
   let get = await dyn.query(params, async function continueQuery(err, data) {
     if (err) {
@@ -154,60 +154,76 @@ module.exports.handler = async (event, context) => {
         })
       };
       return result;
-    } else if (data.LastEvaluatedKey) {
-      params.ExclusiveStartKey = data.LastEvaluatedKey;
-      stack += 1;
-      queries.push(data);
-
-      let wait = await dyn.query(params, continueQuery).promise();
-      if (wait) {
-        //
-        stack -= 1;
-        queries.push(wait['Items']);
+    } else {
+      if (queries.length === 0) {
+        queries.push(data);
+      } else {
+        let check = false;
+        for (let i in queries) {
+          console.log
+          if (queries[i]['Items'][0]['matchId']['S'] === data['Items'][0]['matchId']['S']) {
+            check = true;
+          }
+        }
+        if (!check) {
+          queries.push(data);
+        }
       }
-      if (stack == 0) {
+      if (data.LastEvaluatedKey) {
+        params.ExclusiveStartKey = data.LastEvaluatedKey;
+        return await dyn.query(params, continueQuery).promise();
+      } else {
+        end = true;
         return {
           statusCode: 200,
           body: JSON.stringify({
-            message: queries,
+            message: 'Success',
             runtime: context
           })
         };
       }
-      return queries;
-    } else {
-      queries.push(data['Items']);
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          message: 'Success',
-          runtime: context
-        })
-      };
     }
   }).promise();
 
-  //console.log(queries);
-  //console.log(get);
+  let fuck = await (async _ => {
+    await timeout(300);
+    return finished();
+  })();
 
-  if (get['Items'] !== undefined) {
-    res = {
+  return fuck;
+
+  function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  function finished() {
+    return {
       statusCode: 200,
       body: JSON.stringify({
         message: queries,
         runtime: context
       })
     };
-    return res;
-  } else {
-    result = {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'Query Failed',
-        runtime: err
-      })
-    };
-    return result;
+    if (res['Items'] !== undefined) {
+      let result = {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: queries,
+          runtime: context
+        })
+      };
+      return result;
+    } else {
+      console.log(res);
+      let result = {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: 'Query Failed',
+          runtime: context
+        })
+      };
+      return result;
+    }
   }
 
 }

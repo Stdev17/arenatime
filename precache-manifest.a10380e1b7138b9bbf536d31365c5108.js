@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9b38c1a628f35ada81b1e813f0b06bf7",
+    "revision": "d8bf521ec0359acb81c9095c772051b1",
     "url": "/arenatime/index.html"
   },
   {

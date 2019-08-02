@@ -31,7 +31,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: 'Getting Item Failed',
           runtime: err
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return result;
     });
@@ -65,7 +69,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: 'Getting Voters Failed',
           runtime: err
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return result;
     });
@@ -99,7 +107,11 @@ module.exports.handler = async (event, context) => {
         message: JSON.parse(get.body)['message'],
         vote: checkVote,
         runtime: context
-      })
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+        'Access-Control-Allow-Credentials': true,
+      }
     };
 
 

@@ -22,7 +22,7 @@ class Slot extends React.Component {
   }
   componentDidMount() {
     const image = new window.Image();
-    image.src = "./characters.jpg";
+    image.src = "/arenatime/characters.jpg";
     if (this.props.character === "Empty") {
       this.setState({
         x: 1100,

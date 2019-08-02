@@ -26,9 +26,11 @@ import { getCoord } from './Block.tsx';
 import '../css/daum.css';
 import '../css/text.css';
 
+import { path } from '../util/dummy';
+
 var fileType = require('file-type');
 var axios = require('axios');
-let path = 'http://localhost:4000/';
+
 
 var searchPath = "";
 var resultImageFile = null;
@@ -91,13 +93,15 @@ class Slot extends React.Component {
     for (let i = 0; i < this.props.character['star']; i++) {
       s += "★";
     }
-    this.setState({
-      star: s
-    });
+    if (this.props.character['star'] < 6) {
+      this.setState({
+        star: s
+      });
+    }
   }
   componentDidMount() {
     const image = new window.Image();
-    image.src = "./characters.jpg";
+    image.src = "/arenatime/characters.jpg";
     this.setCoord();
     image.onload = () => {
       // setState will redraw layer
@@ -157,6 +161,7 @@ export class Match extends React.Component {
     this.downClicked = this.downClicked.bind(this);
     this.setVotes = this.setVotes.bind(this);
     this.vote = this.vote.bind(this);
+    this.checkImg = this.checkImg.bind(this);
     this.state = {
       //
       attackImage: null,
@@ -177,6 +182,22 @@ export class Match extends React.Component {
       match: {},
       date: ""
     };
+  }
+
+  checkImg() {
+    if (this.props.match['imagePath']['S'] !== 'PlaceHolder') {
+      return (
+        <Image
+        x={1009}
+        y={54}
+        width={24}
+        height={24}
+        image={this.state.magImage}
+        onClick={this.goProfile}
+        onTap={this.goProfile}
+      />
+      );
+    }
   }
 
   getBack() {
@@ -241,7 +262,7 @@ export class Match extends React.Component {
         }
       }
       //
-      if (this.state.match['imagePath'] !== undefined) {
+      if (this.state.match['imagePath']['S'] !== 'PlaceHolder') {
         let sPath = path + 'api/get-image';
         let str2 = this.state.match['imagePath']['S'];
         let img = await axios({
@@ -263,8 +284,12 @@ export class Match extends React.Component {
       const down = new window.Image();
       const resImg = new window.Image();
       //
-      let ap = "투력 " + this.state.match['attackPower']['N'].toString();
-      let dp = "투력 " + this.state.match['defensePower']['N'].toString();
+      let ap = "";
+      let dp = "";
+      if (this.state.match['attackPower']['N'] > 0) {
+        ap = "투력 " + this.state.match['attackPower']['N'].toString();
+        dp = "투력 " + this.state.match['defensePower']['N'].toString();
+      }
       this.setState({
         attackPower: ap,
         defensePower: dp
@@ -293,16 +318,16 @@ export class Match extends React.Component {
 
       let result = this.state.match['matchResult']['S'];
       if (result === 'attackWin') {
-        aImage.src = './win.png';
-        dImage.src = './lose.png';
+        aImage.src = '/arenatime/win.png';
+        dImage.src = '/arenatime/lose.png';
       } else {
-        aImage.src = './lose.png';
-        dImage.src = './win.png';
+        aImage.src = '/arenatime/lose.png';
+        dImage.src = '/arenatime/win.png';
       }
-      up.src = './thumb-up.png';
-      down.src = './thumb-down.png';
+      up.src = '/arenatime/thumb-up.png';
+      down.src = '/arenatime/thumb-down.png';
       //
-      if (this.state.match['imagePath'] !== undefined) {
+      if (this.state.match['imagePath']['S'] !== 'PlaceHolder') {
         let fileMime = fileType(resultImageFile);
         if (fileMime.ext === 'png') {
           resImg.src = 'data:image/png;base64,' + resultImageFile.toString('base64');
@@ -344,9 +369,9 @@ export class Match extends React.Component {
 
   showResult() {
     if (this.state.link) {
-      return <Redirect to='/search'/>
+      return <Redirect to='/arenatime/search'/>
     }
-    if (this.state.match['imagePath'] !== undefined) {
+    if (this.state.match['imagePath']['S'] !== 'PlaceHolder') {
       return (
         <div>
         <p style={subText} className="ten">
@@ -530,6 +555,7 @@ export class Match extends React.Component {
           opacity={this.state.upHighlighted}
           image={this.state.upImage}
           onClick={this.upClicked}
+          onTap={this.upClicked}
         />
         <Image
           x={1000}
@@ -539,6 +565,7 @@ export class Match extends React.Component {
           opacity={this.state.downHighlighted}
           image={this.state.downImage}
           onClick={this.downClicked}
+          onTap={this.downClicked}
         />
         <Text
           x={953}

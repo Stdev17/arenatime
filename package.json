@@ -1,6 +1,7 @@
 {
   "name": "arenatime-client",
   "version": "0.1.0",
+  "homepage": "https://stdev17.github.io/arenatime",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.5.5",
@@ -38,6 +39,7 @@
     "form-data": "^2.5.0",
     "fs": "0.0.1-security",
     "fs-extra": "7.0.1",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "4.0.0-beta.5",
     "identity-obj-proxy": "3.0.0",
     "is-wsl": "^1.1.0",
@@ -89,7 +91,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"

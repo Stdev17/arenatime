@@ -31,10 +31,10 @@ export class Navi extends React.Component {
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand>
     <div className="brand" style={brandText}>
-    <Link to="/" className="remove-underline">
+    <Link to="/arenatime/" className="remove-underline">
     <img
       alt=""
-      src="/favicon.jpg"
+      src="/arenatime/favicon.jpg"
       width="40"
       height="40"
       float="left"
@@ -46,10 +46,10 @@ export class Navi extends React.Component {
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto" style={menuText}>
-      <LinkContainer to="/search">
+      <LinkContainer to="/arenatime/search">
         <Nav.Link>대전 검색</Nav.Link>
       </LinkContainer>
-      <LinkContainer to="/register">
+      <LinkContainer to="/arenatime/register">
         <Nav.Link>대전 등록</Nav.Link>
       </LinkContainer>
     </Nav>
@@ -58,14 +58,14 @@ export class Navi extends React.Component {
     <a href="https://github.com/Stdev17/arenatime" target="_blank" rel="noopener noreferrer">
     <img
       alt=""
-      src="/github-logo.svg"
+      src="/arenatime/github-logo.svg"
       width="34"
       height="34"
       className="github"
     /></a>
     <a href="https://discord.gg/KpENFp7" target="_blank" rel="noopener noreferrer"><img
       alt=""
-      src="/discord.svg"
+      src="/arenatime/discord.svg"
       width="50"
       height="50"
       className="discord"

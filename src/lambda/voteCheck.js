@@ -118,6 +118,10 @@ module.exports.handler = async (event, context) => {
         statusCode: 200,
         body: {
           message: "Same votes exists."
+        },
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
         }
       };
       return response;
@@ -182,7 +186,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: 'Setting Votes Failed',
           runtime: err
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return result;
     });
@@ -214,7 +222,11 @@ module.exports.handler = async (event, context) => {
             down: setDownvote
           },
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return result;
     })
@@ -224,7 +236,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: 'Setting Voters Failed',
           runtime: err
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return result;
     });

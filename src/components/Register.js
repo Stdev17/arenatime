@@ -12,9 +12,11 @@ import { sort } from './Party';
 import '../css/daum.css';
 import '../css/text.css';
 
+import { path } from '../util/dummy';
+
 let axios = require('axios');
 
-let path = 'http://localhost:4000/';
+
 
 var defParty = [];
 var attParty = [];
@@ -155,11 +157,17 @@ export class Register extends React.Component {
     f = this.setDeck(f);
     f = this.setSelection(f);
     this.setState({
+      title_msg: "등록 실패",
       msg: "대전 업로드에 실패했습니다."
     });
     //send image API
     (async _ => {
       if (this.state.loaded) {
+        this.setState({
+          title_msg: "등록 중",
+          msg: "잠시만 기다려 주세요."
+        });
+        this.errorShow();
         let s3 = await this.sendFiletoS3();
         console.log(f);
         let dat = await this.sendDatatoS3(f, s3);
@@ -168,17 +176,20 @@ export class Register extends React.Component {
           defParty.splice(0, defParty.length);
           attParty.splice(0, attParty.length);
           this.setState({
+            memo: "",
             title_msg: "등록 성공",
             msg: "대전 결과가 DB에 등록되었습니다."
           });
-          this.errorShow();
-        } else {
-          this.errorShow();
         }
       } else {
         let s3 = 'Not Uploaded';
+        this.setState({
+          title_msg: "등록 중",
+          msg: "잠시만 기다려 주세요."
+        });
+        this.errorShow();
         let dat = await this.sendDatatoS3(f, s3);
-        if (dat) {
+        if (dat === 'Succeeded Data Upload') {
           this.resetForm(e);
           defParty.splice(0, defParty.length);
           attParty.splice(0, attParty.length);
@@ -187,9 +198,6 @@ export class Register extends React.Component {
             title_msg: "등록 성공",
             msg: "대전 결과가 DB에 등록되었습니다."
           });
-          this.errorShow();
-        } else {
-          this.errorShow();
         }
       }
       //reset form
@@ -200,9 +208,10 @@ export class Register extends React.Component {
   }
   validatePower() {
     this.setState({
+      title_msg: "등록 실패",
       msg: "정상 범위 내의 전투력을 입력해 주세요."
     });
-    if (!(this.state.form.attackPower > 100)) {
+    if (!(this.state.form.attackPower > 100) && this.state.form.attackPower !== 0) {
       this.errorShow();
       return false;
     }
@@ -210,7 +219,7 @@ export class Register extends React.Component {
       this.errorShow();
       return false;
     }
-    if (!(this.state.form.defensePower > 100)) {
+    if (!(this.state.form.defensePower > 100) && this.state.form.defensePower !== 0) {
       this.errorShow();
       return false;
     }
@@ -222,8 +231,18 @@ export class Register extends React.Component {
   }
   validateStarAndDeck() {
     this.setState({
+      title_msg: "등록 실패",
       msg: "캐릭터 별 성급을 정확히 입력해 주세요."
     });
+    if ((this.state.form.attackStar === "" || this.state.form.attackStar === 99999) && (this.state.form.defenseStar === "" || this.state.form.defenseStar === 99999) && attParty.length > 0 && defParty.length > 0) {
+      let f = this.state.form;
+      f.attackStar = 99999;
+      f.defenseStar = 99999;
+      this.setState({
+        form: f
+      });
+      return true;
+    }
     let a = this.state.form.attackStar;
     if (!(a % 10 > 0 && a % 10 < 6)
     || !(a < 10 || (Math.floor(a/10) % 10 > 0 && Math.floor(a/10) % 10 < 6))

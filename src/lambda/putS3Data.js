@@ -60,9 +60,16 @@ module.exports.handler = async (event, context) => {
       body: JSON.stringify({
         message: "parse error",
         runtime: context
-      })
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+        'Access-Control-Allow-Credentials': true,
+      }
     };
     return response;
+  }
+  if (parsed.imagePath === undefined) {
+    parsed.imagePath = 'PlaceHolder';
   }
 
   parsed.userIp = event.requestContext.identity.sourceIp;
@@ -80,8 +87,13 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: err,
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
+      console.log(item);
       console.log(err);
       return response;
     } else {
@@ -110,7 +122,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: err,
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       console.log(err);
       return response;
@@ -142,7 +158,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: 'Succeeded Data Upload',
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return response;
     })
@@ -152,7 +172,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: 'Upload Failed',
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return response;
     });
@@ -160,13 +184,13 @@ module.exports.handler = async (event, context) => {
 
 function validateProperties(f) {
   //Power
-  if (!(f.attackPower > 100)) {
+  if (!(f.attackPower > 100) && f.attackPower !== 0) {
     return false;
   }
   if (!(f.attackPower < 70000)) {
     return false;
   }
-  if (!(f.defensePower > 100)) {
+  if (!(f.defensePower > 100) && f.defensePower !== 0) {
     return false;
   }
   if (!(f.defensePower < 70000)) {
@@ -193,14 +217,14 @@ function validateStarAndDeck(f) {
   let dDeckCount = 0;
   let a = f.attackStar;
   for (let tmp in a) {
-    if (tmp > 5 || tmp < 1) {
+    if (tmp < 1 || (tmp !== 9 && tmp > 5)) {
       return false;
     }
     aStarCount += 1;
   }
   let d = f.defenseStar;
   for (let tmp in d) {
-    if (tmp > 5 || tmp < 1) {
+    if (tmp < 1 || (tmp !== 9 && tmp > 5)) {
       return false;
     }
     dStarCount += 1;
@@ -317,7 +341,6 @@ function getItem(p) {
   for (let d in p.defenseTrio) {
     dTrio.push({N: p.defenseTrio[d].toString()});
   }
-  console.log(p);
   let temp = {
     matchResult: {S: p.matchResult},
     arena: {S: p.arena},

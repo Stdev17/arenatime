@@ -44,7 +44,7 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
     
     const image = new (window as any).Image();
     
-    image.src = "./characters.jpg";
+    image.src = "/arenatime/characters.jpg";
     
     image.onload = () => {
       // setState will redraw layer
@@ -111,6 +111,7 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
       stroke={'#bb3333'}
       strokeWidth={this.state.str}
       onClick={this.ClickChar}
+      onTap={this.ClickChar}
       />
     );
   }

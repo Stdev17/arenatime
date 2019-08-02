@@ -9,22 +9,26 @@ function setId(req) {
   for (let tmp in req.deck) {
     id *= primeChar[req.deck[tmp]];
   }
+  if (id === NaN) {
+    return 1;
+  }
   return id;
 }
 
 
-module.exports.handler = async (event, context) => {
+module.exports.handler = async (event, context, callback) => {
 
   let req = JSON.parse(event.queryStringParameters[0]);
-  let myIp = event.requestContext.identity.sourceIp;
   let deckId = setId(req);
+
+  
 
   let params = {
     TableName: 'match-table',
     ExpressionAttributeValues: {
       ':deckId': {N: deckId.toString()}
     },
-    Limit: 2
+    Limit: 5
   };
 
   if (req.arena == 'battleArena') {
@@ -61,8 +65,8 @@ module.exports.handler = async (event, context) => {
 
   switch (req.power) {
     case "all":
-      params.ExpressionAttributeValues[':upper'] = {N: '80000'};
-      params.ExpressionAttributeValues[':lower'] = {N: '50'};
+      params.ExpressionAttributeValues[':upper'] = {N: '100000'};
+      params.ExpressionAttributeValues[':lower'] = {N: '-1'};
       break;
     case ">55000":
       params.ExpressionAttributeValues[':upper'] = {N: '80000'};
@@ -141,7 +145,6 @@ module.exports.handler = async (event, context) => {
   }
 
   let queries = [];
-  let res = [];
 
   let get = await dyn.query(params, async function continueQuery(err, data) {
     if (err) {
@@ -184,10 +187,26 @@ module.exports.handler = async (event, context) => {
     }
   }).promise();
 
+  let succeed = false;
+
   let fuck = await (async _ => {
     await timeout(300);
     return finished();
   })();
+
+  if (succeed) {
+    fuck = {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: queries,
+        runtime: context
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+        'Access-Control-Allow-Credentials': true,
+      }
+    };
+  }
 
   return fuck;
 
@@ -197,21 +216,20 @@ module.exports.handler = async (event, context) => {
 
   function finished() {
     if (queries.length === 0) {
-      return result = {
+      return {
         statusCode: 404,
         body: JSON.stringify({
           message: 'Deck Not Found',
           runtime: err
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
     }
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: queries,
-        runtime: context
-      })
-    };
+    succeed = true;
+    return;
   }
 
 }

@@ -17,7 +17,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: data,
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return result;
     })
@@ -27,7 +31,11 @@ module.exports.handler = async (event, context) => {
         body: JSON.stringify({
           message: 'Getting Item Failed',
           runtime: err
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       return result;
     });

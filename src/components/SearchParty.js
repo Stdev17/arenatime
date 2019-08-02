@@ -27,7 +27,7 @@ class Slot extends React.Component {
       image: null,
       x: getCoord(char.indexOf(c['char'])).XCoord,
       y: getCoord(char.indexOf(c['char'])).YCoord,
-      star: "ddd"
+      star: ""
     };
   }
   setCoord() {
@@ -47,13 +47,15 @@ class Slot extends React.Component {
     for (let i = 0; i < this.props.character['star']; i++) {
       s += "★";
     }
-    this.setState({
-      star: s
-    });
+    if (!(this.props.character['star'] > 5)) {
+      this.setState({
+        star: s
+      });
+    }
   }
   componentDidMount() {
     const image = new window.Image();
-    image.src = "./characters.jpg";
+    image.src = "/arenatime/characters.jpg";
     this.setCoord();
     image.onload = () => {
       // setState will redraw layer
@@ -169,15 +171,15 @@ export class SearchParty extends React.Component {
 
     let result = this.props.match['matchResult']['S'];
     if (result === 'attackWin') {
-      aImage.src = './win.png';
-      dImage.src = './lose.png';
+      aImage.src = '/arenatime/win.png';
+      dImage.src = '/arenatime/lose.png';
     } else {
-      aImage.src = './lose.png';
-      dImage.src = './win.png';
+      aImage.src = '/arenatime/lose.png';
+      dImage.src = '/arenatime/win.png';
     }
-    up.src = './thumb-up.png';
-    down.src = './thumb-down.png';
-    mag.src = './mag.png';
+    up.src = '/arenatime/thumb-up.png';
+    down.src = '/arenatime/thumb-down.png';
+    mag.src = '/arenatime/mag.png';
     aImage.onload = () => {
       this.setState({
         attackImage: aImage
@@ -230,7 +232,7 @@ export class SearchParty extends React.Component {
 
   checkLink() {
     if (this.state.link) {
-      return <Redirect to='/match'/>
+      return <Redirect to='/arenatime/match'/>
     }
   }
 

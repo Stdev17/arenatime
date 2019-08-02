@@ -44,7 +44,11 @@ module.exports.handler = (event, context) => {
         body: JSON.stringify({
           message: params.Key,
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       context.succeed(response);
     })
@@ -54,7 +58,11 @@ module.exports.handler = (event, context) => {
         body: JSON.stringify({
           message: 'Upload Failed',
           runtime: context
-        })
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
       };
       context.fail(response);
     });

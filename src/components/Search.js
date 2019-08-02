@@ -13,8 +13,10 @@ import '../css/daum.css';
 import '../css/text.css';
 import { SearchParty } from './SearchParty';
 
+import { path } from '../util/dummy';
+
 var axios = require('axios');
-let path = 'http://localhost:4000/';
+
 
 var party = [];
 var results = [];
@@ -83,7 +85,6 @@ export class Search extends React.Component {
     {
       offset = num;
       results = [];
-      console.log(queryItems);
       let items = queryItems[offset-1]['Items'];
       if (items != null) {
         for (let i in items) {
@@ -118,7 +119,7 @@ export class Search extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message === 'Query Failed' || res.data.message === 'Deck Not Found') {
+      if (res.data.message === 'Query Failed' || res.data.message === 'Deck Not Found' || res.data.message === 'Internal server error') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 오류가 발생했습니다."
@@ -129,6 +130,7 @@ export class Search extends React.Component {
         let msg = res.data.message;
         results = [];
         max = msg.length;
+        offset = 1;
         let items = msg[offset-1]['Items'];
         if (items != null) {
           for (let i in items) {

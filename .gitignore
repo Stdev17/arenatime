@@ -16,7 +16,7 @@ jspm_packages
 /build
 
 # misc
-dummy.js
+src/util/dummy.js
 .DS_Store
 .env.local
 .env.development.local

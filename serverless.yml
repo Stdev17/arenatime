@@ -4,6 +4,7 @@ app: arenatime
 provider:
   name: aws
   runtime: nodejs10.x
+  memorySize: 128
   stage: dev
   region: ap-northeast-2
   iamRoleStatements:
@@ -28,11 +29,7 @@ provider:
         - "dynamodb:PutItem"
         - "dynamodb:UpdateItem"
       Effect: Allow
-      Resource:
-        ? "Fn::GetAtt"
-        : 
-          - VoterTable
-          - Arn
+      Resource: "arn:aws:dynamodb:ap-northeast-2:*:*"
     - 
       Action:
         - "s3:PutObject"
@@ -66,6 +63,9 @@ functions:
         http:
           path: api/put-s3-image
           method: post
+          cors:
+            origins:
+              - "*"
   putData:
     handler: src/lambda/putS3Data.handler
     events:
@@ -73,6 +73,9 @@ functions:
         http:
           path: api/put-s3-data
           method: post
+          cors:
+            origins:
+              - "*"
   getSearch:
     handler: src/lambda/getSearch.handler
     events:
@@ -80,6 +83,9 @@ functions:
         http:
           path: api/get-search
           method: get
+          cors:
+            origins:
+              - "*"
   getMatch:
     handler: src/lambda/getMatch.handler
     events:
@@ -87,6 +93,9 @@ functions:
         http:
           path: api/get-match
           method: get
+          cors:
+            origins:
+              - "*"
   getImage:
     handler: src/lambda/getImage.handler
     events:
@@ -94,6 +103,9 @@ functions:
         http: 
           path: api/get-image
           method: get
+          cors:
+            origins:
+              - "*"
   voteCheck:
     handler: src/lambda/voteCheck.handler
     events: 
@@ -101,6 +113,9 @@ functions:
         http:
           path: api/vote
           method: put
+          cors:
+            origins:
+              - "*"
 
 # you can add CloudFormation resource templates here
 resources:

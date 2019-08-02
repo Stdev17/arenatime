@@ -20,7 +20,7 @@
 }
 
 body {
-  background-image: url("/landsol.jpeg");
+  background-image: url('/arenatime/landsol.jpeg');
   background-size: 1920px 1080px;
   background-repeat: repeat;
 }

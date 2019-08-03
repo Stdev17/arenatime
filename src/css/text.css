@@ -34,3 +34,7 @@
 .twenty {
   margin-top: 20px;
 }
+
+.modal-dialog {
+  max-width: 720px!important;
+}

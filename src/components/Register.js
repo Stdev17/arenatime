@@ -553,7 +553,8 @@ export class Register extends React.Component {
       <Modal
           show={this.state.errShow}
           onHide={this.errorHide}
-          dialogClassName="modal-90w"
+          dialogClassName='modal'
+          bsClass='modal'
           aria-labelledby="example-custom-modal-styling-title"
         >
 

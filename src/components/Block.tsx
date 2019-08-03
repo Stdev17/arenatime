@@ -24,7 +24,7 @@ interface IBlockState {
   opacity: number
 }
 
-let scale = 38;
+let scale = 57;
 
 export class Block extends React.Component<IBlockProps, IBlockState> {
   constructor(props: any) {

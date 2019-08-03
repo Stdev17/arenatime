@@ -55,6 +55,7 @@ export class Search extends React.Component {
     this.validateDeck = this.validateDeck.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
     this.updateOffset = this.updateOffset.bind(this);
+    this.getCount = this.getCount.bind(this);
     this.errorShow = () => {
       this.setState({ errShow: true });
     };
@@ -68,6 +69,7 @@ export class Search extends React.Component {
       errShow: false,
       res: "",
       items: [],
+      count: 0,
       form: {
         target: "방어",
         result: "패배",
@@ -93,6 +95,32 @@ export class Search extends React.Component {
       }
       this.forceUpdate();
     }
+  }
+
+  componentDidMount() {
+    this.getCount();
+  }
+
+  getCount() {
+    let mPath = path + 'api/get-count';
+    return (async _ => {
+      let res = await axios({
+        method: 'get',
+        url: mPath,
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+      if (res.data.message === 'Getting Count Failed') {
+        console.log('Count Error');
+        return;
+      } else {
+        this.setState({
+          count: Number(res.data.message)
+        });
+        console.log(res.data.message);
+      }
+    })();
   }
 
   getSearch() {
@@ -351,7 +379,10 @@ export class Search extends React.Component {
       <h1 style={topicText}>
         대전 검색
       </h1>
-      <h2 style={subText} className="twenty">
+      <p style={smallText} className="twenty">
+        {'지금까지 총 '+this.state.count+'개의 대전 결과가 등록되었습니다. (6시간마다 갱신)'}
+      </p>
+      <h2 style={subText} className="ten">
         검색 설정
       </h2>
       <h3 style={smallText} className="ten">
@@ -423,7 +454,8 @@ export class Search extends React.Component {
       <Modal
         show={this.state.errShow}
         onHide={this.errorHide}
-        dialogClassName="modal-90w"
+        dialogClassName='modal'
+        bsClass='modal'
         aria-labelledby="example-custom-modal-styling-title"
       >
         <Modal.Header>

@@ -116,6 +116,16 @@ functions:
           cors:
             origins:
               - "*"
+  getCount:
+    handler: src/lambda/getCount.handler
+    events:
+      - 
+        http: 
+          path: api/get-count
+          method: get
+          cors:
+            origins:
+              - "*"
 
 # you can add CloudFormation resource templates here
 resources:

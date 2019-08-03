@@ -232,7 +232,7 @@ export class Register extends React.Component {
   validateStarAndDeck() {
     this.setState({
       title_msg: "등록 실패",
-      msg: "캐릭터 별 성급을 정확히 입력해 주세요."
+      msg: "덱을 정확히 입력해 주세요."
     });
     if ((this.state.form.attackStar === "" || this.state.form.attackStar === 99999) && (this.state.form.defenseStar === "" || this.state.form.defenseStar === 99999) && attParty.length > 0 && defParty.length > 0) {
       let f = this.state.form;
@@ -553,8 +553,6 @@ export class Register extends React.Component {
       <Modal
           show={this.state.errShow}
           onHide={this.errorHide}
-          dialogClassName='modal'
-          bsClass='modal'
           aria-labelledby="example-custom-modal-styling-title"
         >
 

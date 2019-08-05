@@ -486,10 +486,10 @@ export class Match extends React.Component {
       return (
         <div className="text">
           <h1 style={topicText}>
-            404 Not Found
+            대전 로드 중
           </h1>
         <h2 style={subText} className="twenty">
-          대전 결과를 찾을 수 없습니다.
+          잠시만 기다려 주세요.
         </h2>
         </div>
       )

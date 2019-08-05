@@ -18,6 +18,13 @@ let scale = 64;
 let attackDeckX = 101;
 let defenseDeckX = 592;
 
+const smallText = {
+  fontFamily: 'Daum',
+  fontStyle: 'normal',
+  fontSize: 16,
+  fontColor: '#333333'
+}
+
 class Slot extends React.Component {
   constructor(props) {
     super(props);
@@ -109,6 +116,7 @@ export class SearchParty extends React.Component {
     this.goProfile = this.goProfile.bind(this);
     this.getProps = this.getProps.bind(this);
     this.checkLink = this.checkLink.bind(this);
+    this.showMemo = this.showMemo.bind(this);
     this.state = {
       attackImage: null,
       defenseImage: null,
@@ -117,6 +125,8 @@ export class SearchParty extends React.Component {
       magImage: null,
       upHighlighted: 0.5,
       downHighlighted: 0.5,
+      attackPower: "",
+      defensePower: "",
       upvotes: "",
       downvotes: "",
       link: false,
@@ -162,13 +172,22 @@ export class SearchParty extends React.Component {
       defenseParty.push(defd[d]['S']);
     }
     //
+    let ap = "";
+    let dp = "";
+    if (this.props.match['attackPower']['N'] > 0) {
+      ap = "투력 " + this.props.match['attackPower']['N'].toString();
+      dp = "투력 " + this.props.match['defensePower']['N'].toString();
+    }
+    //
     let atts = this.props.match['attackStar']['M'];
     let defs = this.props.match['defenseStar']['M'];
     this.setState({
       attackSorted: sort(attackParty.slice(), atts),
-      defenseSorted: sort(defenseParty.slice(), defs)
+      defenseSorted: sort(defenseParty.slice(), defs),
+      attackPower: ap,
+      defensePower: dp
     });
-
+    //
     let result = this.props.match['matchResult']['S'];
     if (result === 'attackWin') {
       aImage.src = '/arenatime/win.png';
@@ -236,6 +255,25 @@ export class SearchParty extends React.Component {
     }
   }
 
+  showMemo() {
+    let m = this.props.match['memo']['S'];
+    let res;
+    if (m !== 'PlaceHolder') {
+      if (m.length > 40) {
+        res = m.slice(0, 40).replace(/\n/, "") + '(...)';
+      } else {
+        res = m.replace(/\n/, "");
+      }
+      return (
+        <div>
+          <p style={smallText}>
+            {res}
+          </p>
+        </div>
+      )
+    }
+  }
+
   render() {
     return (
       <div>
@@ -244,7 +282,7 @@ export class SearchParty extends React.Component {
         <Layer>
         <Image
           x={-10}
-          y={11}
+          y={6}
           width={110}
           height={48}
           image={this.state.attackImage}
@@ -258,7 +296,7 @@ export class SearchParty extends React.Component {
         <Layer>
         <Image
           x={475}
-          y={11}
+          y={6}
           width={110}
           height={48}
           image={this.state.defenseImage}
@@ -270,6 +308,22 @@ export class SearchParty extends React.Component {
           })}
         </Layer>
         <Layer>
+          <Text
+            x={-15}
+            y={58}
+            fontSize={18}
+            width={120}
+            align='center'
+            text={this.state.attackPower}
+          />
+          <Text
+            x={470}
+            y={58}
+            fontSize={18}
+            width={120}
+            align='center'
+            text={this.state.defensePower}
+          />
           <Text
             x={941}
             y={2}
@@ -322,6 +376,7 @@ export class SearchParty extends React.Component {
         />
         </Layer>
       </Stage>
+      {this.showMemo()}
       </div>
     );
   }

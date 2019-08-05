@@ -118,7 +118,6 @@ export class Search extends React.Component {
         this.setState({
           count: Number(res.data.message)
         });
-        console.log(res.data.message);
       }
     })();
   }

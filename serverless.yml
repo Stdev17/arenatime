@@ -10,6 +10,16 @@ provider:
   iamRoleStatements:
     - 
       Action:
+        - "athena:*"
+      Effect: Allow
+      Resource: "*"
+    - 
+      Action:
+        - "glue:*"
+      Effect: Allow
+      Resource: "*"
+    - 
+      Action:
         - "dynamodb:DescribeTable"
         - "dynamodb:Query"
         - "dynamodb:GetItem"
@@ -32,19 +42,27 @@ provider:
       Resource: "arn:aws:dynamodb:ap-northeast-2:*:*"
     - 
       Action:
-        - "s3:PutObject"
-        - "s3:GetObject"
-        - "s3:GetBucketNotification"
-        - "s3:PutBucketNotification"
+        - "s3:*"
       Effect: Allow
-      Resource:
-        ? "Fn::Join"
-        : 
-          - ""
-          - 
-            - "arn:aws:s3:::"
-            - "priconne-arenatime"
-            - /*
+      Resource: "*"
+#    - 
+#      Action:
+#        - "s3:PutObject"
+#        - "s3:GetObject"
+#        - "s3:ListBucket"
+#        - "s3:GetBucketLocation"
+#        - "s3:GetBucketNotification"
+#        - "s3:PutBucketNotification"
+#      Effect: Allow
+#      Resource:
+#        ? "Fn::Join"
+#        : 
+#          - ""
+#          - 
+#            - "arn:aws:s3:::"
+#            - "arn:aws:s3:::aws-athena-query-results-*"
+#            - "priconne-arenatime"
+#            - /*
  
 plugins:
   - serverless-offline

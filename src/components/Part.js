@@ -252,11 +252,9 @@ export class Part extends React.Component {
         <Pagination.First onClick={() => {
           offset = 1;
           results = [];
-          let items = queryItems[0]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
@@ -265,11 +263,9 @@ export class Part extends React.Component {
             offset -= 1;
           }
           results = [];
-          let items = queryItems[offset-1]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
@@ -281,22 +277,18 @@ export class Part extends React.Component {
             offset += 1;
           }
           results = [];
-          let items = queryItems[offset-1]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
         <Pagination.Last onClick={() => {
           offset = max;
           results = [];
-          let items = queryItems[offset-1]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
@@ -336,7 +328,7 @@ export class Part extends React.Component {
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>결과</Form.Label>
-              <Form.Control name="result" onChange={this.inputHandler} as="select">
+              <Form.Control name="matchResult" onChange={this.inputHandler} as="select">
                 <option>패배</option>
                 <option>승리</option>
               </Form.Control>

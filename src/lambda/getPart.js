@@ -1,6 +1,7 @@
 const aws = require('aws-sdk');
 const dyn = new aws.DynamoDB();
-const athenaExpress = require('athena-express');
+const athenaClient = require('athena-client');
+//const athenaExpress = require('athena-express');
 
 const primeChar = require('../util/prime').prime;
 
@@ -14,13 +15,24 @@ function setId(req) {
   }
   return id;
 }
-
+/*
 const config = {
 	aws,
 	db: 'matchdata',
 	getStats: true
 };
 const athena = new athenaExpress(config);
+*/
+var clientConfig = {
+  bucketUri: 's3://aws-athena-query-results-527044138162-ap-northeast-2/',
+  database: 'matchdata'
+}
+
+var awsConfig = {
+  region: 'ap-northeast-2', 
+}
+
+const athena = athenaClient.createClient(clientConfig, awsConfig);
 
 module.exports.handler = async (event, context) => {
   let req = JSON.parse(event.queryStringParameters[0]);
@@ -46,7 +58,7 @@ module.exports.handler = async (event, context) => {
   let id = setId(req);
 
   if (req.deckType === 'defense' && count === 2) {
-    queryString = `select matchid from matchtable where contains(defensetduo, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 100`;
+    queryString = `select matchid from matchtable where contains(defenseduo, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 100`;
   } else if (req.deckType === 'defense' && count === 3) {
     queryString = `select matchid from matchtable where contains(defensetrio, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 100`;
   } else if (req.deckType === 'attack' && count === 2) {
@@ -57,7 +69,7 @@ module.exports.handler = async (event, context) => {
 
   let query;
   try {
-    query = await athena.query(queryString);
+    query = await athena.execute(queryString).toPromise();
   } catch (err) {
     let result = {
       statusCode: 400,
@@ -73,7 +85,7 @@ module.exports.handler = async (event, context) => {
     return result;
   }
 
-  let queries = query['Items'];
+  let queries = query['records'];
   let matches = [];
   let error = false;
 
@@ -95,7 +107,6 @@ module.exports.handler = async (event, context) => {
       error = true;
     });
   }
-
   if (error) {
     let result = {
       statusCode: 400,

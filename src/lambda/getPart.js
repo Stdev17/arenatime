@@ -64,16 +64,63 @@ module.exports.handler = async (event, context) => {
       body: JSON.stringify({
         message: 'Query Failed',
         runtime: err
-      })
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+        'Access-Control-Allow-Credentials': true,
+      }
     };
     return result;
   }
-  let result = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: query,
-      runtime: context
+
+  let queries = query['Items'];
+  let matches = [];
+  let error = false;
+
+  for (let m in queries) {
+    let params = {
+      TableName: 'match-table',
+      ProjectionExpression: 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult',
+      Key: {
+        'matchId': {S: queries[m]['matchid']}
+      }
+    };
+    let nothing = await dyn.getItem(params).promise()
+    .then(data => {
+      if (data['Item'] !== undefined) {
+        matches.push(data['Item']);
+      }
     })
-  };
-  return result;
+    .catch(err => {
+      error = true;
+    });
+  }
+
+  if (error) {
+    let result = {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: 'Getting Items Failed',
+        runtime: context
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+        'Access-Control-Allow-Credentials': true,
+      }
+    };
+    return result;
+  } else {
+    let result = {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: matches,
+        runtime: context
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+        'Access-Control-Allow-Credentials': true,
+      }
+    };
+    return result;
+  }
 }

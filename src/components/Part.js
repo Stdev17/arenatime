@@ -81,11 +81,9 @@ export class Part extends React.Component {
     {
       offset = num;
       results = [];
-      let items = queryItems[offset-1]['Items'];
-      if (items != null) {
-        for (let i in items) {
-          results.push(items[i]);
-        }
+      let items = queryItems.slice((offset-1)*5, (offset)*5);
+      for (let i in items) {
+        results.push(items[i]);
       }
       this.forceUpdate();
     }
@@ -109,7 +107,6 @@ export class Part extends React.Component {
       this.errorShow();
       return;
     }
-    searched = true;
     let f = this.setSelection(this.state.form);
     f = this.validateDeck(f);
     let str = JSON.stringify(f);
@@ -128,8 +125,7 @@ export class Part extends React.Component {
           "Accept": "application/json"
         }
       });
-      console.log(res);
-      if (res.data.message === 'Query Failed' || res.data.message === 'Parsing Failed' || res.data.message === 'Internal server error') {
+      if (res.data.message === 'Query Failed' || res.data.message === 'Parsing Failed' || res.data.message === 'Getting Items Failed' || res.data.message === 'Internal server error') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 오류가 발생했습니다."
@@ -138,18 +134,16 @@ export class Part extends React.Component {
       } else {
         let msg = res.data.message;
         results = [];
-        console.log(msg);
-        /*
-        max = msg.length;
+        max = Math.ceil(msg.length/5);
         offset = 1;
-        let items = msg[offset-1]['Items'];
-        if (items != null) {
+        if (msg != null) {
+          let items = msg.slice(0, 5);
           for (let i in items) {
             results.push(items[i]);
           }
           queryItems = msg;
         }
-        */
+        searched = true;
         this.errorHide();
         this.forceUpdate();
         return;

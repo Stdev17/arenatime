@@ -126,6 +126,16 @@ functions:
           cors:
             origins:
               - "*"
+  getPart:
+    handler: src/lambda/getPart.handler
+    events:
+    - 
+      http: 
+        path: api/get-part
+        method: get
+        cors: 
+          origins: 
+            - "*"
 
 # you can add CloudFormation resource templates here
 resources:

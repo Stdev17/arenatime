@@ -52,6 +52,9 @@ export class Navi extends React.Component {
       <LinkContainer to="/arenatime/register">
         <Nav.Link>대전 등록</Nav.Link>
       </LinkContainer>
+      <LinkContainer to="/arenatime/part">
+        <Nav.Link>부분 검색</Nav.Link>
+      </LinkContainer>
     </Nav>
     </Navbar.Collapse>
     <div align="right">

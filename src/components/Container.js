@@ -9,6 +9,7 @@ import { Register } from './Register';
 import { Search } from './Search';
 import '../css/container.css';
 import { Match } from './Match';
+import { Part } from './Part';
 
 var fireMatch = false;
 export function switchFire() {
@@ -53,6 +54,20 @@ export class pageMatch extends React.Component {
       <Container>
         <Card>
           <Match fire={fireMatch}/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
+export class pagePart extends React.Component {
+  render() {
+    return (
+      <div className="top">
+      <Container>
+        <Card>
+          <Part/>
         </Card>
       </Container>
       </div>

@@ -68,7 +68,6 @@ export class SetParty extends React.Component {
         <Modal
           show={this.state.show}
           onHide={this.handleHide}
-          dialogClassName="modal-90w"
           aria-labelledby="example-custom-modal-styling-title"
         >
 

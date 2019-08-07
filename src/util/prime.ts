@@ -84,7 +84,7 @@ const primeChar: Record<string, number> = {
    "Misaki": prime(75),
    //"ChristmasChika": prime(76),
    "SummerSuzume": prime(77),
-   //"SummerKyaru": prime(78),
+   "SummerKyaru": prime(78),
    "Aoi": prime(79),
    "Chika": prime(80),
    "Maho": prime(81),

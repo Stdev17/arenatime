@@ -89,7 +89,7 @@ exports.dist = {
     "Misaki": 760,
     //"ChristmasChika": 770,
     "SummerSuzume": 775,
-    //"SummerKyaru": 780,
+    "SummerKyaru": 780,
     "Aoi": 785,
     "Chika": 790,
     "Maho": 795,

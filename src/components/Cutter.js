@@ -9,7 +9,7 @@ import { getChar } from '../util/distance.ts';
 var netX = 0;
 var netY = 0;
 var col = 9;
-var char = 53;
+var char = 54;
 
 function getX() {
   netX += 1;

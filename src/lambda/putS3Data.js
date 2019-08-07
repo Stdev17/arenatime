@@ -1,4 +1,4 @@
-const datePath = require('../util/datePath');
+const datePrefix = require('../util/datePrefix');
 const char = require('../util/char').char;
 const primeChar = require('../util/prime').prime;
 
@@ -135,7 +135,7 @@ module.exports.handler = async (event, context) => {
   });
   })();
 
-  let filePath = datePath();
+  let filePath = datePrefix();
   let fileName = parsed.matchId + ".gz";
   let fileFullName = filePath + fileName;
   let fileFullPath = 'data/' + fileFullName;

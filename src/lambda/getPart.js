@@ -58,13 +58,13 @@ module.exports.handler = async (event, context) => {
   let id = setId(req);
 
   if (req.deckType === 'defense' && count === 2) {
-    queryString = `select matchid from matchtable where contains(defenseduo, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 100`;
+    queryString = `select matchid from matchtable where contains(defenseduo, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 50`;
   } else if (req.deckType === 'defense' && count === 3) {
-    queryString = `select matchid from matchtable where contains(defensetrio, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 100`;
+    queryString = `select matchid from matchtable where contains(defensetrio, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 50`;
   } else if (req.deckType === 'attack' && count === 2) {
-    queryString = `select matchid from matchtable where contains(attackduo, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 100`;
+    queryString = `select matchid from matchtable where contains(attackduo, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 50`;
   } else if (req.deckType === 'attack' && count === 3) {
-    queryString = `select matchid from matchtable where contains(attacktrio, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 100`;
+    queryString = `select matchid from matchtable where contains(attacktrio, `+id+`) and arena <> '`+req.arena+`' and matchresult = '`+req.matchResult+`' limit 50`;
   }
 
   let query;

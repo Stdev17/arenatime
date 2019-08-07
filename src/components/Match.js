@@ -171,6 +171,8 @@ export class Match extends React.Component {
       resultImage: null,
       upHighlighted: 0.5,
       downHighlighted: 0.5,
+      imageWidth: 1124,
+      imageHeight: 632,
       upvotes: "",
       downvotes: "",
       attackPower: "",
@@ -181,6 +183,25 @@ export class Match extends React.Component {
       fire: false,
       match: {},
       date: ""
+    };
+
+    this.checkSize = (w, h) => {
+      let width, height;
+      let ratio = w/h;
+      if (w > 1076) {
+        width = 1076;
+        height = 1076 / ratio;
+      } else {
+        width = w;
+        height = h;
+      }
+      if (height > 605) {
+        height = 605;
+      }
+      this.setState({
+        imageWidth: width,
+        imageHeight: height
+      })
     };
   }
 
@@ -335,6 +356,7 @@ export class Match extends React.Component {
           resImg.src = 'data:image/jpeg;base64,' + resultImageFile.toString('base64');
         }
         resImg.onload = () => {
+          this.checkSize(resImg.width, resImg.height);
           this.setState({
             resultImage: resImg
           });
@@ -377,13 +399,13 @@ export class Match extends React.Component {
         <p style={subText} className="ten">
           {'결과 이미지'}
         </p>
-        <Stage width={1002} height={134}>
+        <Stage width={1076} height={this.state.imageHeight}>
           <Layer>
             <Image
               x={1}
               y={0}
-              width={1000}
-              height={134}
+              width={this.state.imageWidth}
+              height={this.state.imageHeight}
               image={this.state.resultImage}
             />
           </Layer>
@@ -434,11 +456,9 @@ export class Match extends React.Component {
           Accept: "application/json"
         }
       });
-      console.log(res.data);
       if (res.data.message === 'Vote Succeeded') {
         let v = res.data.vote;
         let m = this.state.match;
-        console.log(v);
         if (v.up === 'vote') {
           m['upvotes']['N'] = Number(m['upvotes']['N']) + 1;
           this.setState({

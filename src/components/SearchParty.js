@@ -13,6 +13,10 @@ import { getCoord } from './Block.tsx';
 import { setSearchPath } from './Match';
 import { switchFire } from './Container.js';
 
+import { path } from '../util/dummy';
+
+var axios = require('axios');
+
 let scale = 64;
 
 let attackDeckX = 101;
@@ -117,6 +121,10 @@ export class SearchParty extends React.Component {
     this.getProps = this.getProps.bind(this);
     this.checkLink = this.checkLink.bind(this);
     this.showMemo = this.showMemo.bind(this);
+    this.upClicked = this.upClicked.bind(this);
+    this.downClicked = this.downClicked.bind(this);
+    this.setVotes = this.setVotes.bind(this);
+    this.vote = this.vote.bind(this);
     this.state = {
       attackImage: null,
       defenseImage: null,
@@ -125,6 +133,7 @@ export class SearchParty extends React.Component {
       magImage: null,
       upHighlighted: 0.5,
       downHighlighted: 0.5,
+      match: this.props.match,
       attackPower: "",
       defensePower: "",
       upvotes: "",
@@ -136,14 +145,7 @@ export class SearchParty extends React.Component {
     };
   }
 
-  getProps() {
-
-    const aImage = new window.Image();
-    const dImage = new window.Image();
-    const up = new window.Image();
-    const down = new window.Image();
-    const mag = new window.Image();
-    //
+  setVotes() {
     let uv, dv;
     if (this.props.match['upvotes']['N'] > 99) {
       uv = "99+";
@@ -158,7 +160,75 @@ export class SearchParty extends React.Component {
     this.setState({
       upvotes: uv,
       downvotes: dv
-    })
+    });
+  }
+
+  upClicked() {
+    this.vote("up");
+  }
+
+  downClicked() {
+    this.vote("down");
+  }
+
+  vote(param) {
+    let dat = {
+      matchId: this.props.match['matchId']['S'],
+      vote: param
+    }
+    let mPath = path + 'api/vote';
+    (async _ => { 
+      let res = await axios({
+        method: 'put',
+        url: mPath,
+        data: dat,
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      if (res.data.message === 'Vote Succeeded') {
+        let v = res.data.vote;
+        let m = this.props.match;
+        if (v.up === 'vote') {
+          m['upvotes']['N'] = Number(m['upvotes']['N']) + 1;
+          this.setState({
+            upHighlighted: 1,
+          });
+        } else if (v.up === 'unvote') {
+          m['upvotes']['N'] = Number(m['upvotes']['N']) - 1;
+          this.setState({
+            upHighlighted: 0.5,
+          });
+        }
+        if (v.down === 'vote') {
+          m['downvotes']['N'] = Number(m['downvotes']['N']) + 1;
+          this.setState({
+            downHighlighted: 1,
+          });
+        } else if (v.down === 'unvote') {
+          m['downvotes']['N'] = Number(m['downvotes']['N']) - 1;
+          this.setState({
+            downHighlighted: 0.5,
+          });
+        }
+        this.setState({
+          match: m
+        });
+        this.setVotes();
+        this.forceUpdate();
+      }
+    })();
+  }
+
+  getProps() {
+
+    const aImage = new window.Image();
+    const dImage = new window.Image();
+    const up = new window.Image();
+    const down = new window.Image();
+    const mag = new window.Image();
+    //
+    this.setVotes();
     //
     let attackParty = [];
     let defenseParty = [];
@@ -371,7 +441,7 @@ export class SearchParty extends React.Component {
           y={54}
           width={24}
           height={24}
-          image={this.state.magImage}
+          image={this.props.magImage}
           onClick={this.goProfile}
         />
         </Layer>

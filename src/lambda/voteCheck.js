@@ -99,7 +99,8 @@ module.exports.handler = async (event, context) => {
       }
     } else if (checkVote == 'Upvoted') {
       if (req['vote'] == 'up') {
-        exit = true;
+        setUpvote = 'unvote';
+        setDownvote = 'none';
       } else {
         setUpvote = 'unvote';
         setDownvote = 'vote';
@@ -109,7 +110,8 @@ module.exports.handler = async (event, context) => {
         setUpvote = 'vote';
         setDownvote = 'unvote';
       } else {
-        exit = true;
+        setUpvote = 'none';
+        setDownvote = 'unvote';
       }
     }
     //

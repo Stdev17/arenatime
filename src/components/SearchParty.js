@@ -301,7 +301,12 @@ export class SearchParty extends React.Component {
 
   goProfile() {
     switchFire();
-    setSearchPath(this.props.match['matchId']['S']);
+    if (this.props.search === undefined) {
+      setSearchPath(this.props.match['matchId']['S'], true);
+    }
+    else {
+      setSearchPath(this.props.match['matchId']['S'], false);
+    }
     this.setState({
       link: true
     });
@@ -321,7 +326,7 @@ export class SearchParty extends React.Component {
 
   checkLink() {
     if (this.state.link) {
-      return <Redirect to='/arenatime/match'/>
+      return <Redirect to='/match'/>
     }
   }
 
@@ -441,7 +446,7 @@ export class SearchParty extends React.Component {
           y={54}
           width={24}
           height={24}
-          image={this.props.magImage}
+          image={this.state.magImage}
           onClick={this.goProfile}
         />
         </Layer>

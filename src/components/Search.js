@@ -227,6 +227,9 @@ export class Search extends React.Component {
       case "승리":
         f.result = "victory";
         break;
+      case "전체":
+        f.result = "all";
+        break;
       default:
         break;
     }
@@ -399,6 +402,7 @@ export class Search extends React.Component {
               <Form.Control name="result" onChange={this.inputHandler} as="select">
                 <option>패배</option>
                 <option>승리</option>
+                <option>전체</option>
               </Form.Control>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPosition">

@@ -3,7 +3,7 @@ import {
   Navbar,
   Nav
 } from 'react-bootstrap';
-import { Link, BrowserRouter } from 'react-router-dom';
+import { Link, HashRouter } from 'react-router-dom';
 import { LinkContainer} from "react-router-bootstrap";
 import { Routes } from './Routes';
 
@@ -27,11 +27,11 @@ const menuText = {
 export class Navi extends React.Component {
   render() {
   return (
-  <BrowserRouter>
+  <HashRouter>
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand>
     <div className="brand" style={brandText}>
-    <Link to="/arenatime/" className="remove-underline">
+    <Link to="/" className="remove-underline">
     <img
       alt=""
       src="/arenatime/favicon.jpg"
@@ -46,13 +46,13 @@ export class Navi extends React.Component {
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto" style={menuText}>
-      <LinkContainer to="/arenatime/search">
+      <LinkContainer to="/search">
         <Nav.Link>대전 검색</Nav.Link>
       </LinkContainer>
-      <LinkContainer to="/arenatime/register">
+      <LinkContainer to="/register">
         <Nav.Link>대전 등록</Nav.Link>
       </LinkContainer>
-      <LinkContainer to="/arenatime/part">
+      <LinkContainer to="/part">
         <Nav.Link>부분 검색</Nav.Link>
       </LinkContainer>
     </Nav>
@@ -76,7 +76,7 @@ export class Navi extends React.Component {
     </div>
   </Navbar>
   <Routes/>
-  </BrowserRouter>
+  </HashRouter>
   );
   }
 }

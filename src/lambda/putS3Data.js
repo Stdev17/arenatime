@@ -55,7 +55,7 @@ module.exports.handler = async (event, context) => {
   let request = JSON.parse(event.body);
   let parsed = parseData(request);
   if (parsed.downvotes === undefined) {
-    response = {
+    let response = {
       statusCode: 400,
       body: JSON.stringify({
         message: "parse error",
@@ -82,7 +82,7 @@ module.exports.handler = async (event, context) => {
   (async _ => {
   let dataSend = await dyn.putItem(dataParams, (err, data) => {
     if (err) {
-      response = {
+      let response = {
         statusCode: 400,
         body: JSON.stringify({
           message: err,
@@ -117,7 +117,7 @@ module.exports.handler = async (event, context) => {
   (async _ => {
   let voteSend = await dyn.putItem(voteParams, (err, data) => {
     if (err) {
-      response = {
+      let response = {
         statusCode: 400,
         body: JSON.stringify({
           message: err,
@@ -153,7 +153,7 @@ module.exports.handler = async (event, context) => {
 
   return s3.putObject(params).promise()
     .then(data => {
-      response = {
+      let response = {
         statusCode: 200,
         body: JSON.stringify({
           message: 'Succeeded Data Upload',
@@ -167,7 +167,7 @@ module.exports.handler = async (event, context) => {
       return response;
     })
     .catch(err => {
-      response = {
+      let response = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Upload Failed',

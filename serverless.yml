@@ -67,11 +67,15 @@ provider:
 plugins:
   - serverless-offline
   - serverless-plugin-existing-s3
+  - serverless-plugin-optimize
 
 custom:
   serverless-offline:
     port: 4000
   # Set the table name here so we can use it while testing locally
+
+package:
+  individually: true
 
 functions:
   putImage:

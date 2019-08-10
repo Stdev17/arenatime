@@ -12,7 +12,7 @@ module.exports.handler = async (event, context) => {
 
   let get = await s3.getObject(params).promise()
     .then(data => {
-      result = {
+      let result = {
         statusCode: 200,
         body: JSON.stringify({
           message: data,
@@ -26,7 +26,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      result = {
+      let result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Getting Item Failed',

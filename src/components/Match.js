@@ -31,7 +31,7 @@ import { path } from '../util/dummy';
 var fileType = require('file-type');
 var axios = require('axios');
 
-
+var fromSearch = false;
 var searchPath = "";
 var resultImageFile = null;
 
@@ -56,8 +56,9 @@ const smallText = {
   fontColor: '#333333'
 }
 
-export function setSearchPath(str) {
+export function setSearchPath(str, f) {
   searchPath = str;
+  fromSearch = f;
 }
 
 let scale = 72;
@@ -391,7 +392,11 @@ export class Match extends React.Component {
 
   showResult() {
     if (this.state.link) {
-      return <Redirect to='/arenatime/search'/>
+      if (fromSearch) {
+        return <Redirect to='/search'/>
+      } else {
+        return <Redirect to='/part'/>
+      }
     }
     if (this.state.match['imagePath']['S'] !== 'PlaceHolder') {
       return (

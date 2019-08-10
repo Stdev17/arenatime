@@ -39,7 +39,7 @@ module.exports.handler = (event, context) => {
 
   s3.putObject(params).promise()
     .then(data => {
-      response = {
+      let response = {
         statusCode: 200,
         body: JSON.stringify({
           message: params.Key,
@@ -53,7 +53,7 @@ module.exports.handler = (event, context) => {
       context.succeed(response);
     })
     .catch(err => {
-      response = {
+      let response = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Upload Failed',

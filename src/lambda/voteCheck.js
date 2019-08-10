@@ -16,7 +16,7 @@ module.exports.handler = async (event, context) => {
 
   let check = await dyn.getItem(checkParams).promise()
   .then(data => {
-    result = {
+    let result = {
       statusCode: 200,
       body: JSON.stringify({
         message: data,
@@ -26,7 +26,7 @@ module.exports.handler = async (event, context) => {
     return result;
   })
   .catch(err => {
-    result = {
+    let result = {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Getting Item Failed',
@@ -63,7 +63,7 @@ module.exports.handler = async (event, context) => {
 
   let get = await dyn.getItem(getParams).promise()
     .then(data => {
-      result = {
+      let result = {
         statusCode: 200,
         body: JSON.stringify({
           message: data,
@@ -73,7 +73,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      result = {
+      let result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Getting Item Failed',
@@ -173,7 +173,7 @@ module.exports.handler = async (event, context) => {
 
     let updateMatch = await dyn.updateItem(setParams).promise()
     .then(data => {
-      result = {
+      let result = {
         statusCode: 200,
         body: JSON.stringify({
           message: data,
@@ -183,7 +183,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      result = {
+      let result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Setting Votes Failed',
@@ -215,7 +215,7 @@ module.exports.handler = async (event, context) => {
 
     let updateVoter = await dyn.updateItem(voterParams).promise()
     .then(data => {
-      result = {
+      let result = {
         statusCode: 200,
         body: JSON.stringify({
           message: 'Vote Succeeded',
@@ -233,7 +233,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      result = {
+      let result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Setting Voters Failed',

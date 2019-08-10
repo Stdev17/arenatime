@@ -31,13 +31,13 @@ module.exports.handler = async (event, context, callback) => {
     Limit: 5
   };
 
-  if (req.arena == 'battleArena') {
+  if (req.arena === 'battleArena') {
     params.ExpressionAttributeValues[':arena'] = {S: 'princessArena'};
   }
-  if (req.arena == 'princessArena') {
+  if (req.arena === 'princessArena') {
     params.ExpressionAttributeValues[':arena'] = {S: 'battleArena'};
   }
-  if (req.arena == 'all') {
+  if (req.arena === 'all') {
     params.ExpressionAttributeValues[':arena'] = {S: 'all'};
   }
 
@@ -92,63 +92,71 @@ module.exports.handler = async (event, context, callback) => {
       break;
   }
 
-  if (req.target == 'defense' && req.sort == 'netUpvotes') {
+  if (req.target === 'defense' && req.sort === 'netUpvotes') {
     params.IndexName = 'defenseVotes';
-    if (req.result == 'defeat') {
+    if (req.result === 'victory') {
       params.ExpressionAttributeValues[':result'] = {S: 'attackWin'};
+    } else if (req.result === 'all') {
+      params.ExpressionAttributeValues[':result'] = {S: 'all'};
     } else {
       params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'defenseDeckId = :deckId';
     params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
-    params.FilterExpression = 'defensePower > :lower and defensePower < :upper and uploadedDate > :date and arena <> :arena and matchResult = :result';
+    params.FilterExpression = 'defensePower > :lower and defensePower < :upper and uploadedDate > :date and arena <> :arena and matchResult <> :result';
   }
 
-  if (req.target == 'attack' && req.sort == 'netUpvotes') {
+  if (req.target === 'attack' && req.sort === 'netUpvotes') {
     params.IndexName = 'attackVotes';
-    if (req.result == 'victory') {
+    if (req.result === 'defeat') {
       params.ExpressionAttributeValues[':result'] = {S: 'attackWin'};
+    } else if (req.result === 'all') {
+      params.ExpressionAttributeValues[':result'] = {S: 'all'};
     } else {
       params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'attackDeckId = :deckId';
     params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
-    params.FilterExpression = 'attackPower > :lower and attackPower < :upper and uploadedDate > :date and arena <> :arena and matchResult = :result';
+    params.FilterExpression = 'attackPower > :lower and attackPower < :upper and uploadedDate > :date and arena <> :arena and matchResult <> :result';
   }
 
-  if (req.target == 'defense' && req.sort == 'latest') {
+  if (req.target === 'defense' && req.sort === 'latest') {
     params.IndexName = 'defenseDate';
-    if (req.result == 'defeat') {
+    if (req.result === 'victory') {
       params.ExpressionAttributeValues[':result'] = {S: 'attackWin'};
+    } else if (req.result === 'all') {
+      params.ExpressionAttributeValues[':result'] = {S: 'all'};
     } else {
       params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'defenseDeckId = :deckId and uploadedDate > :date';
     params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
-    params.FilterExpression = 'defensePower > :lower and defensePower < :upper and arena <> :arena and matchResult = :result';
+    params.FilterExpression = 'defensePower > :lower and defensePower < :upper and arena <> :arena and matchResult <> :result';
   }
 
-  if (req.target == 'attack' && req.sort == 'latest') {
+  if (req.target === 'attack' && req.sort === 'latest') {
     params.IndexName = 'attackDate';
-    if (req.result == 'victory') {
+    if (req.result === 'defeat') {
       params.ExpressionAttributeValues[':result'] = {S: 'attackWin'};
+    } else if (req.result === 'all') {
+      params.ExpressionAttributeValues[':result'] = {S: 'all'};
     } else {
       params.ExpressionAttributeValues[':result'] = {S: 'defenseWin'};
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'attackDeckId = :deckId and uploadedDate > :date';
     params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
-    params.FilterExpression = 'attackPower > :lower and attackPower < :upper and arena <> :arena and matchResult = :result';
+    params.FilterExpression = 'attackPower > :lower and attackPower < :upper and arena <> :arena and matchResult <> :result';
   }
 
   let queries = [];
 
   let get = await dyn.query(params, async function continueQuery(err, data) {
     if (err) {
-      result = {
+      let result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Query Failed',

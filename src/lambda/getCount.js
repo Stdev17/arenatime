@@ -9,7 +9,7 @@ module.exports.handler = async (event, context) => {
 
   let get = await dyn.describeTable(params).promise()
     .then(data => {
-      result = {
+      let result = {
         statusCode: 200,
         body: JSON.stringify({
           message: data['Table']['ItemCount'],
@@ -23,7 +23,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      result = {
+      let result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Getting Count Failed',

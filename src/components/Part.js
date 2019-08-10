@@ -202,18 +202,21 @@ export class Part extends React.Component {
     }
     switch (this.state.form.matchResult) {
       case "패배":
-        if (f.deckType === 'defense') {
+        if (f.deckType === 'attack') {
           f.matchResult = "attackWin";
         } else {
           f.matchResult = "defenseWin";
         }
         break;
       case "승리":
-        if (f.deckType === 'defense') {
+        if (f.deckType === 'attack') {
           f.matchResult = "defenseWin";
         } else {
           f.matchResult = "attackWin";
         }
+        break;
+      case "전체":
+        f.matchResult = "all";
         break;
       default:
         break;
@@ -246,7 +249,7 @@ export class Part extends React.Component {
       return (
         <div>
         {results.map((value, index) => {
-            return <SearchParty match={value} key={index}/>
+            return <SearchParty match={value} search={false} key={index}/>
         })}
         <Pagination>
         <Pagination.First onClick={() => {
@@ -311,7 +314,7 @@ export class Part extends React.Component {
         부분 검색
       </h1>
       <p style={smallText} className="twenty">
-        {'부분 검색은 2, 3명 조합만 가능합니다.\n최대 100개까지만 표시됩니다.'}
+        {'부분 검색은 2, 3명 조합만 가능합니다.\n최대 50개까지만 표시됩니다.'}
       </p>
       <h2 style={subText} className="ten">
         검색 설정
@@ -331,6 +334,7 @@ export class Part extends React.Component {
               <Form.Control name="matchResult" onChange={this.inputHandler} as="select">
                 <option>패배</option>
                 <option>승리</option>
+                <option>전체</option>
               </Form.Control>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPosition">

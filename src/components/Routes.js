@@ -11,11 +11,11 @@ export class Routes extends React.Component {
   render() {
     return (
       <Switch>
-      <Route path="/arenatime/" exact component={pageSearch} />
-      <Route path="/arenatime/search" component={pageSearch} />
-      <Route path="/arenatime/register" component={pageRegister} />
-      <Route path="/arenatime/match" component={pageMatch} />
-      <Route path="/arenatime/part" component={pagePart} />
+      <Route path="/" exact component={pageSearch} />
+      <Route path="/search" component={pageSearch} />
+      <Route path="/register" component={pageRegister} />
+      <Route path="/match" component={pageMatch} />
+      <Route path="/part" component={pagePart} />
     </Switch>
     );
   }

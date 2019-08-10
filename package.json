@@ -77,6 +77,7 @@
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",
+    "serverless-optimizer-plugin": "^2.5.1",
     "serverless-plugin-existing-s3": "^2.4.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "1.2.3",
@@ -115,7 +116,8 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-jsx-control-statements": "^4.0.0",
-    "serverless-offline": "^5.8.0"
+    "serverless-offline": "^5.8.0",
+    "serverless-plugin-optimize": "^4.1.0-rc.1"
   },
   "jest": {
     "collectCoverageFrom": [

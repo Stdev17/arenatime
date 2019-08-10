@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/arenatime/static/css/main.b26bc67c.chunk.css",
-    "main.js": "/arenatime/static/js/main.337a8f6b.chunk.js",
-    "main.js.map": "/arenatime/static/js/main.337a8f6b.chunk.js.map",
+    "main.js": "/arenatime/static/js/main.9e5546d0.chunk.js",
+    "main.js.map": "/arenatime/static/js/main.9e5546d0.chunk.js.map",
     "runtime~main.js": "/arenatime/static/js/runtime~main.791c5b6c.js",
     "runtime~main.js.map": "/arenatime/static/js/runtime~main.791c5b6c.js.map",
     "static/css/2.22a7d4ef.chunk.css": "/arenatime/static/css/2.22a7d4ef.chunk.css",
     "static/js/2.22532d42.chunk.js": "/arenatime/static/js/2.22532d42.chunk.js",
     "static/js/2.22532d42.chunk.js.map": "/arenatime/static/js/2.22532d42.chunk.js.map",
     "index.html": "/arenatime/index.html",
-    "precache-manifest.4af3b9c6b66f20b71d041ffaf7cc9c8b.js": "/arenatime/precache-manifest.4af3b9c6b66f20b71d041ffaf7cc9c8b.js",
+    "precache-manifest.1aad419da708561366564183f9b6c777.js": "/arenatime/precache-manifest.1aad419da708561366564183f9b6c777.js",
     "service-worker.js": "/arenatime/service-worker.js",
     "static/css/2.22a7d4ef.chunk.css.map": "/arenatime/static/css/2.22a7d4ef.chunk.css.map",
     "static/css/main.b26bc67c.chunk.css.map": "/arenatime/static/css/main.b26bc67c.chunk.css.map"

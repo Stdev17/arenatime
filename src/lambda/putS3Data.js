@@ -272,6 +272,7 @@ function getDuo(d) {
   }
   let du = comb.combination(deck, 2);
   let duo = [];
+  let a;
   while (a = du.next()) {
     let sum = 1;
     while (a.length > 0) {
@@ -294,6 +295,7 @@ function getTrio(d) {
   }
   let t = comb.combination(deck, 3);
   let trio = [];
+  let a;
   while (a = t.next()) {
     let sum = 1;
     while (a.length > 0) {

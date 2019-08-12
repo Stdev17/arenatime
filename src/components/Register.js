@@ -94,7 +94,7 @@ export class Register extends React.Component {
       });
       return;
     }
-    if (e.target.files[0].size > 512000) {
+    if (e.target.files[0].size > 1024000) {
       this.setState({
         selectedFile: null,
         loaded: false,
@@ -169,7 +169,6 @@ export class Register extends React.Component {
         });
         this.errorShow();
         let s3 = await this.sendFiletoS3();
-        console.log(f);
         let dat = await this.sendDatatoS3(f, s3);
         if (dat === 'Succeeded Data Upload') {
           this.resetForm(e);
@@ -540,7 +539,7 @@ export class Register extends React.Component {
         {"결과 이미지"}
       </h6>
       <div style={smallText} className="ten">
-        {"500KB 이하의 .jpg .jpeg .png 파일을 올려주세요."}
+        {"1MB 이하의 .jpg .jpeg .png 파일을 올려주세요."}
         <br/>
         <input type="file" name="file" accept=".jpg, .jpeg, .png" onChange={this.fileHandler}/>
         {this.alert()}

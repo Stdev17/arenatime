@@ -228,6 +228,10 @@ export class SearchParty extends React.Component {
     const down = new window.Image();
     const mag = new window.Image();
     //
+    this.setState({
+      upHighlighted: 0.5,
+      downHighlighted: 0.5
+    });
     this.setVotes();
     //
     let attackParty = [];

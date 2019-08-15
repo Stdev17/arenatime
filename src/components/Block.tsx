@@ -73,16 +73,24 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
         str: 0,
         opacity: 0.5
       });
+      return;
+    }
+    if (this.state.str === 0 && newProps.party.includes(this.props.character)) {
+      this.setState({
+        str: 4,
+        opacity: 1
+      });
+      return;
     }
   }
   ClickChar() {
     let p = this.props.party;
     if (p.includes(this.props.character)) {
+      p.splice(p.indexOf(this.props.character), 1);
       this.setState({
         str: 0,
         opacity: 0.5
       });
-      p.splice(p.indexOf(this.props.character), 1);
     }
     else if (p.length < 5) {
       p.push(this.props.character);

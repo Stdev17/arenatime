@@ -126,6 +126,7 @@ export class SearchParty extends React.Component {
     this.setVotes = this.setVotes.bind(this);
     this.vote = this.vote.bind(this);
     this.state = {
+      voting: false,
       attackImage: null,
       defenseImage: null,
       upImage: null,
@@ -172,6 +173,12 @@ export class SearchParty extends React.Component {
   }
 
   vote(param) {
+    if (this.state.voting) {
+      return;
+    }
+    this.setState({
+      voting: true
+    });
     let dat = {
       matchId: this.props.match['matchId']['S'],
       vote: param
@@ -215,6 +222,9 @@ export class SearchParty extends React.Component {
           match: m
         });
         this.setVotes();
+        this.setState({
+          voting: false
+        });
         this.forceUpdate();
       }
     })();

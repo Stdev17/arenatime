@@ -165,12 +165,11 @@ module.exports.handler = async (event, context, callback) => {
       };
       return result;
     } else {
-      if (queries.length === 0 && data['Items'] !== undefined) {
+      if (queries.length === 0 && data['Count'] !== 0) {
         queries.push(data);
       } else if (data['Items'][0] !== undefined) {
         let check = false;
         for (let i in queries) {
-          console.log
           if (queries[i]['Items'][0]['matchId']['S'] === data['Items'][0]['matchId']['S']) {
             check = true;
           }
@@ -198,15 +197,35 @@ module.exports.handler = async (event, context, callback) => {
   let succeed = false;
 
   let fuck = await (async _ => {
-    await timeout(300);
+    await timeout(800);
     return finished();
   })();
 
   if (succeed) {
+    let res = [];
+    let buf = [];
+    let tmp;
+    for (let i in queries) {
+      for (let j in queries[i]['Items']) {
+        buf.push(queries[i]['Items'][j]);
+      }
+    }
+    for (let i = 0; i < buf.length; i++) {
+      if (i % 5 === 0) {
+        tmp = {'Items': []};
+      }
+      tmp['Items'].push(buf[i]);
+      if (i % 5 === 4) {
+        res.push(tmp);
+      }
+    }
+    if (buf.length % 5 !== 0) {
+      res.push(tmp);
+    }
     fuck = {
       statusCode: 200,
       body: JSON.stringify({
-        message: queries,
+        message: res,
         runtime: context
       }),
       headers: {
@@ -225,10 +244,10 @@ module.exports.handler = async (event, context, callback) => {
   function finished() {
     if (queries.length === 0) {
       return {
-        statusCode: 404,
+        statusCode: 200,
         body: JSON.stringify({
           message: 'Deck Not Found',
-          runtime: err
+          runtime: context
         }),
         headers: {
           'Access-Control-Allow-Origin': 'https://stdev17.github.io',

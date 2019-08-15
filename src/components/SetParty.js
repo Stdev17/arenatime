@@ -1,23 +1,31 @@
 import React from 'react';
 import {
   Modal,
-  Button
+  Button,
+  Form,
+  Col
 } from 'react-bootstrap';
 import { Cutter } from './Cutter.js';
 import { Party } from './Party.js';
+import { char } from '../util/char_parse.js';
 
 import '../css/daum.css';
 import '../css/text.css';
+import '../css/SetParty.css';
 
 export class SetParty extends React.Component {
 
   constructor(props, context) {
     super(props, context);
 
+    this.inputHandler = this.inputHandler.bind(this);
+    this.addParty = this.addParty.bind(this);
+
     this.state = {
       show: false,
       text: "대상 파티  ",
-      p: this.props.party
+      p: this.props.party,
+      char: "Empty"
     };
 
     this.handleShow = () => {
@@ -51,6 +59,23 @@ export class SetParty extends React.Component {
     }
   }
 
+  inputHandler(e) {
+    this.setState({
+      char: e.target.value
+    })
+  }
+
+  addParty() {
+    if (!(this.state.char in char)) {
+      return;
+    }
+    let p = this.props.party;
+    if (p.length < 5 && !(p.includes(char[this.state.char]))) {
+      p.push(char[this.state.char]);
+      this.forceUpdate();
+    }
+  }
+
 
   render() {
 
@@ -78,6 +103,16 @@ export class SetParty extends React.Component {
             </Modal.Header>
             <Modal.Body>
               <Cutter party={this.state.p}/>
+              <div align="center" className="ten">
+              <Form ref="form">
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Control className="char" onChange={this.inputHandler} maxLength={8}/>
+                </Form.Group>
+              </Form.Row>
+              </Form>
+              <Button variant="primary" onClick={this.addParty}>캐릭터 추가</Button>
+              </div>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="danger" onClick={this.clearParty}>설정 초기화</Button>

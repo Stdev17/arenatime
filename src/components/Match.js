@@ -165,6 +165,7 @@ export class Match extends React.Component {
     this.checkImg = this.checkImg.bind(this);
     this.state = {
       //
+      voting: false,
       attackImage: null,
       defenseImage: null,
       upImage: null,
@@ -447,6 +448,12 @@ export class Match extends React.Component {
   }
 
   vote(param) {
+    if (this.state.voting) {
+      return;
+    }
+    this.setState({
+      voting: true
+    });
     let dat = {
       matchId: this.state.match['matchId']['S'],
       vote: param
@@ -490,6 +497,9 @@ export class Match extends React.Component {
             match: m
           });
         }
+        this.setState({
+          voting: false
+        });
         this.setVotes();
 
       }

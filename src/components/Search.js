@@ -146,7 +146,7 @@ export class Search extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message === 'Query Failed' || res.data.message === 'Deck Not Found' || res.data.message === 'Internal server error') {
+      if (res.data.message === 'Query Failed' || res.data.message === 'Internal server error') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 오류가 발생했습니다."
@@ -156,6 +156,10 @@ export class Search extends React.Component {
       } else {
         let msg = res.data.message;
         results = [];
+        if (msg === 'Deck Not Found') {
+          this.forceUpdate();
+          return;
+        }
         max = msg.length;
         offset = 1;
         let items = msg[offset-1]['Items'];

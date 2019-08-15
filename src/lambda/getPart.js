@@ -102,9 +102,11 @@ module.exports.handler = async (event, context) => {
       if (data['Item'] !== undefined) {
         matches.push(data['Item']);
       }
+      return;
     })
     .catch(err => {
       error = true;
+      return;
     });
   }
   if (error) {

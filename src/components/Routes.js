@@ -4,7 +4,8 @@ import {
   pageRegister,
   pageSearch,
   pageMatch,
-  pagePart
+  pagePart,
+  pageStat
 } from "./Container";
 
 export class Routes extends React.Component {
@@ -16,6 +17,7 @@ export class Routes extends React.Component {
       <Route path="/register" component={pageRegister} />
       <Route path="/match" component={pageMatch} />
       <Route path="/part" component={pagePart} />
+      <Route path="/stat" component={pageStat} />
     </Switch>
     );
   }

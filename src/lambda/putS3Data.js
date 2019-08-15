@@ -97,6 +97,7 @@ module.exports.handler = async (event, context) => {
       console.log(err);
       return response;
     } else {
+      return;
     }
   });
   })();
@@ -131,6 +132,7 @@ module.exports.handler = async (event, context) => {
       console.log(err);
       return response;
     } else {
+      return;
     }
   });
   })();

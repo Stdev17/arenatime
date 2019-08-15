@@ -20,26 +20,9 @@ provider:
       Resource: "*"
     - 
       Action:
-        - "dynamodb:DescribeTable"
-        - "dynamodb:Query"
-        - "dynamodb:GetItem"
-        - "dynamodb:PutItem"
-        - "dynamodb:UpdateItem"
+        - "dynamodb:*"
       Effect: Allow
-      Resource:
-        ? "Fn::GetAtt"
-        : 
-          - MatchTable
-          - Arn
-    - 
-      Action:
-        - "dynamodb:DescribeTable"
-        - "dynamodb:Query"
-        - "dynamodb:GetItem"
-        - "dynamodb:PutItem"
-        - "dynamodb:UpdateItem"
-      Effect: Allow
-      Resource: "arn:aws:dynamodb:ap-northeast-2:*:*"
+      Resource: "*"
     - 
       Action:
         - "s3:*"
@@ -154,6 +137,16 @@ functions:
     - 
       http: 
         path: api/get-part
+        method: get
+        cors: 
+          origins: 
+            - "*"
+  getStat:
+    handler: src/lambda/getStat.handler
+    events:
+    - 
+      http: 
+        path: api/get-stat
         method: get
         cors: 
           origins: 

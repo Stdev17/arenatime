@@ -321,7 +321,7 @@ export class Part extends React.Component {
       </h2>
       <h3 style={smallText} className="ten">
         <Form ref="form">
-          <Form.Row>
+          <Form.Row className="stat">
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>덱 유형</Form.Label>
               <Form.Control name="deckType" onChange={this.inputHandler} as="select">

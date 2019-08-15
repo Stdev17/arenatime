@@ -38,3 +38,7 @@
 .modal-dialog {
   max-width: 720px!important;
 }
+
+.stat {
+  width: 50%;
+}

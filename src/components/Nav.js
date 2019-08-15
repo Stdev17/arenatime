@@ -55,6 +55,9 @@ export class Navi extends React.Component {
       <LinkContainer to="/part">
         <Nav.Link>부분 검색</Nav.Link>
       </LinkContainer>
+      <LinkContainer to="/stat">
+        <Nav.Link>메타 통계</Nav.Link>
+      </LinkContainer>
     </Nav>
     </Navbar.Collapse>
     <div align="right">

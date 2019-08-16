@@ -292,18 +292,18 @@ export class Stat extends React.Component {
     } else {
       //
       let cutchar = charset.slice();
-      cutchar.splice(20, cutchar.length-20);
+      cutchar.splice(5, cutchar.length-5);
       let cutduo = duoset.slice();
-      cutduo.splice(20, cutduo.length-20);
+      cutduo.splice(5, cutduo.length-5);
       let cuttrio = trioset.slice();
-      cuttrio.splice(20, cuttrio.length-20);
+      cuttrio.splice(5, cuttrio.length-5);
       //
       return (
         <div>
-        <Stage width={1076} height={2100}>
+        <Stage width={1076} height={560}>
           <Layer>
           <Text
-            x={-2}
+            x={28}
             y={2}
             fontSize={19}
             fontFamily={'Daum'}
@@ -313,19 +313,57 @@ export class Stat extends React.Component {
             align='center'
             text={chartext}
           />
+          <Text
+            x={318}
+            y={2}
+            fontSize={19}
+            fontFamily={'Daum'}
+            fontStyle={'normal'}
+            fontColor={'#333333'}
+            width={210}
+            align='center'
+            text={duotext}
+          />
+          <Text
+            x={698}
+            y={2}
+            fontSize={19}
+            fontFamily={'Daum'}
+            fontStyle={'normal'}
+            fontColor={'#333333'}
+            width={210}
+            align='center'
+            text={triotext}
+          />
           </Layer>
           <Layer>
           {cutchar.map((value, index) => {
-            return <CharSet stat={value} setX={20} setY={cutchar.indexOf(value)} key={index}/>
+            return <CharSet stat={value} setX={50} setY={cutchar.indexOf(value)} key={index}/>
           })}
           {cutduo.map((value, index) => {
-            return <TeamSet stat={value} setX={250} setY={cutduo.indexOf(value)} isDuo={true} key={index}/>
+            return <TeamSet stat={value} setX={320} setY={cutduo.indexOf(value)} isDuo={true} key={index}/>
           })}
           {cuttrio.map((value, index) => {
-            return <TeamSet stat={value} setX={540} setY={cuttrio.indexOf(value)} isDuo={false} key={index}/>
+            return <TeamSet stat={value} setX={660} setY={cuttrio.indexOf(value)} isDuo={false} key={index}/>
           })}
           <Image
-            x={208}
+            x={248}
+            y={0}
+            width={24}
+            height={24}
+            image={this.state.mag_img}
+            onClick={this.goProfile}
+          />
+          <Image
+            x={528}
+            y={0}
+            width={24}
+            height={24}
+            image={this.state.mag_img}
+            onClick={this.goProfile}
+          />
+          <Image
+            x={913}
             y={0}
             width={24}
             height={24}

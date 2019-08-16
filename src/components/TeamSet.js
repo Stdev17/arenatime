@@ -174,7 +174,7 @@ export class TeamSet extends React.Component {
           text={this.props.setY+1}
           />
           <Text
-          x={this.props.setX+86}
+          x={this.props.setX+172}
           y={this.props.setY*102+77}
           fontSize={21}
           fontFamily={'Daum'}
@@ -202,7 +202,7 @@ export class TeamSet extends React.Component {
           text={this.props.setY+1}
           />
           <Text
-          x={this.props.setX+86}
+          x={this.props.setX+258}
           y={this.props.setY*102+77}
           fontSize={21}
           fontFamily={'Daum'}

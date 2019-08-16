@@ -6,13 +6,16 @@ import {
 } from 'react-bootstrap';
 import {
   Stage,
-  Layer
+  Layer,
+  Image,
+  Text
 } from 'react-konva';
 
 import '../css/daum.css';
 import '../css/text.css';
 
 import { path } from '../util/dummy';
+import { CharSet } from './CharSet';
 
 var axios = require('axios');
 
@@ -20,6 +23,9 @@ let loaded = false;
 let charset = [];
 let duoset = [];
 let trioset = [];
+let chartext = '';
+let duotext = '';
+let triotext = '';
 
 const topicText = {
   fontFamily: 'Daum',
@@ -50,14 +56,16 @@ export class Stat extends React.Component {
     this.getValue = this.getValue.bind(this);
     this.getSort = this.getSort.bind(this);
     this.result = this.result.bind(this);
-    //this.getSearch = this.getSearch.bind(this);
+    this.getText = this.getText.bind(this);
+    this.getSearch = this.getSearch.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
 
     this.state = {
       stats: null,
       error: false,
+      mag_img: null,
       form: {
-        target: '공격',
+        target: '방어',
         type: '적폐',
         arena: '전체'
       }
@@ -66,12 +74,51 @@ export class Stat extends React.Component {
 
   componentDidMount() {
     this.getStat();
+    const mag = new window.Image();
+    mag.src = '/arenatime/mag.png';
+    mag.onload = () => {
+      this.setState({
+        mag_img: mag
+      });
+    };
+  }
+
+  getSearch() {
+    this.getText();
+    this.getSort();
   }
 
   inputHandler(e) {
     let eName = e.target.name;
     let eVal = e.target.value;
     this.setState({form: {...this.state.form, [eName]: eVal}});
+  }
+
+  goProfile() {
+    //
+  }
+
+  getText() {
+    chartext = '';
+    duotext = '';
+    triotext = '';
+    if (this.state.form.target === '공격') {
+      chartext += '공덱 ';
+    } else {
+      chartext += '방덱 ';
+    }
+    if (this.state.form.arena === '배틀 아레나') {
+      chartext += '배레나 ';
+    } else if (this.state.form.arena === '프린세스 아레나') {
+      chartext += '프레나 ';
+    } else {
+      chartext += '전체 ';
+    }
+    if (this.state.form.type === '적폐') {
+      chartext += '적폐 캐릭터';
+    } else {
+      chartext += '사기 캐릭터';
+    }
   }
 
   getValue(obj) {
@@ -86,7 +133,7 @@ export class Stat extends React.Component {
       }
       if (this.state.form.arena === '배틀 아레나') {
         return Math.ceil(10000*Number(obj['BattleCnt']['N'])/allbattle)/100;
-      } else if (this.state.arena === '프린세스 아레나') {
+      } else if (this.state.form.arena === '프린세스 아레나') {
         return Math.ceil(10000*Number(obj['PrincessCnt']['N'])/allprincess)/100;
       } else {
         let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
@@ -96,7 +143,7 @@ export class Stat extends React.Component {
     } else {
       if (this.state.form.arena === '배틀 아레나') {
         return Math.ceil(10000*Number(obj['BattleWin']['N'])/Number(obj['BattleCnt']['N']))/100;
-      } else if (this.state.arena === '프린세스 아레나') {
+      } else if (this.state.form.arena === '프린세스 아레나') {
         return Math.ceil(10000*Number(obj['PrincessWin']['N'])/Number(obj['PrincessCnt']['N']))/100;
       } else {
         let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
@@ -151,7 +198,7 @@ export class Stat extends React.Component {
         }
       }
     }
-    if (this.state.form.target === 'defense') {
+    if (this.state.form.target === '방어') {
       for (let i in res) {
         let tmp;
         switch (res[i]['PropertyName']['S']) {
@@ -189,15 +236,14 @@ export class Stat extends React.Component {
       }
     }
     loaded = true;
-    console.log(charset);
     this.forceUpdate();
   }
 
 
 
-  getStat() {
+  async getStat() {
     let mPath = path + 'api/get-stat';
-    (async _ => {
+    let dummy = await (async _ => {
       let res = await axios({
         method: 'get',
         url: mPath,
@@ -215,9 +261,10 @@ export class Stat extends React.Component {
         this.setState({
           stats: res.data.message
         });
-        this.getSort();
       }
     })();
+    this.getText();
+    this.getSort();
   }
 
   result() {
@@ -228,13 +275,39 @@ export class Stat extends React.Component {
         </div>
       );
     } else {
+      //
       let cutchar = charset.slice();
-      cutchar.splice(0, 5);
+      cutchar.splice(20, cutchar.length-20);
+      //
+      
       return (
         <div>
-        <Stage width={1076} height={400}>
+        <Stage width={1076} height={2100}>
           <Layer>
-
+          <Text
+            x={-2}
+            y={2}
+            fontSize={19}
+            fontFamily={'Daum'}
+            fontStyle={'normal'}
+            fontColor={'#333333'}
+            width={210}
+            align='center'
+            text={chartext}
+          />
+          </Layer>
+          <Layer>
+          {cutchar.map((value, index) => {
+            return <CharSet stat={value} setX={20} setY={cutchar.indexOf(value)} key={index}/>
+          })}
+          <Image
+            x={208}
+            y={0}
+            width={24}
+            height={24}
+            image={this.state.mag_img}
+            onClick={this.goProfile}
+          />
           </Layer>
         </Stage>
         </div>
@@ -281,7 +354,7 @@ export class Stat extends React.Component {
       </h3>
       <p style={subText} className="twenty">
         <Button variant='success' onClick={this.getSearch}>
-          검색 시작
+          결과 확인
         </Button>
       </p>
       {this.result()}

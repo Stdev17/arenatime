@@ -16,6 +16,7 @@ import '../css/text.css';
 
 import { path } from '../util/dummy';
 import { CharSet } from './CharSet';
+import { TeamSet } from './TeamSet';
 
 var axios = require('axios');
 
@@ -104,20 +105,34 @@ export class Stat extends React.Component {
     triotext = '';
     if (this.state.form.target === '공격') {
       chartext += '공덱 ';
+      duotext += '공덱 ';
+      triotext += '공덱 ';
     } else {
       chartext += '방덱 ';
+      duotext += '방덱 ';
+      triotext += '방덱 ';
     }
     if (this.state.form.arena === '배틀 아레나') {
       chartext += '배레나 ';
+      duotext += '배레나 ';
+      triotext += '배레나 ';
     } else if (this.state.form.arena === '프린세스 아레나') {
       chartext += '프레나 ';
+      duotext += '프레나 ';
+      triotext += '프레나 ';
     } else {
       chartext += '전체 ';
+      duotext += '전체 ';
+      triotext += '전체 ';
     }
     if (this.state.form.type === '적폐') {
       chartext += '적폐 캐릭터';
+      duotext += '적폐 듀오';
+      triotext += '적폐 트리오';
     } else {
       chartext += '사기 캐릭터';
+      duotext += '사기 듀오';
+      triotext += '사기 트리오';
     }
   }
 
@@ -278,8 +293,11 @@ export class Stat extends React.Component {
       //
       let cutchar = charset.slice();
       cutchar.splice(20, cutchar.length-20);
+      let cutduo = duoset.slice();
+      cutduo.splice(20, cutduo.length-20);
+      let cuttrio = trioset.slice();
+      cuttrio.splice(20, cuttrio.length-20);
       //
-      
       return (
         <div>
         <Stage width={1076} height={2100}>
@@ -299,6 +317,12 @@ export class Stat extends React.Component {
           <Layer>
           {cutchar.map((value, index) => {
             return <CharSet stat={value} setX={20} setY={cutchar.indexOf(value)} key={index}/>
+          })}
+          {cutduo.map((value, index) => {
+            return <TeamSet stat={value} setX={250} setY={cutduo.indexOf(value)} isDuo={true} key={index}/>
+          })}
+          {cuttrio.map((value, index) => {
+            return <TeamSet stat={value} setX={540} setY={cuttrio.indexOf(value)} isDuo={false} key={index}/>
           })}
           <Image
             x={208}

@@ -11,6 +11,7 @@ import '../css/container.css';
 import { Match } from './Match';
 import { Part } from './Part';
 import { Stat } from './Stat';
+import { Rank } from './Rank';
 
 var fireMatch = false;
 export function switchFire() {
@@ -83,6 +84,20 @@ export class pageStat extends React.Component {
       <Container>
         <Card>
           <Stat/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
+export class pageRank extends React.Component {
+  render() {
+    return (
+      <div className="top">
+      <Container>
+        <Card>
+          <Rank/>
         </Card>
       </Container>
       </div>

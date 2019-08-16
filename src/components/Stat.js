@@ -10,6 +10,7 @@ import {
   Image,
   Text
 } from 'react-konva';
+import { Redirect } from 'react-router-dom';
 
 import '../css/daum.css';
 import '../css/text.css';
@@ -17,6 +18,7 @@ import '../css/text.css';
 import { path } from '../util/dummy';
 import { CharSet } from './CharSet';
 import { TeamSet } from './TeamSet';
+import { setRank } from './Rank';
 
 var axios = require('axios');
 
@@ -60,6 +62,10 @@ export class Stat extends React.Component {
     this.getText = this.getText.bind(this);
     this.getSearch = this.getSearch.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
+    this.goLink = this.goLink.bind(this);
+    this.goChar = this.goChar.bind(this);
+    this.goDuo = this.goDuo.bind(this);
+    this.goTrio = this.goTrio.bind(this);
 
     this.state = {
       stats: null,
@@ -95,8 +101,31 @@ export class Stat extends React.Component {
     this.setState({form: {...this.state.form, [eName]: eVal}});
   }
 
-  goProfile() {
-    //
+  goChar() {
+    setRank('char', charset, chartext);
+    this.setState({
+      link: true
+    });
+  }
+
+  goDuo() {
+    setRank('duo', duoset, duotext);
+    this.setState({
+      link: true
+    });
+  }
+
+  goTrio() {
+    setRank('trio', trioset, triotext);
+    this.setState({
+      link: true
+    });
+  }
+
+  goLink() {
+    if (this.state.link) {
+      return <Redirect to='/rank'/>
+    }
   }
 
   getText() {
@@ -352,7 +381,7 @@ export class Stat extends React.Component {
             width={24}
             height={24}
             image={this.state.mag_img}
-            onClick={this.goProfile}
+            onClick={this.goChar}
           />
           <Image
             x={528}
@@ -360,7 +389,7 @@ export class Stat extends React.Component {
             width={24}
             height={24}
             image={this.state.mag_img}
-            onClick={this.goProfile}
+            onClick={this.goDuo}
           />
           <Image
             x={913}
@@ -368,7 +397,7 @@ export class Stat extends React.Component {
             width={24}
             height={24}
             image={this.state.mag_img}
-            onClick={this.goProfile}
+            onClick={this.goTrio}
           />
           </Layer>
         </Stage>
@@ -380,6 +409,7 @@ export class Stat extends React.Component {
   render() {
     return (
       <div className="text">
+      {this.goLink()}
       <h1 style={topicText}>
         메타 통계
       </h1>

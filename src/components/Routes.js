@@ -5,7 +5,8 @@ import {
   pageSearch,
   pageMatch,
   pagePart,
-  pageStat
+  pageStat,
+  pageRank
 } from "./Container";
 
 export class Routes extends React.Component {
@@ -18,6 +19,7 @@ export class Routes extends React.Component {
       <Route path="/match" component={pageMatch} />
       <Route path="/part" component={pagePart} />
       <Route path="/stat" component={pageStat} />
+      <Route path='/rank' component={pageRank} />
     </Switch>
     );
   }

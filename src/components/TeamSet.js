@@ -101,9 +101,6 @@ class Slot extends React.Component {
 }
 
 class Duo extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     let x = [this.props.setX, this.props.setX+86];
@@ -127,9 +124,6 @@ class Duo extends React.Component {
 }
 
 class Trio extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     let x = [this.props.setX, this.props.setX+86, this.props.setX+172];
@@ -152,10 +146,6 @@ class Trio extends React.Component {
 }
 
 export class TeamSet extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     if (this.props.isDuo) {

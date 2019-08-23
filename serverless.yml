@@ -133,6 +133,7 @@ functions:
               - "*"
   getPart:
     handler: src/lambda/getPart.handler
+    timeout: 12
     events:
     - 
       http: 

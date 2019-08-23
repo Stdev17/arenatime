@@ -99,7 +99,7 @@ module.exports.handler = async (event, context) => {
     };
     let nothing = await dyn.getItem(params).promise()
     .then(data => {
-      if (data['Item'] !== undefined) {
+      if (data['Item'] !== undefined && data['Item']['attackDeck'] !== undefined) {
         matches.push(data['Item']);
       }
       return;

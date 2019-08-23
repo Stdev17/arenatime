@@ -97,4 +97,4 @@ var char = {
     "쿄우카": "Kyouka"
     //
 };
-module.exports = char;
+module.exports.char = char;

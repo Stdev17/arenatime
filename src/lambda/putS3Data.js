@@ -46,6 +46,9 @@ let parseData = function(req) {
   req.upvotes = 0;
   req.downvotes = 0;
 
+  req.commenters = [];
+  req.comments = 0;
+
   return req;
 }
 

@@ -25,13 +25,6 @@ const subText = {
   fontColor: '#333333'
 }
 
-const smallText = {
-  fontFamily: 'Daum',
-  fontStyle: 'normal',
-  fontSize: 16,
-  fontColor: '#333333'
-}
-
 let team = 'char';
 let deck = [];
 let text = '';

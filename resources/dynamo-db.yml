@@ -12,6 +12,45 @@ Resources:
           KeyType: HASH
       TableName: voter-table
     Type: "AWS::DynamoDB::Table"
+  CommenterTable: 
+    Properties: 
+      # matchId, commenterIps
+      AttributeDefinitions:
+        - 
+          AttributeName: matchId
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - 
+          AttributeName: matchId
+          KeyType: HASH
+      TableName: commenter-table
+    Type: "AWS::DynamoDB::Table"
+  CommentTable: 
+    Properties: 
+      # matchId, commentId, userIp, memo
+      AttributeDefinitions:
+        - 
+          AttributeName: matchId
+          AttributeType: S
+        - AttributeName: commentId
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - 
+          AttributeName: matchId
+          KeyType: HASH
+      GlobalSecondaryIndexes: 
+        - 
+          IndexName: commentIds
+          KeySchema: 
+            - 
+              AttributeName: commentId
+              KeyType: HASH
+          Projection: 
+            ProjectionType: ALL
+      TableName: comment-table
+    Type: "AWS::DynamoDB::Table"
   MatchTable: 
     Properties: 
       AttributeDefinitions: 

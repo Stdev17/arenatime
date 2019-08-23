@@ -239,6 +239,8 @@ export class Stat extends React.Component {
             }
             trioset = sortProperties(atrio, 'val', true, true);
             break;
+          default:
+            break;
         }
       }
     }
@@ -276,6 +278,8 @@ export class Stat extends React.Component {
             }
             trioset = sortProperties(dtrio, 'val', true, true);
             break;
+          default:
+            break;
         }
       }
     }
@@ -283,11 +287,9 @@ export class Stat extends React.Component {
     this.forceUpdate();
   }
 
-
-
   async getStat() {
     let mPath = path + 'api/get-stat';
-    let dummy = await (async _ => {
+    await (async _ => {
       let res = await axios({
         method: 'get',
         url: mPath,

@@ -345,6 +345,9 @@ export class SearchParty extends React.Component {
   }
 
   showMemo() {
+    if (this.props.match['memo'] === undefined) {
+      return;
+    }
     let m = this.props.match['memo']['S'];
     let res;
     if (m !== 'PlaceHolder') {

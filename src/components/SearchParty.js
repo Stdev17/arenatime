@@ -349,20 +349,25 @@ export class SearchParty extends React.Component {
       return;
     }
     let m = this.props.match['memo']['S'];
-    let res;
+    let res = "";
     if (m !== 'PlaceHolder') {
       if (m.length > 40) {
         res = m.slice(0, 40).replace(/\n/, "") + '(...)';
       } else {
         res = m.replace(/\n/, "");
       }
+    }
+    if (this.props.match['netComments'] !== undefined) {
+      res += (' (덧글 ' + this.props.match['netComments']['N'] + '개)');
+    }
+    if (res !== "") {
       return (
         <div>
           <p style={smallText}>
             {res}
           </p>
         </div>
-      )
+      );
     }
   }
 

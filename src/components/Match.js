@@ -9,7 +9,10 @@
 
 import React from 'react';
 import {
-  Button
+  Form,
+  Col,
+  Button,
+  Modal
 } from 'react-bootstrap';
 import {
   Stage,
@@ -159,6 +162,8 @@ export class Match extends React.Component {
     this.getBack = this.getBack.bind(this);
     this.showMemo = this.showMemo.bind(this);
     this.showComment = this.showComment.bind(this);
+    this.inputHandler = this.inputHandler.bind(this);
+    this.putComment = this.putComment.bind(this);
     this.upClicked = this.upClicked.bind(this);
     this.downClicked = this.downClicked.bind(this);
     this.setVotes = this.setVotes.bind(this);
@@ -185,7 +190,19 @@ export class Match extends React.Component {
       link: false,
       fire: false,
       match: {},
-      date: ""
+      date: "",
+      memo: "",
+      title_msg: "등록 중",
+      msg: "잠시만 기다려 주세요.",
+      errShow: false
+    };
+
+    this.errorShow = () => {
+      this.setState({ errShow: true });
+    };
+
+    this.errorHide = () => {
+      this.setState({ errShow: false });
     };
 
     this.checkSize = (w, h) => {
@@ -206,6 +223,13 @@ export class Match extends React.Component {
         imageHeight: height
       })
     };
+  }
+
+  inputHandler(e) {
+    let eVal = e.target.value;
+    this.setState({
+      memo: eVal
+    });
   }
 
   checkImg() {
@@ -444,6 +468,39 @@ export class Match extends React.Component {
 
   }
 
+  putComment(param) {
+    if (this.state.voting) {
+      return;
+    }
+    this.setState({
+      voting: true,
+      errShow: true
+    });
+    let dat = {
+      matchId: this.state.match['matchId']['S'],
+      memo: this.state.memo,
+      action: param
+    }
+    let mPath = path + 'api/put-comment';
+    (async _ => { 
+      let res = await axios({
+        method: 'put',
+        url: mPath,
+        data: dat,
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      this.setState({
+        voting: false,
+        title_msg: "등록 완료",
+        msg: "덧글이 등록되었습니다."
+      });
+      //refresh();
+    })();
+    
+  }
+
   upClicked() {
     this.vote("up");
   }
@@ -632,16 +689,42 @@ export class Match extends React.Component {
             {'덧글 목록'}
           </p>
           {this.showComment()}
-
+        <Form>
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridCity">
+              <Form.Label>덧글 입력</Form.Label>
+                <Form.Control as="textarea" name="memo" onChange={this.inputHandler} maxLength={200}/>
+            </Form.Group>
+          </Form.Row>
+        </Form>
         </div>
         <p style={subText} className="ten">
-          <Button variant='primary' onClick={this.getBack}>
+          <Button variant='primary' onClick={this.putComment('put')}>
             {'덧글 등록'}
           </Button>
           <Button variant='success' onClick={this.getBack}>
             {'돌아가기'}
           </Button>
         </p>
+        <Modal
+          show={this.state.errShow}
+          onHide={this.errorHide}
+          aria-labelledby="example-custom-modal-styling-title"
+        >
+
+            <Modal.Header>
+              <Modal.Title>
+                {this.state.title_msg}
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {this.state.msg}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={this.errorHide}>확인</Button>
+            </Modal.Footer>
+
+        </Modal>
       </div>
     );
   }

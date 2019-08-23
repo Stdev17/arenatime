@@ -12,14 +12,14 @@ const char: Record<string, string> = {
   "카오리": "Kaori",
   //
   "페코린느": "Pekorinne",
-  //
+  "루카": "Ruka",
   "노조미": "Nozomi",
-  //
+  "무이미": "Muimi",
   "마코토": "Makoto",
   //
   //
   "아키노": "Akino",
-  //
+  "마츠리": "Matsuri",
   //
   //
   "츠무기": "Tsumugi",
@@ -27,7 +27,7 @@ const char: Record<string, string> = {
   "미소기": "Misogi",
   "아야네": "Ayane",
   "타마키": "Tamaki",
-  //
+  "토모": "Tomo",
   //
   "에리코": "Eriko",
   "수페코": "SummerPekorinne",
@@ -37,7 +37,7 @@ const char: Record<string, string> = {
   "지타": "Djeeta",
   "레이": "Rei",
   "시즈루": "Shizuru",
-  //
+  "크리스티나": "Christina",
   //
 
   //중열
@@ -55,13 +55,13 @@ const char: Record<string, string> = {
   //
   //
   "콧코로": "Kokkoro",
-  //
-  //
+  "아유미": "Ayumi",
+  "글레어": "Glare",
   "수코로": "SummerKokkoro",
   "수영복콧코로": "SummerKokkoro",
   "콧코로(여름)": "SummerKokkoro",
-  //
-  //
+  "렘": "Rem",
+  "람": "Ram",
   "린": "Rin",
   "미츠키": "Mitsuki",
   "아카리": "Akari",
@@ -70,8 +70,8 @@ const char: Record<string, string> = {
 
   //후열
   "아리사": "Arisa",
-  //
-  //
+  "앤": "Ann",
+  "루": "Rou",
   "리노": "Rino",
   "스즈나": "Suzuna",
   //
@@ -79,10 +79,10 @@ const char: Record<string, string> = {
   "이오": "Io",
   //
   "스즈메": "Suzume",
-  //
-  //
+  "에밀리아": "Emilia",
+  "카스미": "Kasumi",
   "미사토": "Misato",
-  //
+  "나나카": "Nanaka",
   //
   "캬루": "Kyaru",
   "하츠네": "Hatsune",

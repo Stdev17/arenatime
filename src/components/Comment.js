@@ -2,17 +2,24 @@ import React from 'react';
 import {
   Image,
   Text,
-  Group
+  Stage,
+  Layer
 } from 'react-konva';
+import {
+  Button,
+  Modal
+} from 'react-bootstrap';
 
 import '../css/daum.css';
 import '../css/text.css';
 
 import { getCoord } from './Block.tsx';
 import { char } from '../util/char.js';
-import { tsConstructorType } from '@babel/types';
+import { path } from '../util/dummy';
 
-let parse = require('../util/char_parse.js').char;
+var axios = require('axios');
+
+let parse = require('../util/char_parse.js');
 let scale = 60;
 
 class Slot extends React.Component {
@@ -66,11 +73,10 @@ class Slot extends React.Component {
     }
   }
   render() {
-    console.log(this.props.character);
     return (
       <Image
       x={this.props.setX}
-      y={this.props.setY*74+2}
+      y={2}
       width={scale}
       height={scale}
       image={this.state.image}
@@ -96,26 +102,23 @@ export class Comment extends React.Component {
       errShow: false,
       modalShow: false,
       title_msg: "덧글 삭제",
-      msg: "정말 삭제하시겠습니까?"
+      msg: "정말 삭제하시겠습니까?",
+      deleted: false
     };
 
-    this.errorShow = () => {
-      this.setState({ errShow: true });
-    };
-
-    this.errorHide = () => {
-      this.setState({ errShow: false });
-    };
+    this.errorHide = this.errorHide.bind(this);
+    this.errorShow = this.errorShow.bind(this);
 
     this.deleteComment = () => {
       (async _ => {
         let dat = {
+          matchId: this.props.matchId,
           commentId: this.props.comment.commentId['S'],
           memo: 'PlaceHolder',
           action: 'delete'
         }
         let mPath = path + 'api/put-comment';
-        await axios({
+        let res = await axios({
           method: 'put',
           url: mPath,
           data: dat,
@@ -123,12 +126,22 @@ export class Comment extends React.Component {
             Accept: "application/json"
           }
         });
+        if (res.data.message === 'Forbidden Comment Deletion') {
+          this.setState({
+            modalShow: true,
+            errShow: false,
+            title_msg: "삭제 실패",
+            msg: "권한이 없습니다.",
+            deleted: false
+          });
+          return;
+        }
         this.setState({
           modalShow: true,
           errShow: false,
           title_msg: "삭제 완료",
           msg: "덧글이 삭제되었습니다.",
-          image: null
+          deleted: true
         });
       })();
     };
@@ -138,35 +151,57 @@ export class Comment extends React.Component {
     };
   }
 
+  errorShow() {
+    if (this.state.deleted) {
+      this.setState({
+        modalShow: true,
+        title_msg: "삭제 불가",
+        msg: "이미 삭제된 덧글입니다."
+      });
+    } else {
+      this.setState({
+        errShow: true,
+        title_msg: "덧글 삭제",
+        msg: "정말 삭제하시겠습니까?"
+      });
+    }
+  }
+
+  errorHide() {
+    this.setState({ errShow: false });
+  }
+
   componentDidMount() {
     const del = new window.Image();
     del.src = '/arenatime/cancel.png';
-    down.onload = () => {
+    del.onload = () => {
       this.setState({
-        image: down
+        image: del
       });
     };
   }
 
   render() {
     return (
-      <Group>
+      <div>
+      <Stage width={1124} height={74}>
+      <Layer>
       <Slot character={parse[this.props.comment.charName['S']]} setX={2} setY={this.props.setY}/>
       
       <Text
-      x={80}
-      y={this.props.setY*74+2}
+      x={75}
+      y={2}
       fontSize={16}
       fontFamily={'Daum'}
       fontStyle={'normal'}
       fontColor={'#333333'}
-      width={820}
+      width={810}
       height={68}
       text={this.props.comment.memo['S']}
       />
       <Text
-      x={840}
-      y={this.props.setY*74+28}
+      x={828}
+      y={28}
       fontSize={16}
       fontColor={'#333333'}
       width={256}
@@ -174,13 +209,15 @@ export class Comment extends React.Component {
       text={this.props.comment.uploadedDate['S']}
       />
       <Image
-        x={969}
-        y={this.props.setY*74+28}
+        x={1045}
+        y={22}
         width={24}
         height={24}
-        image={this.state.deleteImage}
-        onClick={this.deleteComment}
+        image={this.state.image}
+        onClick={this.errorShow}
       />
+      </Layer>
+      </Stage>
       <Modal
         show={this.state.errShow}
         onHide={this.errorHide}
@@ -220,7 +257,7 @@ export class Comment extends React.Component {
           </Modal.Footer>
 
       </Modal>
-      </Group>
+      </div>
     );
   }
 }

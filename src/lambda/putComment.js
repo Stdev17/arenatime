@@ -70,6 +70,7 @@ module.exports.handler = async (event, context) => {
   }
 
   let chk_ip = false;
+  let thatIp
   let myName = "";
   let myChar = char.slice();
 
@@ -86,7 +87,6 @@ module.exports.handler = async (event, context) => {
     let name = myChar[Math.floor(Math.random()*myChar.length)];
     com.charName = {S: name};
 
-    console.log(ips);
     ips[com.userIp['S']] = {S: name};
 
     let setParams = {
@@ -219,7 +219,39 @@ module.exports.handler = async (event, context) => {
         };
         return response;
       });
-  } else if (chk_ip && req.action === 'delete') {
+  } else if (req.action === 'delete') {
+    let params = {
+      TableName: 'comment-table',
+      ProjectionExpression: 'userIp',
+      Key: {
+        'commentId': {S: req.commentId}
+      }
+    };
+  
+    let chk = await dyn.getItem(params).promise()
+      .then(data => {
+        return data['Item'];
+      })
+      .catch(err => {
+        console.log(err);
+        return;
+      });
+
+    if (chk['userIp']['S'] !== event.requestContext.identity.sourceIp) {
+      let response = {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Forbidden Comment Deletion',
+          runtime: context
+        }),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+          'Access-Control-Allow-Credentials': true,
+        }
+      };
+      return response;
+    }
+    
     let comParams = {
       TableName: 'match-table',
       Key: {
@@ -242,7 +274,7 @@ module.exports.handler = async (event, context) => {
     let setParams = {
       TableName: 'comment-table',
       Key: {
-        'commentId': req.commentId
+        'commentId': {S: req.commentId}
       }
     };
 

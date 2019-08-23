@@ -12,7 +12,8 @@ import {
   Form,
   Col,
   Button,
-  Modal
+  Modal,
+  Pagination
 } from 'react-bootstrap';
 import {
   Stage,
@@ -38,6 +39,10 @@ var axios = require('axios');
 var fromSearch = false;
 var searchPath = "";
 var resultImageFile = null;
+var offset = 1;
+var max = 1;
+var unit = 5;
+var comments = [];
 
 const topicText = {
   fontFamily: 'Daum',
@@ -171,6 +176,7 @@ export class Match extends React.Component {
     this.vote = this.vote.bind(this);
     this.checkImg = this.checkImg.bind(this);
     this.setComment = this.setComment.bind(this);
+    this.updateOffset = this.updateOffset.bind(this);
     this.state = {
       //
       voting: false,
@@ -179,6 +185,7 @@ export class Match extends React.Component {
       upImage: null,
       downImage: null,
       resultImage: null,
+      deleteImage: null,
       upHighlighted: 0.5,
       downHighlighted: 0.5,
       imageWidth: 1124,
@@ -226,6 +233,18 @@ export class Match extends React.Component {
         imageHeight: height
       })
     };
+  }
+
+  updateOffset(num) {
+    offset = num;
+    comments = [];
+    for (let i = offset*unit-unit; i<offset*unit; i++) {
+      if (i > this.state.comments.length-1) {
+        break;
+      }
+      comments.push(this.state.comments[i]);
+    }
+    this.forceUpdate();
   }
 
   inputHandler(e) {
@@ -334,6 +353,7 @@ export class Match extends React.Component {
       const up = new window.Image();
       const down = new window.Image();
       const resImg = new window.Image();
+      const delImg = new window.Image();
       //
       let ap = "";
       let dp = "";
@@ -377,6 +397,7 @@ export class Match extends React.Component {
       }
       up.src = '/arenatime/thumb-up.png';
       down.src = '/arenatime/thumb-down.png';
+      delImg.src = '/arenatime/cancel.png';
       //
       if (this.state.match['imagePath']['S'] !== 'PlaceHolder') {
         let fileMime = fileType(resultImageFile);
@@ -410,6 +431,11 @@ export class Match extends React.Component {
       down.onload = () => {
         this.setState({
           downImage: down
+        });
+      };
+      delImg.onload = () => {
+        this.setState({
+          deleteImage: delImg
         });
       };
       this.setState({
@@ -477,7 +503,7 @@ export class Match extends React.Component {
   }
 
   setComment() {
-    if (this.state.match['netComments'] !== undefined && Number(this.state.match['netComments']['N']) !== 0) {
+    if (this.state.match['netComments'] !== undefined) {
       let str = this.state.match['matchId']['S'];
       let mPath = path + 'api/get-comment';
       (async _ => { 
@@ -492,20 +518,97 @@ export class Match extends React.Component {
         this.setState({
           comments: res.data.message['Items']
         });
+        comments = [];
+        max = Math.floor((res.data.message['Items'].length-1) / unit) + 1;
+        for (let i = offset*unit-unit; i<offset*unit; i++) {
+          if (i > this.state.comments.length-1) {
+            break;
+          }
+          comments.push(this.state.comments[i]);
+        }
+        this.setState({
+          comments: res.data.message['Items']
+        });
+        this.forceUpdate();
       })();
     }
   }
 
   showComment() {
-    if (this.state.match['netComments'] !== undefined && Number(this.state.match['netComments']['N']) !== 0) {
+    if (this.state.comments.length !== 0) {
+      let items = [];
+      for (let num = offset-2; num <= offset+4; num++) {
+        if (num < 1) {
+          continue;
+        }
+        if (num > max || (num > 5 && num > offset+2)) {
+          break;
+        }
+        items.push(
+          <Pagination.Item key={num} active={num === offset} onClick={() => this.updateOffset(num)}>
+            {num}           
+          </Pagination.Item>,
+        );
+      }
       return (
-        <Stage width={1124} height={this.state.comments.length*74}>
-        <Layer>
-        {this.state.comments.map((value, index) => {
-            return <Comment comment={value} setY={this.state.comments.indexOf(value)} key={index}/>
+        <div>
+        {comments.map((value, index) => {
+            return <Comment comment={value} setY={this.state.comments.indexOf(value)} matchId={this.state.match['matchId']['S']} key={index}/>
         })}
-        </Layer>
-        </Stage>
+        <Pagination>
+        <Pagination.First onClick={() => {
+          offset = 1;
+          comments = [];
+          for (let i = offset*unit-unit; i<offset*unit; i++) {
+            if (i > this.state.comments.length-1) {
+              break;
+            }
+            comments.push(this.state.comments[i]);
+          }
+          this.forceUpdate();
+        }}/>
+        <Pagination.Prev onClick={() => {
+          if (offset > 1) {
+            offset -= 1;
+          }
+          comments = [];
+          for (let i = offset*unit-unit; i<offset*unit; i++) {
+            if (i > this.state.comments.length-1) {
+              break;
+            }
+            comments.push(this.state.comments[i]);
+          }
+          this.forceUpdate();
+        }}/>
+        <Pagination.Ellipsis />
+        {items}
+        <Pagination.Ellipsis />
+        <Pagination.Next onClick={() => {
+          if (offset < max) {
+            offset += 1;
+          }
+          comments = [];
+          for (let i = offset*unit-unit; i<offset*unit; i++) {
+            if (i > this.state.comments.length-1) {
+              break;
+            }
+            comments.push(this.state.comments[i]);
+          }
+          this.forceUpdate();
+        }}/>
+        <Pagination.Last onClick={() => {
+          offset = max;
+          comments = [];
+          for (let i = offset*unit-unit; i<offset*unit; i++) {
+            if (i > this.state.comments.length-1) {
+              break;
+            }
+            comments.push(this.state.comments[i]);
+          }
+          this.forceUpdate();
+        }}/>
+        </Pagination>
+        </div>
       );
     }
   }
@@ -545,7 +648,6 @@ export class Match extends React.Component {
           Accept: "application/json"
         }
       });
-      console.log("done");
       this.setState({
         voting: false,
         title_msg: "등록 완료",
@@ -739,8 +841,8 @@ export class Match extends React.Component {
         </Stage>
         {this.showResult()}
         {this.showMemo()}
-        <div>
-          <p style={subText} className="ten">
+        <div style={subText}>
+          <p className="ten">
             {'덧글 목록'}
           </p>
           {this.showComment()}

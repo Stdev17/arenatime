@@ -42,8 +42,6 @@ Resources:
         - 
           AttributeName: commentId
           KeyType: HASH
-        - AttributeName: uploadedDate
-          KeyType: RANGE
       GlobalSecondaryIndexes: 
         - 
           IndexName: matches

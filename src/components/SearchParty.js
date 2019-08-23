@@ -357,7 +357,7 @@ export class SearchParty extends React.Component {
         res = m.replace(/\n/, "");
       }
     }
-    if (this.props.match['netComments'] !== undefined) {
+    if (this.props.match['netComments'] !== undefined && Number(this.props.match['netComments']['N']) !== 0) {
       res += (' (덧글 ' + this.props.match['netComments']['N'] + '개)');
     }
     if (res !== "") {

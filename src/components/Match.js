@@ -30,6 +30,7 @@ import '../css/daum.css';
 import '../css/text.css';
 
 import { path } from '../util/dummy';
+import { Comment } from './Comment';
 
 var fileType = require('file-type');
 var axios = require('axios');
@@ -465,10 +466,45 @@ export class Match extends React.Component {
   }
 
   showComment() {
-
+    if (this.state.match['netComments'] !== undefined && Number(this.state.match['netComments']['N']) !== 0) {
+      let str = this.state.match['matchId']['S'];
+      let mPath = path + 'api/put-comment';
+      let r = [];
+      (async _ => { 
+        let res = await axios({
+          method: 'get',
+          url: mPath,
+          params: str,
+          headers: {
+            Accept: "application/json"
+          }
+        });
+        r = res.data.message['Items'];
+        console.log(r);
+      })();
+      return (
+        <div>
+        {r.map((value, index) => {
+            return <Comment comment={value} key={index}/>
+        })}
+        </div>
+      );
+    }
   }
 
-  putComment(param) {
+  putComment() {
+    if (this.state.memo !== "") {
+      this.doComment('put');
+    } else {
+      this.setState({
+        errShow: true,
+        title_msg: "등록 실패",
+        msg: "덧글을 입력해 주세요."
+      });
+    }
+  }
+
+  doComment(param) {
     if (this.state.voting) {
       return;
     }
@@ -483,7 +519,7 @@ export class Match extends React.Component {
     }
     let mPath = path + 'api/put-comment';
     (async _ => { 
-      let res = await axios({
+      await axios({
         method: 'put',
         url: mPath,
         data: dat,
@@ -491,12 +527,13 @@ export class Match extends React.Component {
           Accept: "application/json"
         }
       });
+      console.log("done");
       this.setState({
         voting: false,
         title_msg: "등록 완료",
         msg: "덧글이 등록되었습니다."
       });
-      //refresh();
+      this.forceUpdate();
     })();
     
   }
@@ -699,9 +736,10 @@ export class Match extends React.Component {
         </Form>
         </div>
         <p style={subText} className="ten">
-          <Button variant='primary' onClick={this.putComment('put')}>
+          <Button variant='primary' onClick={this.putComment}>
             {'덧글 등록'}
           </Button>
+          {"  "}
           <Button variant='success' onClick={this.getBack}>
             {'돌아가기'}
           </Button>

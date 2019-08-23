@@ -58,14 +58,33 @@ const char = [
   'SummerMifuyu',
   'HalloweenMiyako',
   'HalloweenShinobu',
-  'SummerSuzume'
-  /*
+  'SummerSuzume',
   'Matsuri',
   'HalloweenMisaki',
   'Christina',
   'Ruka',
   'Nanaka',
-  */
+  'ChristmasChika',
+  'ChristmasKurumi',
+  'ChristmasAyane',
+  'NewYui',
+  'NewRei',
+  'NewHiyori',
+  'ValentineShizuru',
+  'ValentineEriko',
+  'Muimi',
+  'Kasumi',
+  'Ayumi',
+  'Rou',
+  'Ann',
+  'Glare',
+  'OedoKuuka',
+  'OedoNinon',
+  'Ram',
+  'Rem',
+  'Emilia',
+  'SummerIo',
+  'SummerSuzuna'
 ];
 
 module.exports.char = char;

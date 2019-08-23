@@ -3,7 +3,7 @@ const dyn = new aws.DynamoDB();
 
 module.exports.handler = async (event, context) => {
 
-  let req = event.body.matchId;
+  let req = event.queryStringParameters[0];
 
   let params = {
     TableName: 'comment-table',
@@ -11,7 +11,7 @@ module.exports.handler = async (event, context) => {
       ':Id': {S: req}
     },
     KeyConditionExpression: 'matchId = :Id',
-    ProjectionExpression: 'commentId, name, memo, uploadDate',
+    ProjectionExpression: 'commentId, name, memo, uploadedDate',
     ScanIndexForward: true
   };
 

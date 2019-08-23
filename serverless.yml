@@ -162,6 +162,16 @@ functions:
         cors: 
           origins:
             - "*"
+  getComment:
+    handler: src/lambda/getComment.handler
+    events:
+    - 
+      http: 
+        path: api/get-comment
+        method: get
+        cors: 
+          origins: 
+            - "*"
 
 # you can add CloudFormation resource templates here
 resources:

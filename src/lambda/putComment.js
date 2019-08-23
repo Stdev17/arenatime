@@ -84,7 +84,7 @@ module.exports.handler = async (event, context) => {
   }
   if (!chk_ip && myChar.length !== 0 && req.action === 'put') {
     let name = myChar[Math.floor(Math.random()*myChar.length)];
-    com.name = {S: name};
+    com.charName = {S: name};
 
     console.log(ips);
     ips[com.userIp['S']] = {S: name};
@@ -163,7 +163,7 @@ module.exports.handler = async (event, context) => {
         return response;
       });
   } else if (chk_ip && req.action === 'put') {
-    com.name = {S: myName};
+    com.charName = {S: myName};
 
     let comParams = {
       TableName: 'match-table',

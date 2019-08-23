@@ -7,11 +7,12 @@ module.exports.handler = async (event, context) => {
 
   let params = {
     TableName: 'comment-table',
+    IndexName: 'matches',
     ExpressionAttributeValues: {
       ':Id': {S: req}
     },
     KeyConditionExpression: 'matchId = :Id',
-    ProjectionExpression: 'commentId, name, memo, uploadedDate',
+    ProjectionExpression: 'commentId, charName, memo, uploadedDate',
     ScanIndexForward: true
   };
 

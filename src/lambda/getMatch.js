@@ -8,7 +8,7 @@ module.exports.handler = async (event, context) => {
 
   let params = {
     TableName: 'match-table',
-    ProjectionExpression: 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, imagePath, matchId, matchResult',
+    ProjectionExpression: 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, imagePath, matchId, matchResult, netComments',
     Key: {
       'matchId': {S: req}
     }

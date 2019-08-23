@@ -170,6 +170,7 @@ export class Match extends React.Component {
     this.setVotes = this.setVotes.bind(this);
     this.vote = this.vote.bind(this);
     this.checkImg = this.checkImg.bind(this);
+    this.setComment = this.setComment.bind(this);
     this.state = {
       //
       voting: false,
@@ -195,7 +196,8 @@ export class Match extends React.Component {
       memo: "",
       title_msg: "등록 중",
       msg: "잠시만 기다려 주세요.",
-      errShow: false
+      errShow: false,
+      comments: []
     };
 
     this.errorShow = () => {
@@ -413,6 +415,7 @@ export class Match extends React.Component {
       this.setState({
         date: (this.state.match['uploadedDate']['S']).replace(/\s(\S)+/, "")
       });
+      this.setComment();
     })();
   }
 
@@ -465,11 +468,18 @@ export class Match extends React.Component {
     return;
   }
 
-  showComment() {
+  checkMatch() {
+
+  }
+
+  deleteMatch() {
+
+  }
+
+  setComment() {
     if (this.state.match['netComments'] !== undefined && Number(this.state.match['netComments']['N']) !== 0) {
       let str = this.state.match['matchId']['S'];
-      let mPath = path + 'api/put-comment';
-      let r = [];
+      let mPath = path + 'api/get-comment';
       (async _ => { 
         let res = await axios({
           method: 'get',
@@ -479,15 +489,23 @@ export class Match extends React.Component {
             Accept: "application/json"
           }
         });
-        r = res.data.message['Items'];
-        console.log(r);
+        this.setState({
+          comments: res.data.message['Items']
+        });
       })();
+    }
+  }
+
+  showComment() {
+    if (this.state.match['netComments'] !== undefined && Number(this.state.match['netComments']['N']) !== 0) {
       return (
-        <div>
-        {r.map((value, index) => {
-            return <Comment comment={value} key={index}/>
+        <Stage width={1124} height={this.state.comments.length*74}>
+        <Layer>
+        {this.state.comments.map((value, index) => {
+            return <Comment comment={value} setY={this.state.comments.indexOf(value)} key={index}/>
         })}
-        </div>
+        </Layer>
+        </Stage>
       );
     }
   }
@@ -533,7 +551,7 @@ export class Match extends React.Component {
         title_msg: "등록 완료",
         msg: "덧글이 등록되었습니다."
       });
-      this.forceUpdate();
+      this.setComment();
     })();
     
   }

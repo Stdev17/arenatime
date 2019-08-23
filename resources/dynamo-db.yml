@@ -28,12 +28,14 @@ Resources:
     Type: "AWS::DynamoDB::Table"
   CommentTable: 
     Properties: 
-      # matchId, commentId, userIp, memo
+      # matchId, commentId, userIp, memo, uploadDate
       AttributeDefinitions:
         - 
           AttributeName: matchId
           AttributeType: S
         - AttributeName: commentId
+          AttributeType: S
+        - AttributeName: uploadedDate
           AttributeType: S
       BillingMode: PAY_PER_REQUEST
       KeySchema:
@@ -47,6 +49,9 @@ Resources:
             - 
               AttributeName: commentId
               KeyType: HASH
+            - 
+              AttributeName: uploadedDate
+              KeyType: RANGE
           Projection: 
             ProjectionType: ALL
       TableName: comment-table

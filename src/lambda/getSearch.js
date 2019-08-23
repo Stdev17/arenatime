@@ -103,7 +103,7 @@ module.exports.handler = async (event, context, callback) => {
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'defenseDeckId = :deckId';
-    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
+    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult, netComments';
     params.FilterExpression = 'defensePower > :lower and defensePower < :upper and uploadedDate > :date and arena <> :arena and matchResult <> :result';
   }
 
@@ -118,7 +118,7 @@ module.exports.handler = async (event, context, callback) => {
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'attackDeckId = :deckId';
-    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
+    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult, netComments';
     params.FilterExpression = 'attackPower > :lower and attackPower < :upper and uploadedDate > :date and arena <> :arena and matchResult <> :result';
   }
 
@@ -133,7 +133,7 @@ module.exports.handler = async (event, context, callback) => {
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'defenseDeckId = :deckId and uploadedDate > :date';
-    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
+    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult, netComments';
     params.FilterExpression = 'defensePower > :lower and defensePower < :upper and arena <> :arena and matchResult <> :result';
   }
 
@@ -148,7 +148,7 @@ module.exports.handler = async (event, context, callback) => {
     }
     params.ScanIndexForward = false;
     params.KeyConditionExpression = 'attackDeckId = :deckId and uploadedDate > :date';
-    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult';
+    params.ProjectionExpression = 'attackDeck, attackStar, attackPower, uploadedDate, defenseDeck, defenseStar, defensePower, memo, upvotes, downvotes, matchId, matchResult, netComments';
     params.FilterExpression = 'attackPower > :lower and attackPower < :upper and arena <> :arena and matchResult <> :result';
   }
 

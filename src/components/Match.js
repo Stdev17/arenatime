@@ -158,6 +158,7 @@ export class Match extends React.Component {
     this.showResult = this.showResult.bind(this);
     this.getBack = this.getBack.bind(this);
     this.showMemo = this.showMemo.bind(this);
+    this.showComment = this.showComment.bind(this);
     this.upClicked = this.upClicked.bind(this);
     this.downClicked = this.downClicked.bind(this);
     this.setVotes = this.setVotes.bind(this);
@@ -439,6 +440,10 @@ export class Match extends React.Component {
     return;
   }
 
+  showComment() {
+
+  }
+
   upClicked() {
     this.vote("up");
   }
@@ -622,7 +627,17 @@ export class Match extends React.Component {
         </Stage>
         {this.showResult()}
         {this.showMemo()}
-        <p style={subText}>
+        <div>
+          <p style={subText} className="ten">
+            {'덧글 목록'}
+          </p>
+          {this.showComment()}
+
+        </div>
+        <p style={subText} className="ten">
+          <Button variant='primary' onClick={this.getBack}>
+            {'덧글 등록'}
+          </Button>
           <Button variant='success' onClick={this.getBack}>
             {'돌아가기'}
           </Button>

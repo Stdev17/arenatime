@@ -152,6 +152,16 @@ functions:
         cors: 
           origins: 
             - "*"
+  putComment:
+    handler: src/lambda/putComment.handler
+    events:
+    - 
+      http: 
+        path: api/put-comment
+        method: put
+        cors: 
+          origins:
+            - "*"
 
 # you can add CloudFormation resource templates here
 resources:

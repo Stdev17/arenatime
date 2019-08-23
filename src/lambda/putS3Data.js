@@ -46,8 +46,7 @@ let parseData = function(req) {
   req.upvotes = 0;
   req.downvotes = 0;
 
-  req.commenters = [];
-  req.comments = 0;
+  req.netComments = 0;
 
   return req;
 }
@@ -370,7 +369,8 @@ function getItem(p) {
     netUpvotes: {N: p.netUpvotes.toString()},
     upvotes: {N: p.upvotes.toString()},
     downvotes: {N: p.downvotes.toString()},
-    userIp: {S: p.userIp}
+    userIp: {S: p.userIp},
+    netComments: {N: p.netComments.toString()}
   };
   return temp;
 }

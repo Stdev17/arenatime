@@ -40,14 +40,16 @@ Resources:
       BillingMode: PAY_PER_REQUEST
       KeySchema:
         - 
-          AttributeName: matchId
+          AttributeName: commentId
           KeyType: HASH
+        - AttributeName: uploadedDate
+          KeyType: RANGE
       GlobalSecondaryIndexes: 
         - 
-          IndexName: commentIds
+          IndexName: matches
           KeySchema: 
             - 
-              AttributeName: commentId
+              AttributeName: matchId
               KeyType: HASH
             - 
               AttributeName: uploadedDate

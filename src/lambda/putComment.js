@@ -9,7 +9,8 @@ module.exports.handler = async (event, context) => {
 
   //req.action: put, delete
 
-  let req = event.body;
+  let req = JSON.parse(event.body);
+
   let com = {
     matchId: {S: req.matchId},
     commentId: {S: ubase.encode(uuid())},
@@ -20,7 +21,7 @@ module.exports.handler = async (event, context) => {
 
   let params = {
     TableName: 'commenter-table',
-    ProjectionExpression: 'commenterIps',
+    ProjectionExpression: 'commentIps',
     Key: {
       'matchId': {S: req.matchId}
     }
@@ -28,12 +29,22 @@ module.exports.handler = async (event, context) => {
 
   let ips = await dyn.getItem(params).promise()
     .then(data => {
-      return data;
+      return data['Item'];
     })
     .catch(err => {
       console.log(err);
       return;
     });
+  
+  let tmp = {};
+  if (ips === undefined) {
+    ips = {};
+  } else {
+    for (let i in ips.commentIps['M']) {
+      tmp[i] = {S: ips.commentIps['M'][i]['S']};
+    }
+  }
+  ips = tmp;
 
   let getComments = {
     TableName: 'match-table',
@@ -43,7 +54,7 @@ module.exports.handler = async (event, context) => {
     }
   };
 
-  let coms = await dyn.getItem(params).promise()
+  let coms = await dyn.getItem(getComments).promise()
     .then(data => {
       return data;
     })
@@ -52,18 +63,22 @@ module.exports.handler = async (event, context) => {
       return;
     });
   
-  if (coms === undefined) {
+  if (coms['Item']['netComments'] !== undefined) {
+    coms = coms['Item']['netComments']['N'];
+  } else {
     coms = 0;
   }
 
   let chk_ip = false;
+  let myName = "";
   let myChar = char.slice();
 
   for (let i in ips) {
-    let del = myChar.indexOf(ips[i]);
+    let del = myChar.indexOf(ips[i]['S']);
     myChar.splice(del, 1);
-    if (i === com.userIp) {
+    if (i === com.userIp['S']) {
       chk_ip = true;
+      myName = ips[i]['S'];
       break;
     }
   }
@@ -71,7 +86,8 @@ module.exports.handler = async (event, context) => {
     let name = myChar[Math.floor(Math.random()*myChar.length)];
     com.name = {S: name};
 
-    ips[com.userIp] = com.name;
+    console.log(ips);
+    ips[com.userIp['S']] = {S: name};
 
     let setParams = {
       TableName: 'commenter-table',
@@ -147,6 +163,8 @@ module.exports.handler = async (event, context) => {
         return response;
       });
   } else if (chk_ip && req.action === 'put') {
+    com.name = {S: myName};
+
     let comParams = {
       TableName: 'match-table',
       Key: {
@@ -165,8 +183,6 @@ module.exports.handler = async (event, context) => {
       .catch(err => {
         console.log(err);
       });
-
-    com.name = {S: ips[com.userIp]};
 
     let putParams = {
       TableName: 'comment-table',

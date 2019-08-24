@@ -23,8 +23,8 @@ var revchar = {
     "Misogi": "미소기",
     "Ayane": "아야네",
     "Tamaki": "타마키",
-    //"Tomo": 220,
-    //"SummerTamaki": 225,
+    "Tomo": "토모",
+    "SummerTamaki": "타마키(여름)",
     "Eriko": "에리코",
     "SummerPekorinne": "페코린느(여름)",
     "Kurumi": "쿠루미",
@@ -45,8 +45,8 @@ var revchar = {
     "Ilya": "이리야",
     "Saren": "사렌",
     "Anna": "안나",
-    //"HalloweenShinobu": 440,
-    //"SummerMifuyu": 495,
+    "HalloweenShinobu": "시노부(할로윈)",
+    "SummerMifuyu": "미후유(여름)",
     "Kokkoro": "콧코로",
     //"Ayumi": 510,
     //"Glare": 525,
@@ -57,7 +57,7 @@ var revchar = {
     "Mitsuki": "미츠키",
     "Akari": "아카리",
     "Yori": "요리",
-    //"HalloweenMiyako": 590,
+    "HalloweenMiyako": "미야코(할로윈)",
     //Back Line
     "Arisa": "아리사",
     //"Ann": 630,
@@ -85,6 +85,7 @@ var revchar = {
     "Maho": "마호",
     "Yui": "유이",
     "Yuki": "유키",
-    "Kyouka": "쿄우카"
+    "Kyouka": "쿄우카",
+    "HalloweenMisaki": "미사키(할로윈)"
 };
 module.exports = revchar;

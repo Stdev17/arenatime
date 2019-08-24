@@ -32,8 +32,8 @@ export const dist: Record<string, number> = {
      "Misogi": 205,
      "Ayane": 210,
      "Tamaki": 215,
-     //"Tomo": 220,
-     //"SummerTamaki": 225,
+     "Tomo": 220,
+     "SummerTamaki": 225,
      "Eriko": 230,
      "SummerPekorinne": 235,
      "Kurumi": 240,
@@ -55,8 +55,8 @@ export const dist: Record<string, number> = {
      "Ilya": 425,
      "Saren": 430,
      "Anna": 440,
-     //"HalloweenShinobu": 440,
-     //"SummerMifuyu": 495,
+     "HalloweenShinobu": 440,
+     "SummerMifuyu": 495,
      "Kokkoro": 500,
      //"Ayumi": 510,
      //"Glare": 525,
@@ -67,7 +67,7 @@ export const dist: Record<string, number> = {
      "Mitsuki": 565,
      "Akari": 570,
      "Yori": 575,
-     //"HalloweenMiyako": 590,
+     "HalloweenMiyako": 590,
  
      //Back Line
      "Arisa": 625,
@@ -97,5 +97,5 @@ export const dist: Record<string, number> = {
      "Yui": 800,
      "Yuki": 805,
      "Kyouka": 810,
-     //"HalloweenMisaki": 815
+     "HalloweenMisaki": 815
 }

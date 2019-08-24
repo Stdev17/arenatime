@@ -25,7 +25,9 @@ var char = {
     "아야네": "Ayane",
     "타마키": "Tamaki",
     "토모": "Tomo",
-    //
+    "수마키": "SummerTamaki",
+    "수영복타마키": "SummerTamaki",
+    "타마키(여름)": "SummerTamaki",
     "에리코": "Eriko",
     "수페코": "SummerPekorinne",
     "수영복페코린느": "SummerPekorinne",
@@ -48,8 +50,12 @@ var char = {
     "이리야": "Ilya",
     "사렌": "Saren",
     "안나": "Anna",
-    //
-    //
+    "할노부": "HalloweenShinobu",
+    "할로윈시노부": "HalloweenShinobu",
+    "시노부(할로윈)": "HalloweenShinobu",
+    "수후유": "SummerMifuyu",
+    "수영복미후유": "SummerMifuyu",
+    "미후유(여름)": "SummerMifuyu",
     "콧코로": "Kokkoro",
     "아유미": "Ayumi",
     "글레어": "Glare",
@@ -62,7 +68,10 @@ var char = {
     "미츠키": "Mitsuki",
     "아카리": "Akari",
     "요리": "Yori",
-    //
+    "할푸딩": "HalloweenMiyako",
+    "할로윈푸딩": "HalloweenMiyako",
+    "할로윈미야코": "HalloweenMiyako",
+    "미야코(할로윈)": "HalloweenMiyako",
     //후열
     "아리사": "Arisa",
     "앤": "Ann",
@@ -94,7 +103,9 @@ var char = {
     "마호": "Maho",
     "유이": "Yui",
     "유키": "Yuki",
-    "쿄우카": "Kyouka"
-    //
+    "쿄우카": "Kyouka",
+    "할사키": "HalloweenMisaki",
+    "할로윈미사키": "HalloweenMisaki",
+    "미사키(할로윈)": "HalloweenMisaki"
 };
 module.exports = char;

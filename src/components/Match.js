@@ -207,6 +207,8 @@ export class Match extends React.Component {
       comments: []
     };
 
+    comments = [];
+
     this.errorShow = () => {
       this.setState({ errShow: true });
     };
@@ -503,39 +505,41 @@ export class Match extends React.Component {
   }
 
   setComment() {
-    if (this.state.match['netComments'] !== undefined) {
-      let str = this.state.match['matchId']['S'];
-      let mPath = path + 'api/get-comment';
-      (async _ => { 
-        let res = await axios({
-          method: 'get',
-          url: mPath,
-          params: str,
-          headers: {
-            Accept: "application/json"
-          }
-        });
-        this.setState({
-          comments: res.data.message['Items']
-        });
-        comments = [];
-        max = Math.floor((res.data.message['Items'].length-1) / unit) + 1;
-        for (let i = offset*unit-unit; i<offset*unit; i++) {
-          if (i > this.state.comments.length-1) {
-            break;
-          }
-          comments.push(this.state.comments[i]);
+
+    let str = this.state.match['matchId']['S'];
+    let mPath = path + 'api/get-comment';
+    (async _ => { 
+      let res = await axios({
+        method: 'get',
+        url: mPath,
+        params: str,
+        headers: {
+          Accept: "application/json"
         }
-        this.setState({
-          comments: res.data.message['Items']
-        });
-        this.forceUpdate();
-      })();
-    }
+      });
+      if (res.data.message['Items'].length === 0) {
+        return;
+      }
+      this.setState({
+        comments: res.data.message['Items']
+      });
+      comments = [];
+      max = Math.floor((res.data.message['Items'].length-1) / unit) + 1;
+      for (let i = offset*unit-unit; i<offset*unit; i++) {
+        if (i > this.state.comments.length-1) {
+          break;
+        }
+        comments.push(this.state.comments[i]);
+      }
+      this.setState({
+        comments: res.data.message['Items']
+      });
+      this.forceUpdate();
+    })();
   }
 
   showComment() {
-    if (this.state.comments.length !== 0) {
+    if (comments.length !== 0) {
       let items = [];
       for (let num = offset-2; num <= offset+4; num++) {
         if (num < 1) {

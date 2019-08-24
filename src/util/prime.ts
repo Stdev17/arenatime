@@ -26,8 +26,8 @@ const primeChar: Record<string, number> = {
    "Misogi": prime(21),
    "Ayane": prime(22),
    "Tamaki": prime(23),
-   //"Tomo": prime(24),
-   //"SummerTamaki": prime(25),
+   "Tomo": prime(24),
+   "SummerTamaki": prime(25),
    "Eriko": prime(26),
    "SummerPekorinne": prime(27),
    "Kurumi": prime(28),
@@ -49,8 +49,8 @@ const primeChar: Record<string, number> = {
    "Ilya": prime(42),
    "Saren": prime(43),
    "Anna": prime(44),
-   //"HalloweenShinobu": prime(45),
-   //"SummerMifuyu": prime(46),
+   "HalloweenShinobu": prime(45),
+   "SummerMifuyu": prime(46),
    "Kokkoro": prime(47),
    //"Ayumi": prime(48),
    //"Glare": prime(49),
@@ -61,7 +61,7 @@ const primeChar: Record<string, number> = {
    "Mitsuki": prime(54),
    "Akari": prime(55),
    "Yori": prime(56),
-   //"HalloweenMiyako": prime(57),
+   "HalloweenMiyako": prime(57),
 
    //Back Line
    "Arisa": prime(58),
@@ -91,7 +91,7 @@ const primeChar: Record<string, number> = {
    "Yui": prime(82),
    "Yuki": prime(83),
    "Kyouka": prime(84),
-   //"HalloweenMisaki": prime(85)
+   "HalloweenMisaki": prime(85)
 
    //additional char
    

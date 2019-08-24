@@ -386,7 +386,7 @@ export class Search extends React.Component {
         대전 검색
       </h1>
       <p style={smallText} className="twenty">
-        {'덧글 기능 오픈! 돋보기를 클릭해서 덧글을 확인해 보세요!'}
+        {'덧글 기능 오픈! 돋보기를 클릭해서 덧글을 등록해 보세요!'}
         <br/>
         {'지금까지 총 '+this.state.count+'개의 대전 결과가 등록되었습니다. (6시간마다 갱신)'}
       </p>

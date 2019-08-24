@@ -8,12 +8,12 @@ import { getChar } from '../util/distance.ts';
 
 var netX = 0;
 var netY = 0;
-var col = 9;
-var char = 54;
+var col = 10;
+var char = 60;
 
 function getX() {
   netX += 1;
-  return (((netX-1) % col) * (57+10)) + 40 + Math.floor((netY) / (char-char%col)) * (col-(char%col)) * 33.5;
+  return (((netX-1) % col) * (57+10)) + 30 + Math.floor((netY) / (char-char%col)) * (col-(char%col)) * 33.5;
 }
 
 function getY() {
@@ -35,7 +35,7 @@ export class Cutter extends Component {
     netX = 0;
     netY = 0;
     return (
-      <Stage width={700} height={420}>
+      <Stage width={767} height={420}>
         <Layer>
           {c.map((value, index) => {
             return <Block character={value} party={this.state.p} setX={getX()} setY={getY()} key={index}/>

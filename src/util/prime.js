@@ -24,8 +24,8 @@ var primeChar = {
     "Misogi": prime(21),
     "Ayane": prime(22),
     "Tamaki": prime(23),
-    //"Tomo": prime(24),
-    //"SummerTamaki": prime(25),
+    "Tomo": prime(24),
+    "SummerTamaki": prime(25),
     "Eriko": prime(26),
     "SummerPekorinne": prime(27),
     "Kurumi": prime(28),
@@ -46,8 +46,8 @@ var primeChar = {
     "Ilya": prime(42),
     "Saren": prime(43),
     "Anna": prime(44),
-    //"HalloweenShinobu": prime(45),
-    //"SummerMifuyu": prime(46),
+    "HalloweenShinobu": prime(45),
+    "SummerMifuyu": prime(46),
     "Kokkoro": prime(47),
     //"Ayumi": prime(48),
     //"Glare": prime(49),
@@ -58,7 +58,7 @@ var primeChar = {
     "Mitsuki": prime(54),
     "Akari": prime(55),
     "Yori": prime(56),
-    //"HalloweenMiyako": prime(57),
+    "HalloweenMiyako": prime(57),
     //Back Line
     "Arisa": prime(58),
     //"Ann": prime(59),
@@ -86,6 +86,8 @@ var primeChar = {
     "Maho": prime(81),
     "Yui": prime(82),
     "Yuki": prime(83),
-    "Kyouka": prime(84)
+    "Kyouka": prime(84),
+    "HalloweenMisaki": prime(85)
+    //additional char
 };
 module.exports.prime = primeChar;

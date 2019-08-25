@@ -108,4 +108,4 @@ var char = {
     "할로윈미사키": "HalloweenMisaki",
     "미사키(할로윈)": "HalloweenMisaki"
 };
-module.exports = char;
+module.exports.char = char;

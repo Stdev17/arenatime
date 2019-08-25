@@ -19,7 +19,7 @@ import { path } from '../util/dummy';
 
 var axios = require('axios');
 
-let parse = require('../util/char_parse.js');
+let parse = require('../util/char_parse.js').char;
 let scale = 60;
 
 class Slot extends React.Component {

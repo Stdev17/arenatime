@@ -114,4 +114,4 @@ const char: Record<string, string> = {
   "미사키(할로윈)": "HalloweenMisaki"
 }
 
-module.exports = char;
+module.exports.char = char;

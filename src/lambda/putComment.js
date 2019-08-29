@@ -70,7 +70,6 @@ module.exports.handler = async (event, context) => {
   }
 
   let chk_ip = false;
-  let thatIp
   let myName = "";
   let myChar = char.slice();
 
@@ -132,7 +131,7 @@ module.exports.handler = async (event, context) => {
       Item: com
     };
 
-    return dyn.putItem(putParams).promise()
+    return await dyn.putItem(putParams).promise()
       .then(data => {
         let response = {
           statusCode: 200,
@@ -189,7 +188,7 @@ module.exports.handler = async (event, context) => {
       Item: com
     };
 
-    return dyn.putItem(putParams).promise()
+    return await dyn.putItem(putParams).promise()
       .then(data => {
         let response = {
           statusCode: 200,
@@ -278,7 +277,7 @@ module.exports.handler = async (event, context) => {
       }
     };
 
-    return dyn.deleteItem(setParams).promise()
+    return await dyn.deleteItem(setParams).promise()
       .then(data => {
         let response = {
           statusCode: 200,

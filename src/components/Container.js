@@ -35,6 +35,7 @@ export class pageSearch extends React.Component {
     );
   }
 }
+
 export class pageRegister extends React.Component {
   render() {
     return (

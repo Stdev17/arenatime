@@ -337,7 +337,7 @@ export class Stat extends React.Component {
             x={28}
             y={2}
             fontSize={19}
-            fontFamily={'Daum'}
+            fontFamily={'daum'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}
@@ -348,7 +348,7 @@ export class Stat extends React.Component {
             x={318}
             y={2}
             fontSize={19}
-            fontFamily={'Daum'}
+            fontFamily={'daum'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}
@@ -359,7 +359,7 @@ export class Stat extends React.Component {
             x={698}
             y={2}
             fontSize={19}
-            fontFamily={'Daum'}
+            fontFamily={'daum'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}

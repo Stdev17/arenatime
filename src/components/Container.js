@@ -13,6 +13,8 @@ import { Part } from './Part';
 import { Stat } from './Stat';
 import { Rank } from './Rank';
 
+import { MobSearch } from './MobSearch';
+
 var fireMatch = false;
 export function switchFire() {
   if (fireMatch) {
@@ -22,6 +24,10 @@ export function switchFire() {
   }
 }
 
+let setWidth = {
+  width: 412
+};
+
 export class pageSearch extends React.Component {
   render() {
     return (
@@ -29,6 +35,20 @@ export class pageSearch extends React.Component {
       <Container>
         <Card>
           <Search/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
+export class pageMobSearch extends React.Component {
+  render() {
+    return (
+      <div className="top" style={setWidth}>
+      <Container>
+        <Card>
+          <MobSearch/>
         </Card>
       </Container>
       </div>

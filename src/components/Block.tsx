@@ -10,6 +10,7 @@ interface coord {
 }
 
 interface IBlockProps {
+  scale: number,
   character: string,
   setX: number,
   setY: number,
@@ -17,14 +18,13 @@ interface IBlockProps {
 }
 
 interface IBlockState {
+  scale: number,
   image: any,
   x: number,
   y: number,
   str: number,
   opacity: number
 }
-
-let scale = 57;
 
 export class Block extends React.Component<IBlockProps, IBlockState> {
   constructor(props: any) {
@@ -33,6 +33,7 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
     let c: string = this.props.character;
 
     this.state = {
+      scale: this.props.scale,
       image: null,
       x: getCoord(char.indexOf(c)).XCoord,
       y: getCoord(char.indexOf(c)).YCoord,
@@ -106,8 +107,8 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
       <Image
       x={this.props.setX+8}
       y={this.props.setY+5}
-      width={scale}
-      height={scale}
+      width={this.props.scale}
+      height={this.props.scale}
       image={this.state.image}
       opacity={this.state.opacity}
       crop = {{

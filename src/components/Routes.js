@@ -6,21 +6,38 @@ import {
   pageMatch,
   pagePart,
   pageStat,
-  pageRank
+  pageRank,
+  pageMobSearch
 } from "./Container";
+
+let mobile = require('is-mobile');
 
 export class Routes extends React.Component {
   render() {
-    return (
-      <Switch>
-      <Route path="/" exact component={pageSearch} />
-      <Route path="/search" component={pageSearch} />
-      <Route path="/register" component={pageRegister} />
-      <Route path="/match" component={pageMatch} />
-      <Route path="/part" component={pagePart} />
-      <Route path="/stat" component={pageStat} />
-      <Route path='/rank' component={pageRank} />
-    </Switch>
-    );
+    if (mobile()) {
+      return (
+        <Switch>
+        <Route path="/" exact component={pageSearch} />
+        <Route path="/search" component={pageSearch} />
+        <Route path="/register" component={pageRegister} />
+        <Route path="/match" component={pageMatch} />
+        <Route path="/part" component={pagePart} />
+        <Route path="/stat" component={pageStat} />
+        <Route path='/rank' component={pageRank} />
+      </Switch>
+      );
+    } else {
+      return (
+        <Switch>
+        <Route path="/" exact component={pageMobSearch} />
+        <Route path="/search" component={pageMobSearch} />
+        <Route path="/register" component={pageRegister} />
+        <Route path="/match" component={pageMatch} />
+        <Route path="/part" component={pagePart} />
+        <Route path="/stat" component={pageStat} />
+        <Route path='/rank' component={pageRank} />
+      </Switch>
+      );
+    }
   }
 }

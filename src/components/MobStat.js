@@ -383,7 +383,7 @@ export class MobStat extends React.Component {
             width={18}
             height={18}
             image={this.state.mag_img}
-            onClick={this.goChar}
+            onTap={this.goChar}
           />
           <Image
             x={268}
@@ -391,7 +391,7 @@ export class MobStat extends React.Component {
             width={18}
             height={18}
             image={this.state.mag_img}
-            onClick={this.goDuo}
+            onTap={this.goDuo}
           />
           <Image
             x={268}
@@ -399,7 +399,7 @@ export class MobStat extends React.Component {
             width={18}
             height={18}
             image={this.state.mag_img}
-            onClick={this.goTrio}
+            onTap={this.goTrio}
           />
           </Layer>
         </Stage>

@@ -214,7 +214,7 @@ export class MobComment extends React.Component {
         width={16}
         height={16}
         image={this.state.image}
-        onClick={this.errorShow}
+        onTap={this.errorShow}
       />
       </Layer>
       </Stage>

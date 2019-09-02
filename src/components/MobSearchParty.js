@@ -436,7 +436,7 @@ export class MobSearchParty extends React.Component {
           height={16}
           image={this.state.upImage}
           opacity={this.state.upHighlighted}
-          onClick={this.upClicked}
+          onTap={this.upClicked}
         />
         <Image
           x={198}
@@ -445,7 +445,7 @@ export class MobSearchParty extends React.Component {
           height={16}
           image={this.state.downImage}
           opacity={this.state.downHighlighted}
-          onClick={this.downClicked}
+          onTap={this.downClicked}
         />
         <Text
           x={151}
@@ -469,7 +469,7 @@ export class MobSearchParty extends React.Component {
           width={16}
           height={16}
           image={this.state.magImage}
-          onClick={this.goProfile}
+          onTap={this.goProfile}
         />
         </Layer>
       </Stage>

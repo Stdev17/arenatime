@@ -176,7 +176,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.search}
-        onClick={this.setSearch}
+        onTap={this.setSearch}
       />
       <Image
         x={111}
@@ -184,7 +184,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.register}
-        onClick={this.setRegister}
+        onTap={this.setRegister}
       />
       <Image
         x={206}
@@ -192,7 +192,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.part}
-        onClick={this.setPart}
+        onTap={this.setPart}
       />
       <Image
         x={301}
@@ -200,7 +200,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.stat}
-        onClick={this.setStat}
+        onTap={this.setStat}
       />
       </Group>
       </Layer>

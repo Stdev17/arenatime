@@ -113,7 +113,7 @@ export class Navi extends React.Component {
   }
 
   render() {
-    if (mobile()) {
+    if (!mobile()) {
       return (
         <HashRouter>
         {this.getNav()}

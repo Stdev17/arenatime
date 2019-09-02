@@ -18,7 +18,7 @@ import '../css/text.css';
 import { path } from '../util/dummy';
 import { CharSet } from './CharSet';
 import { TeamSet } from './TeamSet';
-import { setRank } from './Rank';
+import { setRank } from './MobRank';
 
 var axios = require('axios');
 
@@ -51,7 +51,7 @@ const smallText = {
   fontColor: '#333333'
 }
 
-export class Stat extends React.Component {
+export class MobStat extends React.Component {
   constructor(props) {
     super(props);
 
@@ -331,10 +331,10 @@ export class Stat extends React.Component {
       //
       return (
         <div>
-        <Stage width={1076} height={560}>
+        <Stage width={400} height={1700}>
           <Layer>
           <Text
-            x={28}
+            x={48}
             y={2}
             fontSize={19}
             fontFamily={'daum'}
@@ -345,8 +345,8 @@ export class Stat extends React.Component {
             text={chartext}
           />
           <Text
-            x={318}
-            y={2}
+            x={58}
+            y={562}
             fontSize={19}
             fontFamily={'daum'}
             fontStyle={'normal'}
@@ -356,8 +356,8 @@ export class Stat extends React.Component {
             text={duotext}
           />
           <Text
-            x={698}
-            y={2}
+            x={48}
+            y={1122}
             fontSize={19}
             fontFamily={'daum'}
             fontStyle={'normal'}
@@ -369,35 +369,35 @@ export class Stat extends React.Component {
           </Layer>
           <Layer>
           {cutchar.map((value, index) => {
-            return <CharSet stat={value} setX={50} setY={cutchar.indexOf(value)} key={index}/>
+            return <CharSet stat={value} setX={70} setY={cutchar.indexOf(value)} key={index}/>
           })}
           {cutduo.map((value, index) => {
-            return <TeamSet stat={value} setX={320} setY={cutduo.indexOf(value)} isDuo={true} scale={76} key={index}/>
+            return <TeamSet stat={value} setX={40} setY={cutduo.indexOf(value)} mob={560} isDuo={true} scale={76} key={index}/>
           })}
           {cuttrio.map((value, index) => {
-            return <TeamSet stat={value} setX={660} setY={cuttrio.indexOf(value)} isDuo={false} scale={76} key={index}/>
+            return <TeamSet stat={value} setX={8} setY={cuttrio.indexOf(value)} mob={1120} isDuo={false} scale={60} key={index}/>
           })}
           <Image
-            x={248}
-            y={0}
-            width={24}
-            height={24}
+            x={268}
+            y={4}
+            width={18}
+            height={18}
             image={this.state.mag_img}
             onClick={this.goChar}
           />
           <Image
-            x={528}
-            y={0}
-            width={24}
-            height={24}
+            x={268}
+            y={564}
+            width={18}
+            height={18}
             image={this.state.mag_img}
             onClick={this.goDuo}
           />
           <Image
-            x={913}
-            y={0}
-            width={24}
-            height={24}
+            x={268}
+            y={1124}
+            width={18}
+            height={18}
             image={this.state.mag_img}
             onClick={this.goTrio}
           />
@@ -420,7 +420,7 @@ export class Stat extends React.Component {
       </h2>
       <h3 style={smallText} className="ten">
         <Form ref="form">
-          <Form.Row className="stat" align="left">
+          <Form.Row align="left">
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>덱 유형</Form.Label>
               <Form.Control name="target" onChange={this.inputHandler} as="select">

@@ -14,7 +14,6 @@ import { char } from '../util/char.js';
 
 let parse = require('../util/rev_parse.js');
 let prime = require('../util/prime.js').prime;
-let scale = 76;
 
 class Slot extends React.Component {
   constructor(props) {
@@ -67,13 +66,17 @@ class Slot extends React.Component {
     }
   }
   render() {
+    let comp = 0;
+    if (this.props.scale === 60) {
+      comp = 20;
+    }
     return (
       <Group>
       <Image
-      x={this.props.setX+22}
-      y={this.props.setY*102+42}
-      width={scale}
-      height={scale}
+      x={this.props.setX+98-this.props.scale-comp*0.5}
+      y={this.props.setY*102+42+this.props.mob+comp*0.5}
+      width={this.props.scale}
+      height={this.props.scale}
       image={this.state.image}
       crop = {{
         x: this.state.x,
@@ -85,8 +88,8 @@ class Slot extends React.Component {
       strokeWidth={2}
       />
       <Text
-      x={this.props.setX-2}
-      y={this.props.setY*102+122}
+      x={this.props.setX+74-this.props.scale-comp}
+      y={this.props.setY*102+198+this.props.mob-this.props.scale-comp}
       fontSize={16}
       fontFamily={'Daum'}
       fontStyle={'normal'}
@@ -115,7 +118,7 @@ class Duo extends React.Component {
     return (
       <Group>
       {sorted.map((value, index) => {
-        return <Slot character={value} setX={x[sorted.indexOf(value)]} setY={this.props.setY} key={index}/>
+        return <Slot character={value} setX={x[sorted.indexOf(value)]} setY={this.props.setY} scale={this.props.scale} mob={this.props.mob} key={index}/>
       })}
       </Group>
     );    
@@ -127,6 +130,9 @@ class Trio extends React.Component {
 
   render() {
     let x = [this.props.setX, this.props.setX+86, this.props.setX+172];
+    if (this.props.scale === 60) {
+      x = [this.props.setX, this.props.setX+80, this.props.setX+160];
+    }
     //
     let team = [];
     for (let p in prime) {
@@ -138,7 +144,7 @@ class Trio extends React.Component {
     return (
       <Group>
       {sorted.map((value, index) => {
-        return <Slot character={value} setX={x[sorted.indexOf(value)]} setY={this.props.setY} key={index}/>
+        return <Slot character={value} setX={x[sorted.indexOf(value)]} setY={this.props.setY} mob={this.props.mob} scale={this.props.scale} key={index}/>
       })}
       </Group>
     );    
@@ -149,12 +155,18 @@ export class TeamSet extends React.Component {
 
   render() {
     if (this.props.isDuo) {
+      let mob = 0;
+      if (this.props.mob === undefined) {
+        //
+      } else {
+        mob = this.props.mob;
+      }
       return (
         <Group>
-          <Duo duos={this.props.stat[0]} setX={this.props.setX} setY={this.props.setY}/>
+          <Duo duos={this.props.stat[0]} setX={this.props.setX} setY={this.props.setY} mob={mob} scale={this.props.scale}/>
           <Text
           x={this.props.setX-22}
-          y={this.props.setY*102+77}
+          y={this.props.setY*102+77+mob}
           fontSize={20}
           fontFamily={'Daum'}
           fontStyle={'normal'}
@@ -165,7 +177,7 @@ export class TeamSet extends React.Component {
           />
           <Text
           x={this.props.setX+172}
-          y={this.props.setY*102+77}
+          y={this.props.setY*102+77+mob}
           fontSize={21}
           fontFamily={'Daum'}
           fontStyle={'normal'}
@@ -177,12 +189,18 @@ export class TeamSet extends React.Component {
         </Group>
       );
     } else {
+      let mob = 0;
+      if (this.props.mob === undefined) {
+        //
+      } else {
+        mob = this.props.mob;
+      }
       return (
         <Group>
-          <Trio trios={this.props.stat[0]} setX={this.props.setX} setY={this.props.setY}/>
+          <Trio trios={this.props.stat[0]} setX={this.props.setX} setY={this.props.setY} mob={mob} scale={this.props.scale}/>
           <Text
           x={this.props.setX-22}
-          y={this.props.setY*102+77}
+          y={this.props.setY*102+77+mob}
           fontSize={20}
           fontFamily={'Daum'}
           fontStyle={'normal'}
@@ -192,8 +210,8 @@ export class TeamSet extends React.Component {
           text={this.props.setY+1}
           />
           <Text
-          x={this.props.setX+258}
-          y={this.props.setY*102+77}
+          x={this.props.setX+143+this.props.scale*1.5}
+          y={this.props.setY*102+77+mob}
           fontSize={21}
           fontFamily={'Daum'}
           fontStyle={'normal'}

@@ -16,6 +16,9 @@ import { Rank } from './Rank';
 import { MobSearch } from './MobSearch';
 import { MobRegister } from './MobRegister';
 import { MobPart } from './MobPart';
+import { MobMatch } from './MobMatch';
+import { MobStat } from './MobStat';
+import { MobRank } from './MobRank';
 
 var fireMatch = false;
 export function switchFire() {
@@ -101,6 +104,20 @@ export class pageMatch extends React.Component {
   }
 }
 
+export class pageMobMatch extends React.Component {
+  render() {
+    return (
+      <div className="top" style={setWidth}>
+      <Container>
+        <Card>
+          <MobMatch fire={fireMatch}/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
 export class pagePart extends React.Component {
   render() {
     return (
@@ -143,6 +160,20 @@ export class pageStat extends React.Component {
   }
 }
 
+export class pageMobStat extends React.Component {
+  render() {
+    return (
+      <div className="top" style={setWidth}>
+      <Container>
+        <Card>
+          <MobStat/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
 export class pageRank extends React.Component {
   render() {
     return (
@@ -150,6 +181,20 @@ export class pageRank extends React.Component {
       <Container>
         <Card>
           <Rank/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
+export class pageMobRank extends React.Component {
+  render() {
+    return (
+      <div className="top" style={setWidth}>
+      <Container>
+        <Card>
+          <MobRank/>
         </Card>
       </Container>
       </div>

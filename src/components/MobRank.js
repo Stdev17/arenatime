@@ -35,7 +35,7 @@ export function setRank(str, d, txt) {
   text = txt;
 }
 
-export class Rank extends React.Component {
+export class MobRank extends React.Component {
 
   constructor(props) {
     super(props);
@@ -64,7 +64,7 @@ export class Rank extends React.Component {
     if (team === 'char') {
       return (
       <div>
-        <Stage width={1076} height={2100}>
+        <Stage width={400} height={2100}>
           <Layer>
           <Text
             x={28}
@@ -78,7 +78,7 @@ export class Rank extends React.Component {
             text={text}
           />
           {deck.map((value, index) => {
-            return <CharSet stat={value} setX={50} setY={deck.indexOf(value)} key={index}/>
+            return <CharSet stat={value} setX={70} setY={deck.indexOf(value)} key={index}/>
           })}
           </Layer>
         </Stage>
@@ -87,7 +87,7 @@ export class Rank extends React.Component {
     } else if (team === 'duo') {
       return (
         <div>
-        <Stage width={1076} height={2100}>
+        <Stage width={400} height={2100}>
           <Layer>
           <Text
             x={28}
@@ -101,7 +101,7 @@ export class Rank extends React.Component {
             text={text}
           />
           {deck.map((value, index) => {
-            return <TeamSet stat={value} setX={50} setY={deck.indexOf(value)} isDuo={true} scale={76} key={index}/>
+            return <TeamSet stat={value} setX={40} setY={deck.indexOf(value)} isDuo={true} scale={76} key={index}/>
           })}
           </Layer>
         </Stage>
@@ -110,7 +110,7 @@ export class Rank extends React.Component {
     } else {
       return (
         <div>
-        <Stage width={1076} height={2100}>
+        <Stage width={400} height={2100}>
           <Layer>
           <Text
             x={28}
@@ -124,7 +124,7 @@ export class Rank extends React.Component {
             text={text}
           />
           {deck.map((value, index) => {
-            return <TeamSet stat={value} setX={50} setY={deck.indexOf(value)} isDuo={false} scale={76} key={index}/>
+            return <TeamSet stat={value} setX={8} setY={deck.indexOf(value)} isDuo={false} scale={60} key={index}/>
           })}
           </Layer>
         </Stage>

@@ -10,7 +10,7 @@ import { Redirect } from 'react-router-dom';
 import { char } from '../util/char.js';
 import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
-import { setSearchPath } from './Match';
+import { setSearchPath } from './MobMatch';
 import { switchFire } from './Container.js';
 
 import { path } from '../util/dummy';
@@ -375,7 +375,7 @@ export class MobSearchParty extends React.Component {
     return (
       <div>
         {this.checkLink()}
-      <Stage width={1124} height={170}>
+      <Stage width={400} height={170}>
         <Layer>
         <Image
           x={-5}

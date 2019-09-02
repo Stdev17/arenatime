@@ -3,8 +3,7 @@ import {
   Stage,
   Layer,
   Image,
-  Group,
-  Text
+  Group
 } from 'react-konva';
 import { HashRouter, Redirect } from 'react-router-dom';
 import { Routes } from './Routes';

@@ -7,7 +7,9 @@ import {
   pagePart,
   pageStat,
   pageRank,
-  pageMobSearch
+  pageMobSearch,
+  pageMobRegister,
+  pageMobPart
 } from "./Container";
 
 let mobile = require('is-mobile');
@@ -31,9 +33,9 @@ export class Routes extends React.Component {
         <Switch>
         <Route path="/" exact component={pageMobSearch} />
         <Route path="/search" component={pageMobSearch} />
-        <Route path="/register" component={pageRegister} />
+        <Route path="/register" component={pageMobRegister} />
         <Route path="/match" component={pageMatch} />
-        <Route path="/part" component={pagePart} />
+        <Route path="/part" component={pageMobPart} />
         <Route path="/stat" component={pageStat} />
         <Route path='/rank' component={pageRank} />
       </Switch>

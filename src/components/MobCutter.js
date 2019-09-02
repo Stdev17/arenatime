@@ -13,12 +13,12 @@ var char = 60;
 
 function getX() {
   netX += 1;
-  return (((netX-1) % col) * (48+7)) + 7.5 + Math.floor((netY) / (char-char%col)) * (col-(char%col)) * 27.5;
+  return (((netX-1) % col) * (47+7)) - 7.5 + Math.floor((netY) / (char-char%col)) * (col-(char%col)) * 27;
 }
 
 function getY() {
   netY += 1;
-  return (Math.floor((netY-1) / col)) * (48+7);
+  return (Math.floor((netY-1) / col)) * (47+7);
 }
 
 export class MobCutter extends Component {
@@ -38,7 +38,7 @@ export class MobCutter extends Component {
       <Stage width={400} height={500}>
         <Layer>
           {c.map((value, index) => {
-            return <Block character={value} party={this.state.p} setX={getX()} setY={getY()} scale={48} key={index}/>
+            return <Block character={value} party={this.state.p} setX={getX()} setY={getY()} scale={47} key={index}/>
           })}
         </Layer>
       </Stage>

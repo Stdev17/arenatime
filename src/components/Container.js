@@ -14,6 +14,8 @@ import { Stat } from './Stat';
 import { Rank } from './Rank';
 
 import { MobSearch } from './MobSearch';
+import { MobRegister } from './MobRegister';
+import { MobPart } from './MobPart';
 
 var fireMatch = false;
 export function switchFire() {
@@ -70,6 +72,21 @@ export class pageRegister extends React.Component {
   }
 }
 
+export class pageMobRegister extends React.Component {
+  render() {
+    return (
+      <div className="top" style={setWidth}>
+      <Container>
+        <Card>
+          <MobRegister/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
+
 export class pageMatch extends React.Component {
   render() {
     return (
@@ -91,6 +108,20 @@ export class pagePart extends React.Component {
       <Container>
         <Card>
           <Part/>
+        </Card>
+      </Container>
+      </div>
+    );
+  }
+}
+
+export class pageMobPart extends React.Component {
+  render() {
+    return (
+      <div className="top" style={setWidth}>
+      <Container>
+        <Card>
+          <MobPart/>
         </Card>
       </Container>
       </div>

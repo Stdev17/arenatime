@@ -5,13 +5,13 @@ import {
   Form,
   Col
 } from 'react-bootstrap';
-import { Cutter } from './Cutter.js';
+import { MobCutter } from './MobCutter.js';
 import { MobParty } from './MobParty.js';
 import { char } from '../util/char_parse.js';
 
 import '../css/daum.css';
 import '../css/mobile.css';
-import '../css/SetParty.css';
+import '../css/MobSetParty.css';
 
 export class MobSetParty extends React.Component {
 
@@ -102,7 +102,7 @@ export class MobSetParty extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Cutter party={this.state.p}/>
+              <MobCutter party={this.state.p}/>
               <div align="center" className="ten">
               <Form ref="form">
               <Form.Row>

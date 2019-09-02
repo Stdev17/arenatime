@@ -6,8 +6,7 @@ import {
   Group,
   Text
 } from 'react-konva';
-import { Link, HashRouter } from 'react-router-dom';
-import { LinkContainer} from "react-router-bootstrap";
+import { HashRouter, Redirect } from 'react-router-dom';
 import { Routes } from './Routes';
 
 import '../css/daum.css';
@@ -25,8 +24,15 @@ export class MobNav extends React.Component {
       search: null,
       register: null,
       part: null,
-      stat: null
+      stat: null,
+      link: ""
     };
+
+    this.checkLink = this.checkLink.bind(this);
+    this.setSearch = this.setSearch.bind(this);
+    this.setRegister = this.setRegister.bind(this);
+    this.setPart = this.setPart.bind(this);
+    this.setStat = this.setStat.bind(this);
   }
 
   componentDidMount() {
@@ -94,10 +100,49 @@ export class MobNav extends React.Component {
       });
     };
   }
+  setSearch() {
+    this.setState({
+      link: 'search'
+    });
+  }
+
+  setRegister() {
+    this.setState({
+      link: 'register'
+    });
+  }
+
+  setPart() {
+    this.setState({
+      link: 'part'
+    });
+  }
+
+  setStat() {
+    this.setState({
+      link: 'stat'
+    });
+  }
+
+  checkLink() {
+    if (this.state.link === 'search') {
+      return <Redirect to='/search'/>
+    }
+    if (this.state.link === 'register') {
+      return <Redirect to='/register'/>
+    }
+    if (this.state.link === 'part') {
+      return <Redirect to='/part'/>
+    }
+    if (this.state.link === 'stat') {
+      return <Redirect to='/stat'/>
+    }
+  }
 
   render() {
     return (
       <HashRouter>
+        {this.checkLink()}
       <Stage width={412} height={120}>
       <Layer>
       <Image
@@ -132,6 +177,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.search}
+        onClick={this.setSearch}
       />
       <Image
         x={111}
@@ -139,6 +185,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.register}
+        onClick={this.setRegister}
       />
       <Image
         x={206}
@@ -146,6 +193,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.part}
+        onClick={this.setPart}
       />
       <Image
         x={301}
@@ -153,6 +201,7 @@ export class MobNav extends React.Component {
         width={81}
         height={23}
         image={this.state.stat}
+        onClick={this.setStat}
       />
       </Group>
       </Layer>

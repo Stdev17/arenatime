@@ -8,7 +8,7 @@ import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
 import { char } from '../util/char.js';
 
-let scale = 64;
+let scale = 60;
 
 class Slot extends React.Component {
   constructor(props) {
@@ -106,7 +106,7 @@ let netX = 0;
 
 function getX() {
   netX += 1;
-  return (((netX-1) % 5) * (64+10));
+  return (((netX-1) % 5) * (60+10));
 }
 
 export function sort(arr) {

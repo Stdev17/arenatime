@@ -17,10 +17,9 @@ import { path } from '../util/dummy';
 
 var axios = require('axios');
 
-
 var party = [];
-var results = [];
 var searched = false;
+var results = [];
 var offset = 1;
 var max = 1;
 var queryItems = [];
@@ -35,18 +34,18 @@ const topicText = {
 const subText = {
   fontFamily: 'Daum',
   fontStyle: 'normal',
-  fontSize: 24,
+  fontSize: 28,
   fontColor: '#333333'
 }
 
 const smallText = {
   fontFamily: 'Daum',
   fontStyle: 'normal',
-  fontSize: 14,
+  fontSize: 16,
   fontColor: '#333333'
 }
 
-export class MobSearch extends React.Component {
+export class MobPart extends React.Component {
   constructor(props) {
     super(props);
 
@@ -55,7 +54,6 @@ export class MobSearch extends React.Component {
     this.validateDeck = this.validateDeck.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
     this.updateOffset = this.updateOffset.bind(this);
-    this.getCount = this.getCount.bind(this);
     this.errorShow = () => {
       this.setState({ errShow: true });
     };
@@ -69,14 +67,10 @@ export class MobSearch extends React.Component {
       errShow: false,
       res: "",
       items: [],
-      count: 0,
       form: {
-        target: "방어",
-        result: "패배",
+        deckType: "방어",
+        matchResult: "패배",
         arena: "전체",
-        date: "전체",
-        power: "전체",
-        sort: "순추천순",
         deck: {
 
         }
@@ -87,39 +81,12 @@ export class MobSearch extends React.Component {
     {
       offset = num;
       results = [];
-      let items = queryItems[offset-1]['Items'];
-      if (items != null) {
-        for (let i in items) {
-          results.push(items[i]);
-        }
+      let items = queryItems.slice((offset-1)*5, (offset)*5);
+      for (let i in items) {
+        results.push(items[i]);
       }
       this.forceUpdate();
     }
-  }
-
-  componentDidMount() {
-    this.getCount();
-  }
-
-  getCount() {
-    let mPath = path + 'api/get-count';
-    return (async _ => {
-      let res = await axios({
-        method: 'get',
-        url: mPath,
-        headers: {
-          "Accept": "application/json"
-        }
-      });
-      if (res.data.message === 'Getting Count Failed') {
-        console.log('Count Error');
-        return;
-      } else {
-        this.setState({
-          count: Number(res.data.message)
-        });
-      }
-    })();
   }
 
   getSearch() {
@@ -132,11 +99,23 @@ export class MobSearch extends React.Component {
       this.errorShow();
       return;
     }
-    searched = true;
+    if (party.length < 2 || party.length > 3) {
+      this.setState({
+        title_msg: "검색 실패",
+        msg: "2,3명만 선택해 주세요."
+      });
+      this.errorShow();
+      return;
+    }
     let f = this.setSelection(this.state.form);
     f = this.validateDeck(f);
     let str = JSON.stringify(f);
-    let mPath = path + 'api/get-search';
+    let mPath = path + 'api/get-part';
+    this.setState({
+      title_msg: "검색 중",
+      msg: "잠시만 기다려 주세요."
+    });
+    this.errorShow();
     return (async _ => {
       let res = await axios({
         method: 'get',
@@ -146,29 +125,26 @@ export class MobSearch extends React.Component {
           "Accept": "application/json"
         }
       });
-      if (res.data.message === 'Query Failed' || res.data.message === 'Internal server error') {
+      if (res.data.message === 'Query Failed' || res.data.message === 'Parsing Failed' || res.data.message === 'Getting Items Failed' || res.data.message === 'Internal server error') {
         this.setState({
           title_msg: "검색 실패",
           msg: "데이터 검색에 오류가 발생했습니다."
         });
-        this.errorShow();
         return;
       } else {
         let msg = res.data.message;
         results = [];
-        if (msg === 'Deck Not Found') {
-          this.forceUpdate();
-          return;
-        }
-        max = msg.length;
+        max = Math.ceil(msg.length/5);
         offset = 1;
-        let items = msg[offset-1]['Items'];
-        if (items != null) {
+        if (msg != null) {
+          let items = msg.slice(0, 5);
           for (let i in items) {
             results.push(items[i]);
           }
           queryItems = msg;
         }
+        searched = true;
+        this.errorHide();
         this.forceUpdate();
         return;
       }
@@ -201,22 +177,22 @@ export class MobSearch extends React.Component {
     return f;
   }
   setSelection(f) {
-    switch (this.state.form.target) {
+    switch (this.state.form.deckType) {
       case "방어":
-        f.target = "defense";
+        f.deckType = "defense";
         break;
       case "공격":
-        f.target = "attack";
+        f.deckType = "attack";
         break;
       default:
         break;
     }
     switch (this.state.form.arena) {
       case "배틀 아레나":
-        f.arena = "battleArena";
+        f.arena = "princessArena";
         break;
       case "프린세스 아레나":
-        f.arena = "princessArena";
+        f.arena = "battleArena";
         break;
       case "전체":
         f.arena = "all";
@@ -224,63 +200,23 @@ export class MobSearch extends React.Component {
       default:
         break;
     }
-    switch (this.state.form.result) {
+    switch (this.state.form.matchResult) {
       case "패배":
-        f.result = "defeat";
+        if (f.deckType === 'attack') {
+          f.matchResult = "attackWin";
+        } else {
+          f.matchResult = "defenseWin";
+        }
         break;
       case "승리":
-        f.result = "victory";
+        if (f.deckType === 'attack') {
+          f.matchResult = "defenseWin";
+        } else {
+          f.matchResult = "attackWin";
+        }
         break;
       case "전체":
-        f.result = "all";
-        break;
-      default:
-        break;
-    }
-    switch (this.state.form.date) {
-      case "전체":
-        f.date = "all";
-        break;
-      case "7일 이내":
-        f.date = "week";
-        break;
-      case "30일 이내":
-        f.date = "month";
-        break;
-      case "3개월 이내":
-        f.date = "season";
-        break;
-      default:
-        break;
-    }
-    switch (this.state.form.power) {
-      case "전체":
-        f.power = "all";
-        break;
-      case "55000 이상":
-        f.power = ">55000";
-        break;
-      case "50000-55000":
-        f.power = ">50000";
-        break;
-      case "45000-50000":
-        f.power = ">45000";
-        break;
-      case "40000-45000":
-        f.power = ">40000";
-        break;
-      case "40000 미만":
-        f.power = "<40000";
-        break;
-      default:
-        break;
-    }
-    switch (this.state.form.sort) {
-      case "순추천순":
-        f.sort = "netUpvotes";
-        break;
-      case "최신순":
-        f.sort = "latest";
+        f.matchResult = "all";
         break;
       default:
         break;
@@ -313,17 +249,15 @@ export class MobSearch extends React.Component {
       return (
         <div>
         {results.map((value, index) => {
-            return <MobSearchParty match={value} key={index}/>
+            return <MobSearchParty match={value} search={false} key={index}/>
         })}
         <Pagination>
         <Pagination.First onClick={() => {
           offset = 1;
           results = [];
-          let items = queryItems[0]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
@@ -332,11 +266,9 @@ export class MobSearch extends React.Component {
             offset -= 1;
           }
           results = [];
-          let items = queryItems[offset-1]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
@@ -346,22 +278,18 @@ export class MobSearch extends React.Component {
             offset += 1;
           }
           results = [];
-          let items = queryItems[offset-1]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
         <Pagination.Last onClick={() => {
           offset = max;
           results = [];
-          let items = queryItems[offset-1]['Items'];
-          if (items != null) {
-            for (let i in items) {
-              results.push(items[i]);
-            }
+          let items = queryItems.slice((offset-1)*5, (offset)*5);
+          for (let i in items) {
+            results.push(items[i]);
           }
           this.forceUpdate();
         }}/>
@@ -381,14 +309,12 @@ export class MobSearch extends React.Component {
     return (
       <div className="text">
       <h1 style={topicText}>
-        대전 검색
+        부분 검색
       </h1>
       <p style={smallText} className="twenty">
-        {'모바일 웹 페이지 개선 완료!'}
+        {'부분 검색은 2, 3명 조합만 가능합니다.'}
         <br/>
-        {'덧글 오픈! 돋보기를 클릭해 덧글을 등록해 보세요!'}
-        <br/>
-        {'지금까지 총 '+this.state.count+'개의 대전 결과가 등록되었습니다.'}
+        {'최대 50개까지만 표시됩니다.'}
       </p>
       <h2 style={subText} className="ten">
         검색 설정
@@ -398,14 +324,14 @@ export class MobSearch extends React.Component {
           <Form.Row>
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>덱 유형</Form.Label>
-              <Form.Control name="target" onChange={this.inputHandler} as="select">
+              <Form.Control name="deckType" onChange={this.inputHandler} as="select">
                 <option>방어</option>
                 <option>공격</option>
               </Form.Control>
             </Form.Group>
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>결과</Form.Label>
-              <Form.Control name="result" onChange={this.inputHandler} as="select">
+              <Form.Control name="matchResult" onChange={this.inputHandler} as="select">
                 <option>패배</option>
                 <option>승리</option>
                 <option>전체</option>
@@ -420,35 +346,7 @@ export class MobSearch extends React.Component {
               </Form.Control>
             </Form.Group>
           </Form.Row>
-          <Form.Row>
-            <Form.Group as={Col} controlId="formGridPosition">
-              <Form.Label>기간</Form.Label>
-              <Form.Control name="date" onChange={this.inputHandler} as="select">
-                <option>전체</option>
-                <option>7일 이내</option>
-                <option>30일 이내</option>
-                <option>3개월 이내</option>
-              </Form.Control>
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridPosition">
-              <Form.Label>전투력</Form.Label>
-              <Form.Control name="power" onChange={this.inputHandler} as="select">
-                <option>전체</option>
-                <option>55000 이상</option>
-                <option>50000-55000</option>
-                <option>45000-50000</option>
-                <option>40000-45000</option>
-                <option>40000 미만</option>
-              </Form.Control>
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridPosition">
-              <Form.Label>정렬</Form.Label>
-              <Form.Control name="sort" onChange={this.inputHandler} as="select">
-                <option>순추천순</option>
-                <option>최신순</option>
-              </Form.Control>
-            </Form.Group>
-          </Form.Row>
+          <Form.Row/>
         </Form>
       </h3>
       <h4 style={subText} className="ten">

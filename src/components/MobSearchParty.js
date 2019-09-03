@@ -101,7 +101,7 @@ class Slot extends React.Component {
       strokeWidth={2}
       />
       <Text
-      x={this.props.setX+4}
+      x={this.props.setX}
       y={2+4+scale+this.props.setY}
       fontSize={9}
       width={scale+4}
@@ -432,8 +432,8 @@ export class MobSearchParty extends React.Component {
         <Image
           x={137}
           y={136}
-          width={16}
-          height={16}
+          width={24}
+          height={24}
           image={this.state.upImage}
           opacity={this.state.upHighlighted}
           onTap={this.upClicked}
@@ -441,14 +441,14 @@ export class MobSearchParty extends React.Component {
         <Image
           x={198}
           y={140}
-          width={16}
-          height={16}
+          width={24}
+          height={24}
           image={this.state.downImage}
           opacity={this.state.downHighlighted}
           onTap={this.downClicked}
         />
         <Text
-          x={151}
+          x={159}
           y={140}
           fontSize={16}
           width={48}
@@ -456,7 +456,7 @@ export class MobSearchParty extends React.Component {
           text={this.state.upvotes}
         />
         <Text
-          x={209}
+          x={217}
           y={140}
           fontSize={16}
           width={48}
@@ -465,9 +465,9 @@ export class MobSearchParty extends React.Component {
         />
         <Image
           x={269}
-          y={138}
-          width={16}
-          height={16}
+          y={134}
+          width={24}
+          height={24}
           image={this.state.magImage}
           onTap={this.goProfile}
         />

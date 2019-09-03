@@ -379,25 +379,25 @@ export class MobStat extends React.Component {
           })}
           <Image
             x={268}
-            y={4}
-            width={18}
-            height={18}
+            y={0}
+            width={24}
+            height={24}
             image={this.state.mag_img}
             onTap={this.goChar}
           />
           <Image
             x={268}
-            y={564}
-            width={18}
-            height={18}
+            y={560}
+            width={24}
+            height={24}
             image={this.state.mag_img}
             onTap={this.goDuo}
           />
           <Image
             x={268}
-            y={1124}
-            width={18}
-            height={18}
+            y={1120}
+            width={24}
+            height={24}
             image={this.state.mag_img}
             onTap={this.goTrio}
           />

@@ -174,7 +174,6 @@ export class MobMatch extends React.Component {
     this.downClicked = this.downClicked.bind(this);
     this.setVotes = this.setVotes.bind(this);
     this.vote = this.vote.bind(this);
-    this.checkImg = this.checkImg.bind(this);
     this.setComment = this.setComment.bind(this);
     this.updateOffset = this.updateOffset.bind(this);
     this.state = {
@@ -254,22 +253,6 @@ export class MobMatch extends React.Component {
     this.setState({
       memo: eVal
     });
-  }
-
-  checkImg() {
-    if (this.props.match['imagePath']['S'] !== 'PlaceHolder') {
-      return (
-        <Image
-        x={1009}
-        y={54}
-        width={24}
-        height={24}
-        image={this.state.magImage}
-        onClick={this.goProfile}
-        onTap={this.goProfile}
-      />
-      );
-    }
   }
 
   getBack() {
@@ -806,8 +789,8 @@ export class MobMatch extends React.Component {
         <Image
           x={167}
           y={136}
-          width={16}
-          height={16}
+          width={24}
+          height={24}
           opacity={this.state.upHighlighted}
           image={this.state.upImage}
           onClick={this.upClicked}
@@ -816,15 +799,15 @@ export class MobMatch extends React.Component {
         <Image
           x={228}
           y={140}
-          width={16}
-          height={16}
+          width={24}
+          height={24}
           opacity={this.state.downHighlighted}
           image={this.state.downImage}
           onClick={this.downClicked}
           onTap={this.downClicked}
         />
         <Text
-          x={181}
+          x={189}
           y={140}
           fontSize={16}
           width={48}
@@ -832,7 +815,7 @@ export class MobMatch extends React.Component {
           text={this.state.upvotes}
         />
         <Text
-          x={239}
+          x={247}
           y={140}
           fontSize={16}
           width={48}

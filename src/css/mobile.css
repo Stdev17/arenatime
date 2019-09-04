@@ -24,8 +24,8 @@
   margin-top: 20px;
 }
 
-.modal-dialog {
-  max-width: 400px!important;
+.modal-mobile {
+  width: 400px!important;
 }
 
 .stat {

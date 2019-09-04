@@ -221,6 +221,7 @@ export class MobComment extends React.Component {
       <Modal
         show={this.state.errShow}
         onHide={this.errorHide}
+        dialogClassName="modal-mobile"
         aria-labelledby="example-custom-modal-styling-title"
       >
 
@@ -241,6 +242,7 @@ export class MobComment extends React.Component {
       <Modal
         show={this.state.modalShow}
         onHide={this.modalHide}
+        dialogClassName="modal-mobile"
         aria-labelledby="example-custom-modal-styling-title"
       >
 

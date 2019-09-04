@@ -93,6 +93,7 @@ export class MobSetParty extends React.Component {
         <Modal
           show={this.state.show}
           onHide={this.handleHide}
+          dialogClassName="modal-mobile"
           aria-labelledby="example-custom-modal-styling-title"
         >
 

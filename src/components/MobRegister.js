@@ -94,7 +94,7 @@ export class MobRegister extends React.Component {
       });
       return;
     }
-    if (e.target.files[0].size > 1024000) {
+    if (e.target.files[0].size > 3072000) {
       this.setState({
         selectedFile: null,
         loaded: false,
@@ -541,7 +541,7 @@ export class MobRegister extends React.Component {
         {"결과 이미지"}
       </h6>
       <div style={smallText} className="ten">
-        {"1MB 이하의 .jpg .jpeg .png 파일을 올려주세요."}
+        {"3MB 이하의 .jpg .jpeg .png 파일을 올려주세요."}
         <br/>
         <input type="file" name="file" accept=".jpg, .jpeg, .png" onChange={this.fileHandler}/>
         {this.alert()}
@@ -554,6 +554,7 @@ export class MobRegister extends React.Component {
       <Modal
           show={this.state.errShow}
           onHide={this.errorHide}
+          dialogClassName="modal-mobile"
           aria-labelledby="example-custom-modal-styling-title"
         >
 

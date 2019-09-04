@@ -93,6 +93,7 @@ export class SetParty extends React.Component {
         <Modal
           show={this.state.show}
           onHide={this.handleHide}
+          dialogClassName="modal-web"
           aria-labelledby="example-custom-modal-styling-title"
         >
 

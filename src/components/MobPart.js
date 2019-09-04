@@ -363,6 +363,7 @@ export class MobPart extends React.Component {
       <Modal
         show={this.state.errShow}
         onHide={this.errorHide}
+        dialogClassName="modal-mobile"
         aria-labelledby="example-custom-modal-styling-title"
       >
         <Modal.Header>

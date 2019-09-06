@@ -97,8 +97,10 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "ts-mocha -p tsconfig.json src/lambda/*.test.ts",
+    "test": "cross-env TS_NODE_FILES=true mocha --require ts-node/register src/lambda/*.test.ts",
     "compile": "tsc src/lambda/*.ts",
+    "cov": "nyc -x src/lambda/*.js --reporter=text npm run test",
+    "clear": "rm -rf src/lambda/*.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "lint": "eslint src/lambda/*.ts"

@@ -1,29 +1,27 @@
 import aws = require('aws-sdk');
 aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
-let index = 'matches';
+let table = 'match-table';
 
 export const handler = async (event: any, context: any): Promise<any> => {
-
-  const req = event.queryStringParameters[0];
-
   const params = {
-    TableName: 'comment-table',
-    IndexName: index,
-    ExpressionAttributeValues: {
-      ':Id': {S: req}
-    },
-    KeyConditionExpression: 'matchId = :Id',
-    ProjectionExpression: 'commentId, charName, memo, uploadedDate',
-    ScanIndexForward: true
+    TableName: table
   };
 
-  const res: any = await dyn.query(params).promise()
+  const get = await dyn.describeTable(params).promise()
     .then(data => {
-      const response = {
+      let msg = 0;
+      if (data['Table'] !== undefined) {
+        if (data['Table']['ItemCount'] !== undefined) {
+          msg = data['Table']['ItemCount'];
+        }
+      } else {
+        throw 'error';
+      }
+      const result = {
         statusCode: 200,
         body: JSON.stringify({
-          message: data,
+          message: msg,
           runtime: context
         }),
         headers: {
@@ -31,29 +29,28 @@ export const handler = async (event: any, context: any): Promise<any> => {
           'Access-Control-Allow-Credentials': true,
         }
       };
-      return response;
+      return result;
     })
-    .catch(() => {
-      const response = {
+    .catch(err => {
+      const result = {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'Failed Comment Read',
-          runtime: context
+          message: 'Getting Count Failed',
+          runtime: err
         }),
         headers: {
           'Access-Control-Allow-Origin': 'https://stdev17.github.io',
           'Access-Control-Allow-Credentials': true,
         }
       };
-      return response;
+      return result;
     });
 
-    return res;
-
+    return get;
 }
 
-async function test (event: any, context: any, _index: string): Promise<any> {
-  index = _index;
+async function test (event: any, context: any, _table: string): Promise<any> {
+  table = _table;
   return await handler(event, context);
 }
 

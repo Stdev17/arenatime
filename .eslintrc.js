@@ -27,4 +27,11 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-explicit-any": "off"
   },
+  settings: {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
 };

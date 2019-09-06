@@ -1,7 +1,8 @@
 import aws = require('aws-sdk');
+aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
 
-module.exports.handler = async (event: any, context: any): Promise<any> => {
+const handler = async (event: any, context: any): Promise<any> => {
 
   const req = event.queryStringParameters[0];
 
@@ -16,8 +17,8 @@ module.exports.handler = async (event: any, context: any): Promise<any> => {
     ScanIndexForward: true
   };
 
-  const res: any = await dyn.query(params, (data: any, err: any) => {
-    try {
+  const res: any = await dyn.query(params).promise()
+    .then(data => {
       const response = {
         statusCode: 200,
         body: JSON.stringify({
@@ -30,8 +31,8 @@ module.exports.handler = async (event: any, context: any): Promise<any> => {
         }
       };
       return response;
-    }
-    catch {
+    })
+    .catch(err => {
       console.log(err);
       const response = {
         statusCode: 400,
@@ -45,8 +46,10 @@ module.exports.handler = async (event: any, context: any): Promise<any> => {
         }
       };
       return response;
-    }});
+    });
 
-    return res;
+    return await res;
 
 }
+
+export default handler;

@@ -6,6 +6,9 @@
   "dependencies": {
     "@babel/core": "^7.5.5",
     "@svgr/webpack": "4.1.0",
+    "@types/chai": "^4.2.1",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/mocha": "^5.2.7",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
     "@types/react-router-bootstrap": "^0.24.5",
@@ -21,6 +24,8 @@
     "bootstrap": "^4.3.1",
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "compression": "^1.7.4",
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
@@ -92,7 +97,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
+    "test": "ts-mocha -p tsconfig.json src/lambda/*.test.ts",
+    "compile": "tsc src/lambda/*.ts",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "lint": "eslint src/lambda/*.ts"
@@ -115,6 +121,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.1.0",
     "@typescript-eslint/parser": "^2.1.0",
+    "aws-sdk-mock": "^4.5.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-jsx-control-statements": "^4.0.0",
     "eslint": "^6.3.0",
@@ -123,8 +130,11 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "mocha": "^6.2.0",
     "serverless-offline": "^5.8.0",
-    "serverless-plugin-optimize": "^4.1.0-rc.1"
+    "serverless-plugin-optimize": "^4.1.0-rc.1",
+    "ts-mocha": "^6.0.0",
+    "ts-node": "^8.3.0"
   },
   "jest": {
     "collectCoverageFrom": [

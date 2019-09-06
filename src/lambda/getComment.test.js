@@ -36,59 +36,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 exports.__esModule = true;
-var aws = require("aws-sdk");
-aws.config.update({ region: 'ap-northeast-2' });
-var dyn = new aws.DynamoDB();
-var handler = function (event, context) { return __awaiter(_this, void 0, void 0, function () {
-    var req, params, res;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                req = event.queryStringParameters[0];
-                params = {
-                    TableName: 'comment-table',
-                    IndexName: 'matches',
-                    ExpressionAttributeValues: {
-                        ':Id': { S: req }
-                    },
-                    KeyConditionExpression: 'matchId = :Id',
-                    ProjectionExpression: 'commentId, charName, memo, uploadedDate',
-                    ScanIndexForward: true
-                };
-                return [4 /*yield*/, dyn.query(params).promise()
-                        .then(function (data) {
-                        var response = {
-                            statusCode: 200,
-                            body: JSON.stringify({
-                                message: data,
-                                runtime: context
-                            }),
-                            headers: {
-                                'Access-Control-Allow-Origin': 'https://stdev17.github.io',
-                                'Access-Control-Allow-Credentials': true
-                            }
-                        };
-                        return response;
-                    })["catch"](function (err) {
-                        console.log(err);
-                        var response = {
-                            statusCode: 400,
-                            body: JSON.stringify({
-                                message: 'Failed Comment Read',
-                                runtime: context
-                            }),
-                            headers: {
-                                'Access-Control-Allow-Origin': 'https://stdev17.github.io',
-                                'Access-Control-Allow-Credentials': true
-                            }
-                        };
-                        return response;
-                    })];
-            case 1:
-                res = _a.sent();
-                return [4 /*yield*/, res];
-            case 2: return [2 /*return*/, _a.sent()];
-        }
+var getComment_1 = require("./getComment");
+var chai = require("chai");
+var chaiAsPromised = require("chai-as-promised");
+var expect = chai.expect;
+chai.use(chaiAsPromised);
+var event = {
+    queryStringParameters: ["fuck"]
+};
+var context = {};
+var event2 = {
+    queryStringParameters: [".O0FLtcWIDXSpzf0I1PT0V"]
+};
+describe('getComment', function () {
+    describe('query comments', function () {
+        it('should be equal', function () { return __awaiter(_this, void 0, void 0, function () {
+            var res, count;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, getComment_1["default"](event, context)];
+                    case 1:
+                        res = _a.sent();
+                        count = JSON.parse(res.body).message.Count;
+                        expect(count).to.equal(0);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('should be two', function () { return __awaiter(_this, void 0, void 0, function () {
+            var res, count;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, getComment_1["default"](event2, context)];
+                    case 1:
+                        res = _a.sent();
+                        count = JSON.parse(res.body).message.Count;
+                        expect(count).to.equal(2);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
     });
-}); };
-exports["default"] = handler;
+});

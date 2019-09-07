@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 jspm_packages
+.nyc_output
 
 # Serverless directories
 .serverless

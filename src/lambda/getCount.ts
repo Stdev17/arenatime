@@ -3,6 +3,10 @@ aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
 let table = 'match-table';
 
+/** 람다 핸들러 함수
+ * @param event http request에 인자를 담아주세요
+ * @return Promise 형태로 response를 반환합니다
+ */
 export const handler = async (event: any, context: any): Promise<any> => {
   const params = {
     TableName: table
@@ -49,8 +53,9 @@ export const handler = async (event: any, context: any): Promise<any> => {
     return get;
 }
 
-async function test (event: any, context: any, _table: string): Promise<any> {
-  table = _table;
+/** 유닛 테스트에 호출되는 함수 */
+async function test (event: any, context: any, args: string[]): Promise<any> {
+  table = args[0];
   return await handler(event, context);
 }
 

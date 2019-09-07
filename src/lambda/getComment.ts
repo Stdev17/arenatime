@@ -3,8 +3,11 @@ aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
 let index = 'matches';
 
+/** 람다 핸들러 함수
+ * @param event http request에 인자를 담아주세요
+ * @return Promise 형태로 response를 반환합니다
+ */
 export const handler = async (event: any, context: any): Promise<any> => {
-
   const req = event.queryStringParameters[0];
 
   const params = {
@@ -52,6 +55,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
 
 }
 
+/** 유닛 테스트에 호출되는 함수 */
 async function test (event: any, context: any, _index: string): Promise<any> {
   index = _index;
   return await handler(event, context);

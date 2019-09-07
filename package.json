@@ -99,7 +99,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "cross-env TS_NODE_FILES=true mocha --require ts-node/register src/lambda/*.ts",
+    "test": "cross-env TS_NODE_FILES=true mocha --require ts-node/register src/lambda/getPart.ts",
     "compile": "tsc src/lambda/*.ts",
     "cov": "nyc --reporter=text npm run test",
     "clear": "rm -rf src/lambda/*.js",

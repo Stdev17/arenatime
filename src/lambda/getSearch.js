@@ -1,7 +1,7 @@
 const aws = require('aws-sdk');
 const dyn = new aws.DynamoDB();
 const char = require('../util/char').char;
-const primeChar = require('../util/prime').prime;
+const primeChar = require('../util/prime');
 const moment = require('moment');
 
 function setId(req) {

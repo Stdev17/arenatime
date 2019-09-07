@@ -97,4 +97,4 @@ const primeChar: Record<string, number> = {
    
 }
 
-module.exports.prime = primeChar;
+export default primeChar;

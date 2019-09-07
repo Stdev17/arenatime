@@ -1,6 +1,6 @@
 const datePrefix = require('../util/datePrefix');
 const char = require('../util/char').char;
-const primeChar = require('../util/prime').prime;
+const primeChar = require('../util/prime');
 
 const aws = require('aws-sdk');
 const s3 = new aws.S3();

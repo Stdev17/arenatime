@@ -1,8 +1,6 @@
 import test from './getCount';
 import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
 const expect = chai.expect;
-chai.use(chaiAsPromised);
 
 describe('getComment', () => {
   describe('query comments', () => {

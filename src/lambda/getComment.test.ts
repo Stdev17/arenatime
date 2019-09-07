@@ -1,8 +1,6 @@
 import test from './getComment';
 import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
 const expect = chai.expect;
-chai.use(chaiAsPromised);
 
 const event = {
   queryStringParameters: ["fuck"]

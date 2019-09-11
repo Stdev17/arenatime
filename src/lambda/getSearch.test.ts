@@ -1,24 +1,36 @@
-import test from './getPart';
+import test from './getSearch';
 import chai = require('chai');
 const expect = chai.expect;
 
 const event1 = {
-  deckType: 'attack',
+  target: 'defense',
   arena: 'all',
-  matchResult: 'attackWin',
+  date: 'all',
+  power: 'all',
+  sort: 'netUpvotes',
+  result: 'attackWin',
   deck: {
-    first: 'SummerKyaru',
-    second: 'Kyouka'
+    first: 'Miyako',
+    second: 'Nozomi',
+    third: 'Tamaki',
+    fourth: 'Ninon',
+    fifth: 'Mitsuki'
   }
 };
 
 const event2 = {
-  deckType: 'fuck',
+  target: 'defense',
   arena: 'all',
-  matchResult: 'attackWin',
+  date: 'all',
+  power: 'test',
+  sort: 'netUpvotes',
+  result: 'attackWin',
   deck: {
-    first: 'SummerKyaru',
-    second: 'Kyouka'
+    first: 'Miyako',
+    second: 'Nozomi',
+    third: 'Tamaki',
+    fourth: 'Ninon',
+    fifth: 'Mitsuki'
   }
 };
 
@@ -30,12 +42,12 @@ const ev2 = {
   queryStringParameters: [JSON.stringify(event2)]
 };
 
-describe('getPart', () => {
-  describe('get part from athena', () => {
+describe('getSearch', () => {
+  describe('get search query', () => {
     it('should succeed', async () => {
       const res: any = await test(ev1, {}, ['match-table']);
-      const count: number = JSON.parse(res.statusCode);
-      expect(count).to.equal(200);
+      const count: any = JSON.parse(res.body).message.length;
+      expect(count).to.be.above(1);
     });
     it('should fail', async () => {
       const res: any = await test(ev1, {}, ['princonne-arenatime']);

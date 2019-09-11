@@ -1,25 +1,30 @@
-const aws = require('aws-sdk');
+import aws = require('aws-sdk');
+import char from '../util/comment_char';
+import uuid = require('uuid/v4');
+import ubase from '../util/ubase';
+import moment from 'moment';
+aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
-const char = require('../util/comment_char').char;
-const uuid = require('uuid/v4');
-const ubase = require('uuid-base64');
-const moment = require('moment');
 
-module.exports.handler = async (event, context) => {
+/** 람다 핸들러 함수
+ * @param event http request에 인자를 담아주세요
+ * @return Promise 형태로 response를 반환합니다
+ */
+export const handler = async (event: any, context: any): Promise<any> => {
 
   //req.action: put, delete
 
-  let req = JSON.parse(event.body);
+  const req = JSON.parse(event.body);
 
-  let com = {
+  const com: any = {
     matchId: {S: req.matchId},
-    commentId: {S: ubase.encode(uuid())},
+    commentId: {S: ubase(uuid())},
     userIp: {S: event.requestContext.identity.sourceIp},
     memo: {S: req.memo},
     uploadedDate: {S: moment().add(9, 'hours').format("YYYY-MM-DD HH:mm:ss")}
   };
 
-  let params = {
+  const params = {
     TableName: 'commenter-table',
     ProjectionExpression: 'commentIps',
     Key: {
@@ -27,7 +32,7 @@ module.exports.handler = async (event, context) => {
     }
   };
 
-  let ips = await dyn.getItem(params).promise()
+  let ips: any = await dyn.getItem(params).promise()
     .then(data => {
       return data['Item'];
     })
@@ -36,17 +41,18 @@ module.exports.handler = async (event, context) => {
       return;
     });
   
-  let tmp = {};
+  let tmp: any = {};
+  tmp = {};
   if (ips === undefined) {
     ips = {};
   } else {
-    for (let i in ips.commentIps['M']) {
+    for (const i in ips.commentIps['M']) {
       tmp[i] = {S: ips.commentIps['M'][i]['S']};
     }
   }
   ips = tmp;
 
-  let getComments = {
+  const getComments = {
     TableName: 'match-table',
     ProjectionExpression: 'netComments',
     Key: {
@@ -54,7 +60,7 @@ module.exports.handler = async (event, context) => {
     }
   };
 
-  let coms = await dyn.getItem(getComments).promise()
+  let coms: any = await dyn.getItem(getComments).promise()
     .then(data => {
       return data;
     })
@@ -69,26 +75,27 @@ module.exports.handler = async (event, context) => {
     coms = 0;
   }
 
-  let chk_ip = false;
+  let chkIp = false;
   let myName = "";
   let myChar = char.slice();
+  myChar = myChar;
 
-  for (let i in ips) {
-    let del = myChar.indexOf(ips[i]['S']);
+  for (const i in ips) {
+    const del = myChar.indexOf(ips[i]['S']);
     myChar.splice(del, 1);
     if (i === com.userIp['S']) {
-      chk_ip = true;
+      chkIp = true;
       myName = ips[i]['S'];
       break;
     }
   }
-  if (!chk_ip && myChar.length !== 0 && req.action === 'put') {
-    let name = myChar[Math.floor(Math.random()*myChar.length)];
-    com.charName = {S: name};
+  if (!chkIp && myChar.length !== 0 && req.action === 'put') {
+    const name = myChar[Math.floor(Math.random()*myChar.length)];
+    com['charName'] = {S: name};
 
     ips[com.userIp['S']] = {S: name};
 
-    let setParams = {
+    const setParams = {
       TableName: 'commenter-table',
       Key: {
         'matchId': {S: req.matchId}
@@ -100,14 +107,14 @@ module.exports.handler = async (event, context) => {
     };
 
     dyn.updateItem(setParams).promise()
-      .then(data =>{
+      .then(() =>{
         //
       })
       .catch(err => {
         console.log(err);
       });
 
-    let comParams = {
+    const comParams = {
       TableName: 'match-table',
       Key: {
         'matchId': {S: req.matchId}
@@ -119,21 +126,21 @@ module.exports.handler = async (event, context) => {
     };
 
     dyn.updateItem(comParams).promise()
-      .then(data =>{
+      .then(() => {
         //
       })
       .catch(err => {
         console.log(err);
       });
     
-    let putParams = {
+    const putParams = {
       TableName: 'comment-table',
       Item: com
     };
 
     return await dyn.putItem(putParams).promise()
-      .then(data => {
-        let response = {
+      .then(() => {
+        const response = {
           statusCode: 200,
           body: JSON.stringify({
             message: 'Succeeded Comment Upload',
@@ -148,7 +155,7 @@ module.exports.handler = async (event, context) => {
       })
       .catch(err => {
         console.log(err);
-        let response = {
+        const response = {
           statusCode: 400,
           body: JSON.stringify({
             message: 'Failed Comment Upload',
@@ -161,10 +168,10 @@ module.exports.handler = async (event, context) => {
         };
         return response;
       });
-  } else if (chk_ip && req.action === 'put') {
+  } else if (chkIp && req.action === 'put') {
     com.charName = {S: myName};
 
-    let comParams = {
+    const comParams = {
       TableName: 'match-table',
       Key: {
         'matchId': {S: req.matchId}
@@ -176,21 +183,21 @@ module.exports.handler = async (event, context) => {
     };
 
     dyn.updateItem(comParams).promise()
-      .then(data =>{
+      .then(() =>{
         //
       })
       .catch(err => {
         console.log(err);
       });
 
-    let putParams = {
+    const putParams = {
       TableName: 'comment-table',
       Item: com
     };
 
     return await dyn.putItem(putParams).promise()
-      .then(data => {
-        let response = {
+      .then(() => {
+        const response = {
           statusCode: 200,
           body: JSON.stringify({
             message: 'Succeeded Comment Upload',
@@ -205,7 +212,7 @@ module.exports.handler = async (event, context) => {
       })
       .catch(err => {
         console.log(err);
-        let response = {
+        const response = {
           statusCode: 400,
           body: JSON.stringify({
             message: 'Failed Comment Upload',
@@ -219,7 +226,7 @@ module.exports.handler = async (event, context) => {
         return response;
       });
   } else if (req.action === 'delete') {
-    let params = {
+    const params = {
       TableName: 'comment-table',
       ProjectionExpression: 'userIp',
       Key: {
@@ -227,7 +234,7 @@ module.exports.handler = async (event, context) => {
       }
     };
   
-    let chk = await dyn.getItem(params).promise()
+    const chk: any = await dyn.getItem(params).promise()
       .then(data => {
         return data['Item'];
       })
@@ -237,7 +244,7 @@ module.exports.handler = async (event, context) => {
       });
 
     if (chk['userIp']['S'] !== event.requestContext.identity.sourceIp) {
-      let response = {
+      const response = {
         statusCode: 200,
         body: JSON.stringify({
           message: 'Forbidden Comment Deletion',
@@ -251,7 +258,7 @@ module.exports.handler = async (event, context) => {
       return response;
     }
     
-    let comParams = {
+    const comParams = {
       TableName: 'match-table',
       Key: {
         'matchId': {S: req.matchId}
@@ -263,14 +270,14 @@ module.exports.handler = async (event, context) => {
     };
 
     dyn.updateItem(comParams).promise()
-      .then(data =>{
+      .then(() =>{
         //
       })
       .catch(err => {
         console.log(err);
       });
 
-    let setParams = {
+    const setParams = {
       TableName: 'comment-table',
       Key: {
         'commentId': {S: req.commentId}
@@ -278,8 +285,8 @@ module.exports.handler = async (event, context) => {
     };
 
     return await dyn.deleteItem(setParams).promise()
-      .then(data => {
-        let response = {
+      .then(() => {
+        const response = {
           statusCode: 200,
           body: JSON.stringify({
             message: 'Succeeded Comment Deletion',
@@ -294,7 +301,7 @@ module.exports.handler = async (event, context) => {
       })
       .catch(err => {
         console.log(err);
-        let response = {
+        const response = {
           statusCode: 400,
           body: JSON.stringify({
             message: 'Failed Comment Deletion',

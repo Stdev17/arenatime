@@ -1,13 +1,15 @@
-const aws = require('aws-sdk');
+import aws = require('aws-sdk');
+import primeChar from '../util/prime';
+import moment from 'moment';
+aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
-const char = require('../util/char').char;
-const primeChar = require('../util/prime');
-const moment = require('moment');
+let table = 'match-table';
 
-function setId(req) {
+function setId(req: any): number {
   let id = 1;
-  for (let tmp in req.deck) {
-    id *= primeChar[req.deck[tmp]];
+  const deck = req.deck;
+  for (const tmp in deck) {
+    id *= primeChar[deck[tmp]];
   }
   if (id === NaN) {
     return 1;
@@ -15,20 +17,21 @@ function setId(req) {
   return id;
 }
 
+/** 람다 핸들러 함수
+ * @param event http request에 인자를 담아주세요
+ * @return Promise 형태로 response를 반환합니다
+ */
+export const handler = async (event: any, context: any): Promise<any> => {
 
-module.exports.handler = async (event, context, callback) => {
+  const req = JSON.parse(event.queryStringParameters[0]);
+  const deckId = setId(req);
 
-  let req = JSON.parse(event.queryStringParameters[0]);
-  let deckId = setId(req);
-
-  
-
-  let params = {
-    TableName: 'match-table',
+  let params: any = {};
+  params = {
+    TableName: table,
     ExpressionAttributeValues: {
       ':deckId': {N: deckId.toString()}
-    },
-    Limit: 5
+    }
   };
 
   if (req.arena === 'battleArena') {
@@ -152,11 +155,31 @@ module.exports.handler = async (event, context, callback) => {
     params.FilterExpression = 'attackPower > :lower and attackPower < :upper and arena <> :arena and matchResult <> :result';
   }
 
-  let queries = [];
+  let queries: any[] = [];
+  queries = [];
 
-  let get = await dyn.query(params, async function continueQuery(err, data) {
-    if (err) {
-      let result = {
+  const get = await dyn.query(params).promise()
+    .then(data => {
+      if (queries.length === 0 && data['Count'] !== 0) {
+        queries.push(data);
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            message: 'Query Succeeded',
+            runtime: 'ok'
+          })
+        };
+      }
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'No Result',
+          runtime: 'ok'
+        })
+      };
+    })
+    .catch(err => {
+      const result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Query Failed',
@@ -164,68 +187,17 @@ module.exports.handler = async (event, context, callback) => {
         })
       };
       return result;
-    } else {
-      if (queries.length === 0 && data['Count'] !== 0) {
-        queries.push(data);
-      } else if (data['Items'][0] !== undefined) {
-        let check = false;
-        for (let i in queries) {
-          if (queries[i]['Items'][0]['matchId']['S'] === data['Items'][0]['matchId']['S']) {
-            check = true;
-          }
-        }
-        if (!check) {
-          queries.push(data);
-        }
-      }
-      if (data.LastEvaluatedKey) {
-        params.ExclusiveStartKey = data.LastEvaluatedKey;
-        let get = await dyn.query(params, continueQuery).promise();
-        return get;
-      } else {
-        return {
-          statusCode: 200,
-          body: JSON.stringify({
-            message: 'Success',
-            runtime: context
-          })
-        };
-      }
-    }
-  }).promise();
+    });
 
-  let succeed = false;
+  if (get.statusCode === 400) {
+    return get;
+  }
 
-  let fuck = await (async _ => {
-    await timeout(800);
-    return finished();
-  })();
-
-  if (succeed) {
-    let res = [];
-    let buf = [];
-    let tmp;
-    for (let i in queries) {
-      for (let j in queries[i]['Items']) {
-        buf.push(queries[i]['Items'][j]);
-      }
-    }
-    for (let i = 0; i < buf.length; i++) {
-      if (i % 5 === 0) {
-        tmp = {'Items': []};
-      }
-      tmp['Items'].push(buf[i]);
-      if (i % 5 === 4) {
-        res.push(tmp);
-      }
-    }
-    if (buf.length % 5 !== 0) {
-      res.push(tmp);
-    }
-    fuck = {
+  if (queries.length === 0) {
+    return {
       statusCode: 200,
       body: JSON.stringify({
-        message: res,
+        message: 'Deck Not Found',
         runtime: context
       }),
       headers: {
@@ -235,28 +207,45 @@ module.exports.handler = async (event, context, callback) => {
     };
   }
 
-  return fuck;
-
-  function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  function finished() {
-    if (queries.length === 0) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          message: 'Deck Not Found',
-          runtime: context
-        }),
-        headers: {
-          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
-          'Access-Control-Allow-Credentials': true,
-        }
-      };
+  let res = [];
+  res = [];
+  let buf = [];
+  buf = [];
+  let tmp: any;
+  for (const i in queries) {
+    for (const j in queries[i]['Items']) {
+      buf.push(queries[i]['Items'][j]);
     }
-    succeed = true;
-    return;
   }
-
+  for (let i = 0; i < buf.length; i++) {
+    if (i % 5 === 0) {
+      tmp = {'Items': []};
+    }
+    tmp['Items'].push(buf[i]);
+    if (i % 5 === 4) {
+      res.push(tmp);
+    }
+  }
+  if (buf.length % 5 !== 0) {
+    res.push(tmp);
+  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: res,
+      runtime: context
+    }),
+    headers: {
+      'Access-Control-Allow-Origin': 'https://stdev17.github.io',
+      'Access-Control-Allow-Credentials': true,
+    }
+  };
 }
+
+/** 유닛 테스트에 호출되는 함수 */
+async function test (event: any, context: any, args: string[]): Promise<any> {
+  table = args[0];
+  return await handler(event, context);
+}
+
+export default test;

@@ -1,16 +1,22 @@
-const aws = require('aws-sdk');
+import aws = require('aws-sdk');
+aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
+let table = 'stat-table';
 
-module.exports.handler = async (event, context) => {
+/** 람다 핸들러 함수
+ * @param event http request에 인자를 담아주세요
+ * @return Promise 형태로 response를 반환합니다
+ */
+export const handler = async (event: any, context: any): Promise<any> => {
 
-  let params = {
-    TableName: 'stat-table',
+  const params = {
+    TableName: table,
     ProjectionExpression: 'PropertyName, Stats'
   };
 
-  let items = await dyn.scan(params).promise()
+  const items = await dyn.scan(params).promise()
   .then(data => {
-    let result = {
+    const result = {
       statusCode: 200,
       body: JSON.stringify({
         message: data,
@@ -24,7 +30,7 @@ module.exports.handler = async (event, context) => {
     return result;
   })
   .catch(err => {
-    let result = {
+    const result = {
       statusCode: 200,
       body: JSON.stringify({
         message: 'Getting Stats Failed',
@@ -41,3 +47,11 @@ module.exports.handler = async (event, context) => {
 
   return items;
 }
+
+/** 유닛 테스트에 호출되는 함수 */
+async function test (event: any, context: any, args: string[]): Promise<any> {
+  table = args[0];
+  return await handler(event, context);
+}
+
+export default test;

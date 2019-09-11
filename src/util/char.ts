@@ -1,4 +1,4 @@
-const char = [
+const char: string[] = [
   'Empty',
   'Makoto',
   'Mitsuki',
@@ -87,4 +87,4 @@ const char = [
   'SummerSuzuna'
 ];
 
-module.exports.char = char;
+export default char;

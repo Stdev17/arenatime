@@ -1,4 +1,4 @@
-let char = [
+const char = [
   "리마",
   "미야코",
   "쿠우카",
@@ -67,4 +67,4 @@ let char = [
   "쿄우카"
 ];
 
-module.exports.char = char;
+export default char;

@@ -1,12 +1,17 @@
-const aws = require('aws-sdk');
+import aws = require('aws-sdk');
+aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
 
-module.exports.handler = async (event, context) => {
+/** 람다 핸들러 함수
+ * @param event http request에 인자를 담아주세요
+ * @return Promise 형태로 response를 반환합니다
+ */
+export const handler = async (event: any, context: any): Promise<any> => {
 
-  let req = JSON.parse(event.body);
-  let myIp = event.requestContext.identity.sourceIp;
+  const req = JSON.parse(event.body);
+  const myIp = event.requestContext.identity.sourceIp;
 
-  let checkParams = {
+  const checkParams = {
     TableName: 'voter-table',
     Key: {
       'matchId': {S: req.matchId}
@@ -14,9 +19,9 @@ module.exports.handler = async (event, context) => {
     ProjectionExpression: 'upvoters, downvoters'
   };
 
-  let check = await dyn.getItem(checkParams).promise()
+  const check = await dyn.getItem(checkParams).promise()
   .then(data => {
-    let result = {
+    const result = {
       statusCode: 200,
       body: JSON.stringify({
         message: data,
@@ -26,7 +31,7 @@ module.exports.handler = async (event, context) => {
     return result;
   })
   .catch(err => {
-    let result = {
+    const result = {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Getting Item Failed',
@@ -36,24 +41,24 @@ module.exports.handler = async (event, context) => {
     return result;
   });
 
-  let resCheck = JSON.parse(check.body)['message']['Item'];
+  const resCheck = JSON.parse(check.body)['message']['Item'];
   let checkVote = "Not Voted";
-  let upv = resCheck['upvoters']['L'];
-  let dov = resCheck['downvoters']['L'];
-  for (let u in upv) {
+  const upv = resCheck['upvoters']['L'];
+  const dov = resCheck['downvoters']['L'];
+  for (const u in upv) {
     if (upv[u]['S'] == myIp) {
       checkVote = 'Upvoted';
       break;
     }
   }
-  for (let d in dov) {
+  for (const d in dov) {
     if (dov[d]['S'] == myIp) {
       checkVote = 'Downvoted';
       break;
     }
   }
 
-  let getParams = {
+  const getParams = {
     TableName: 'match-table',
     ProjectionExpression: 'upvotes, downvotes, netUpvotes',
     Key: {
@@ -61,9 +66,9 @@ module.exports.handler = async (event, context) => {
     }
   };
 
-  let get = await dyn.getItem(getParams).promise()
+  const get = await dyn.getItem(getParams).promise()
     .then(data => {
-      let result = {
+      const result = {
         statusCode: 200,
         body: JSON.stringify({
           message: data,
@@ -73,7 +78,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      let result = {
+      const result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Getting Item Failed',
@@ -83,9 +88,8 @@ module.exports.handler = async (event, context) => {
       return result;
     });
 
-    let exit = false;
-    let resGet = JSON.parse(get.body)['message']['Item'];
-    let setUpvote, setDownvote;
+    const resGet = JSON.parse(get.body)['message']['Item'];
+    let setUpvote = 'none', setDownvote = 'none';
     let upvoteValue = Number(resGet['upvotes']['N']);
     let downvoteValue = Number(resGet['downvotes']['N']);
     let netUpvoteValue = Number(resGet['netUpvotes']['N']);
@@ -113,20 +117,6 @@ module.exports.handler = async (event, context) => {
         setUpvote = 'none';
         setDownvote = 'unvote';
       }
-    }
-    //
-    if (exit) {
-      let response = {
-        statusCode: 200,
-        body: {
-          message: "Same votes exists."
-        },
-        headers: {
-          'Access-Control-Allow-Origin': 'https://stdev17.github.io',
-          'Access-Control-Allow-Credentials': true,
-        }
-      };
-      return response;
     }
     //
     if (setUpvote == 'vote') {
@@ -158,7 +148,7 @@ module.exports.handler = async (event, context) => {
       }
     }
 
-    let setParams = {
+    const setParams = {
       TableName: 'match-table',
       Key: {
         'matchId': {S: req.matchId}
@@ -171,9 +161,9 @@ module.exports.handler = async (event, context) => {
       },
     };
 
-    let updateMatch = await dyn.updateItem(setParams).promise()
+    const updateMatch = await dyn.updateItem(setParams).promise()
     .then(data => {
-      let result = {
+      const result = {
         statusCode: 200,
         body: JSON.stringify({
           message: data,
@@ -183,7 +173,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      let result = {
+      const result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Setting Votes Failed',
@@ -201,7 +191,7 @@ module.exports.handler = async (event, context) => {
       return updateMatch;
     }
 
-    let voterParams = {
+    const voterParams = {
       TableName: 'voter-table',
       Key: {
         'matchId': {S: req.matchId}
@@ -213,9 +203,9 @@ module.exports.handler = async (event, context) => {
       },
     };
 
-    let updateVoter = await dyn.updateItem(voterParams).promise()
-    .then(data => {
-      let result = {
+    const updateVoter = await dyn.updateItem(voterParams).promise()
+    .then(() => {
+      const result = {
         statusCode: 200,
         body: JSON.stringify({
           message: 'Vote Succeeded',
@@ -233,7 +223,7 @@ module.exports.handler = async (event, context) => {
       return result;
     })
     .catch(err => {
-      let result = {
+      const result = {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Setting Voters Failed',

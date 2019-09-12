@@ -9,8 +9,7 @@ import '../css/daum.css';
 import '../css/text.css';
 
 import { getCoord } from './Block.tsx';
-import { char } from '../util/char.js';
-
+import char from '../util/char';
 let parse = require('../util/rev_parse.js');
 let scale = 76;
 

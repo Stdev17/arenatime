@@ -14,7 +14,7 @@ import '../css/daum.css';
 import '../css/text.css';
 
 import { getCoord } from './Block.tsx';
-import { char } from '../util/char.js';
+import char from '../util/char';
 import { path } from '../util/dummy';
 
 var axios = require('axios');

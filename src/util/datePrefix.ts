@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment = require('moment');
 
 const datePrefix = function() {
   const m = moment().add(9, 'hour');

@@ -10,10 +10,11 @@ import '../css/text.css';
 
 import { sort } from './Party.js';
 import { getCoord } from './Block.tsx';
-import { char } from '../util/char.js';
+import char from '../util/char';
+
+import primeChar from '../util/prime';
 
 let parse = require('../util/rev_parse.js');
-let prime = require('../util/prime.js').prime;
 
 class Slot extends React.Component {
   constructor(props) {
@@ -109,8 +110,8 @@ class Duo extends React.Component {
     let x = [this.props.setX, this.props.setX+86];
     //
     let team = [];
-    for (let p in prime) {
-      if (this.props.duos % prime[p] === 0) {
+    for (let p in primeChar) {
+      if (this.props.duos % primeChar[p] === 0) {
         team.push(p);
       }
     }
@@ -135,8 +136,8 @@ class Trio extends React.Component {
     }
     //
     let team = [];
-    for (let p in prime) {
-      if (this.props.trios % prime[p] === 0) {
+    for (let p in primeChar) {
+      if (this.props.trios % primeChar[p] === 0) {
         team.push(p);
       }
     }

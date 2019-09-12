@@ -20,10 +20,11 @@
     "out": "docs"
   },
   "include": [
-      "./src/**/*"
+      "./src/lambda/*"
   ],
   "exclude": [
-      "node_modules"
+      "node_modules",
+      "./src/util"
   ],
   "typeRoots": [
     "../node_modules/@types",

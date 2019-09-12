@@ -2,7 +2,7 @@ import aws = require('aws-sdk');
 import char from '../util/comment_char';
 import uuid = require('uuid/v4');
 import ubase from '../util/ubase';
-import moment from 'moment';
+import moment = require('moment');
 aws.config.update({region: 'ap-northeast-2'});
 const dyn = new aws.DynamoDB();
 

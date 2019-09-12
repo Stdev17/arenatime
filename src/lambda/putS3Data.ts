@@ -2,7 +2,7 @@ import datePrefix from '../util/datePrefix';
 import char from '../util/char';
 import primeChar from '../util/prime';
 import aws = require('aws-sdk');
-import moment from 'moment';
+import moment = require('moment');
 import uuid = require('uuid/v4');
 import comb from '../util/comb';
 import {gzip} from 'node-gzip';
@@ -349,7 +349,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
   const fileFullName = filePath + fileName;
   const fileFullPath = 'data/' + fileFullName;
 
-  const z: any = new (Buffer.from(JSON.stringify(parsed)) as any);
+  const z: any = Buffer.from(JSON.stringify(parsed));
   const gz = await gzip(z);
 
   const params = {

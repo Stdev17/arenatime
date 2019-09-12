@@ -39,7 +39,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
 
   const params = getFile(fileMime, buffer);
 
-  s3.putObject(params).promise()
+  return s3.putObject(params).promise()
     .then(() => {
       const response = {
         statusCode: 200,
@@ -52,7 +52,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
           'Access-Control-Allow-Credentials': true,
         }
       };
-      context.succeed(response);
+      return response;
     })
     .catch(() => {
       const response = {
@@ -66,7 +66,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
           'Access-Control-Allow-Credentials': true,
         }
       };
-      context.fail(response);
+      return response;
     });
 
 }

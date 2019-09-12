@@ -7,7 +7,7 @@ import {
   Text
 } from 'react-konva';
 import { Redirect } from 'react-router-dom';
-import { char } from '../util/char.js';
+import char from '../util/char';
 import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
 import { setSearchPath } from './Match';

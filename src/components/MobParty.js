@@ -6,7 +6,7 @@ import {
 } from 'react-konva';
 import { dist } from '../util/distance.ts';
 import { getCoord } from './Block.tsx';
-import { char } from '../util/char.js';
+import char from '../util/char';
 
 let scale = 60;
 

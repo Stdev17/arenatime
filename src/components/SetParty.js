@@ -44,7 +44,7 @@ export class SetParty extends React.Component {
   }
 
   mainText = {
-    fontFamily: 'Daum',
+    fontFamily: 'GyeonggiTitleM',
     fontStyle: 'normal',
     fontSize: 14,
     fontColor: '#333333'

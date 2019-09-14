@@ -94,7 +94,7 @@ export class CharSet extends React.Component {
       x={this.props.setX-22}
       y={this.props.setY*102+77}
       fontSize={20}
-      fontFamily={'Daum'}
+      fontFamily={'GyeonggiTitleM'}
       fontStyle={'normal'}
       fontColor={'#333333'}
       width={42}
@@ -105,7 +105,7 @@ export class CharSet extends React.Component {
       x={this.props.setX-2}
       y={this.props.setY*102+122}
       fontSize={16}
-      fontFamily={'Daum'}
+      fontFamily={'GyeonggiTitleM'}
       fontStyle={'normal'}
       fontColor={'#333333'}
       width={124}
@@ -116,7 +116,7 @@ export class CharSet extends React.Component {
       x={this.props.setX+86}
       y={this.props.setY*102+77}
       fontSize={21}
-      fontFamily={'Daum'}
+      fontFamily={'GyeonggiTitleM'}
       fontStyle={'normal'}
       fontColor={'#333333'}
       width={124}

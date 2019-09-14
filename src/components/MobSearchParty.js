@@ -23,7 +23,7 @@ let attackDeckX = 88;
 let defenseDeckX = 88;
 
 const smallText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 16,
   fontColor: '#333333'

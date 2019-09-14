@@ -14,14 +14,14 @@ import '../css/text.css';
 let mobile = require('is-mobile');
 
 const brandText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 32,
   fontColor: 'White'
 }
 
 const menuText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 24,
   fontColor: 'White'

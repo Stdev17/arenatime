@@ -192,7 +192,7 @@ export class MobComment extends React.Component {
       x={68}
       y={2}
       fontSize={14}
-      fontFamily={'Daum'}
+      fontFamily={'GyeonggiTitleM'}
       fontStyle={'normal'}
       fontColor={'#333333'}
       width={290}

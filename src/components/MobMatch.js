@@ -45,21 +45,21 @@ var unit = 5;
 var comments = [];
 
 const topicText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 36,
   fontColor: '#333333'
 }
 
 const subText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 28,
   fontColor: '#333333'
 }
 
 const smallText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 16,
   fontColor: '#333333'

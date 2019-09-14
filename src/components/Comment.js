@@ -192,7 +192,7 @@ export class Comment extends React.Component {
       x={75}
       y={2}
       fontSize={16}
-      fontFamily={'Daum'}
+      fontFamily={'GyeonggiTitleM'}
       fontStyle={'normal'}
       fontColor={'#333333'}
       width={810}

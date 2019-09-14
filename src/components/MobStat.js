@@ -31,21 +31,21 @@ let duotext = '';
 let triotext = '';
 
 const topicText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 36,
   fontColor: '#333333'
 }
 
 const subText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 28,
   fontColor: '#333333'
 }
 
 const smallText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 16,
   fontColor: '#333333'
@@ -337,7 +337,7 @@ export class MobStat extends React.Component {
             x={48}
             y={2}
             fontSize={19}
-            fontFamily={'daum'}
+            fontFamily={'GyeonggiTitleM'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}
@@ -348,7 +348,7 @@ export class MobStat extends React.Component {
             x={58}
             y={562}
             fontSize={19}
-            fontFamily={'daum'}
+            fontFamily={'GyeonggiTitleM'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}
@@ -359,7 +359,7 @@ export class MobStat extends React.Component {
             x={48}
             y={1122}
             fontSize={19}
-            fontFamily={'daum'}
+            fontFamily={'GyeonggiTitleM'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}

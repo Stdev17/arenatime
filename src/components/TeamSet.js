@@ -92,7 +92,7 @@ class Slot extends React.Component {
       x={this.props.setX+74-this.props.scale-comp}
       y={this.props.setY*102+198+this.props.mob-this.props.scale-comp}
       fontSize={16}
-      fontFamily={'Daum'}
+      fontFamily={'GyeonggiTitleM'}
       fontStyle={'normal'}
       fontColor={'#333333'}
       width={124}
@@ -169,7 +169,7 @@ export class TeamSet extends React.Component {
           x={this.props.setX-22}
           y={this.props.setY*102+77+mob}
           fontSize={20}
-          fontFamily={'Daum'}
+          fontFamily={'GyeonggiTitleM'}
           fontStyle={'normal'}
           fontColor={'#333333'}
           width={42}
@@ -180,7 +180,7 @@ export class TeamSet extends React.Component {
           x={this.props.setX+172}
           y={this.props.setY*102+77+mob}
           fontSize={21}
-          fontFamily={'Daum'}
+          fontFamily={'GyeonggiTitleM'}
           fontStyle={'normal'}
           fontColor={'#333333'}
           width={124}
@@ -203,7 +203,7 @@ export class TeamSet extends React.Component {
           x={this.props.setX-22}
           y={this.props.setY*102+77+mob}
           fontSize={20}
-          fontFamily={'Daum'}
+          fontFamily={'GyeonggiTitleM'}
           fontStyle={'normal'}
           fontColor={'#333333'}
           width={42}
@@ -214,7 +214,7 @@ export class TeamSet extends React.Component {
           x={this.props.setX+143+this.props.scale*1.5}
           y={this.props.setY*102+77+mob}
           fontSize={21}
-          fontFamily={'Daum'}
+          fontFamily={'GyeonggiTitleM'}
           fontStyle={'normal'}
           fontColor={'#333333'}
           width={124}

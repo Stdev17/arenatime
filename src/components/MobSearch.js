@@ -26,21 +26,21 @@ var max = 1;
 var queryItems = [];
 
 const topicText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 36,
   fontColor: '#333333'
 }
 
 const subText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 24,
   fontColor: '#333333'
 }
 
 const smallText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 14,
   fontColor: '#333333'

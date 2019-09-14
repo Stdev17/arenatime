@@ -12,14 +12,14 @@ import { CharSet } from './CharSet';
 import { TeamSet } from './TeamSet';
 
 const topicText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 36,
   fontColor: '#333333'
 }
 
 const subText = {
-  fontFamily: 'Daum',
+  fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 28,
   fontColor: '#333333'
@@ -70,7 +70,7 @@ export class MobRank extends React.Component {
             x={28}
             y={2}
             fontSize={19}
-            fontFamily={'Daum'}
+            fontFamily={'GyeonggiTitleM'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}
@@ -93,7 +93,7 @@ export class MobRank extends React.Component {
             x={28}
             y={2}
             fontSize={19}
-            fontFamily={'Daum'}
+            fontFamily={'GyeonggiTitleM'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}
@@ -116,7 +116,7 @@ export class MobRank extends React.Component {
             x={28}
             y={2}
             fontSize={19}
-            fontFamily={'Daum'}
+            fontFamily={'GyeonggiTitleM'}
             fontStyle={'normal'}
             fontColor={'#333333'}
             width={210}

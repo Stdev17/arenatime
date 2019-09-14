@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/arenatime/precache-manifest.4b593dde83be9d47992bfee50b87d40b.js"
+  "/arenatime/precache-manifest.9303b5cf5f4fbef1b87cd4ef025fcaef.js"
 );
 
 self.addEventListener('message', (event) => {

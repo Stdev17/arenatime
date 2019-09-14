@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b33ca5a71af09b83b12b75a3571dbd7a",
+    "revision": "83b2573f81c3197a89a260e8202a779b",
     "url": "/arenatime/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/arenatime/static/css/2.22a7d4ef.chunk.css"
   },
   {
-    "revision": "170df20fb39d610156d8",
+    "revision": "e97b02d1723c5241dbbe",
     "url": "/arenatime/static/css/main.e3b69ebf.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/arenatime/static/js/2.eeb7df9d.chunk.js"
   },
   {
-    "revision": "170df20fb39d610156d8",
-    "url": "/arenatime/static/js/main.d5b540d0.chunk.js"
+    "revision": "e97b02d1723c5241dbbe",
+    "url": "/arenatime/static/js/main.45b2cea6.chunk.js"
   },
   {
     "revision": "0803dd4244798aaf2acd",

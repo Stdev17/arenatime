@@ -328,6 +328,7 @@ export class MobStat extends React.Component {
       cutduo.splice(5, cutduo.length-5);
       let cuttrio = trioset.slice();
       cuttrio.splice(5, cuttrio.length-5);
+
       //
       return (
         <div>

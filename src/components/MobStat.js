@@ -74,7 +74,8 @@ export class MobStat extends React.Component {
       form: {
         target: '방어',
         type: '적폐',
-        arena: '전체'
+        arena: '전체',
+        date: '7일 이내'
       }
     };
   }
@@ -166,33 +167,65 @@ export class MobStat extends React.Component {
   }
 
   getValue(obj) {
-    if (this.state.form.type === '적폐') {
-      let allbattle = 0;
-      let allprincess = 0;
-      for (let i in this.state.stats['Items']) {
-        if (this.state.stats['Items'][i]['PropertyName']['S'] === 'net') {
-          allbattle = Number(this.state.stats['Items'][i]['Stats']['L'][0]['M']['BattleCnt']['N']);
-          allprincess = Number(this.state.stats['Items'][i]['Stats']['L'][0]['M']['PrincessCnt']['N']);
+    if (this.state.form.date == '21일 이내') {
+      if (this.state.form.type === '적폐') {
+        let allbattle = 0;
+        let allprincess = 0;
+        for (let i in this.state.stats['Items']) {
+          if (this.state.stats['Items'][i]['PropertyName']['S'] === 'net') {
+            allbattle = Number(this.state.stats['Items'][i]['Stats']['L'][0]['M']['BattleCnt']['N']);
+            allprincess = Number(this.state.stats['Items'][i]['Stats']['L'][0]['M']['PrincessCnt']['N']);
+          }
+        }
+        if (this.state.form.arena === '배틀 아레나') {
+          return Math.ceil(10000*Number(obj['BattleCnt']['N'])/allbattle)/100;
+        } else if (this.state.form.arena === '프린세스 아레나') {
+          return Math.ceil(10000*Number(obj['PrincessCnt']['N'])/allprincess)/100;
+        } else {
+          let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
+          let net = allbattle + allprincess;
+          return Math.ceil(10000*cnt/net)/100;
+        }
+      } else {
+        if (this.state.form.arena === '배틀 아레나') {
+          return Math.ceil(10000*Number(obj['BattleWin']['N'])/Number(obj['BattleCnt']['N']))/100;
+        } else if (this.state.form.arena === '프린세스 아레나') {
+          return Math.ceil(10000*Number(obj['PrincessWin']['N'])/Number(obj['PrincessCnt']['N']))/100;
+        } else {
+          let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
+          let net = Number(obj['BattleWin']['N']) + Number(obj['PrincessWin']['N']);
+          return Math.ceil(10000*net/cnt)/100;
         }
       }
-      if (this.state.form.arena === '배틀 아레나') {
-        return Math.ceil(10000*Number(obj['BattleCnt']['N'])/allbattle)/100;
-      } else if (this.state.form.arena === '프린세스 아레나') {
-        return Math.ceil(10000*Number(obj['PrincessCnt']['N'])/allprincess)/100;
+    } else if (this.state.form.date == '7일 이내') {
+      if (this.state.form.type === '적폐') {
+        let allbattle = 0;
+        let allprincess = 0;
+        for (let i in this.state.stats['Items']) {
+          if (this.state.stats['Items'][i]['PropertyName']['S'] === 'netWeek') {
+            allbattle = Number(this.state.stats['Items'][i]['Stats']['L'][0]['M']['BattleCnt']['N']);
+            allprincess = Number(this.state.stats['Items'][i]['Stats']['L'][0]['M']['PrincessCnt']['N']);
+          }
+        }
+        if (this.state.form.arena === '배틀 아레나') {
+          return Math.ceil(10000*Number(obj['BattleCnt']['N'])/allbattle)/100;
+        } else if (this.state.form.arena === '프린세스 아레나') {
+          return Math.ceil(10000*Number(obj['PrincessCnt']['N'])/allprincess)/100;
+        } else {
+          let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
+          let net = allbattle + allprincess;
+          return Math.ceil(10000*cnt/net)/100;
+        }
       } else {
-        let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
-        let net = allbattle + allprincess;
-        return Math.ceil(10000*cnt/net)/100;
-      }
-    } else {
-      if (this.state.form.arena === '배틀 아레나') {
-        return Math.ceil(10000*Number(obj['BattleWin']['N'])/Number(obj['BattleCnt']['N']))/100;
-      } else if (this.state.form.arena === '프린세스 아레나') {
-        return Math.ceil(10000*Number(obj['PrincessWin']['N'])/Number(obj['PrincessCnt']['N']))/100;
-      } else {
-        let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
-        let net = Number(obj['BattleWin']['N']) + Number(obj['PrincessWin']['N']);
-        return Math.ceil(10000*net/cnt)/100;
+        if (this.state.form.arena === '배틀 아레나') {
+          return Math.ceil(10000*Number(obj['BattleWin']['N'])/Number(obj['BattleCnt']['N']))/100;
+        } else if (this.state.form.arena === '프린세스 아레나') {
+          return Math.ceil(10000*Number(obj['PrincessWin']['N'])/Number(obj['PrincessCnt']['N']))/100;
+        } else {
+          let cnt = Number(obj['BattleCnt']['N']) + Number(obj['PrincessCnt']['N']);
+          let net = Number(obj['BattleWin']['N']) + Number(obj['PrincessWin']['N']);
+          return Math.ceil(10000*net/cnt)/100;
+        }
       }
     }
   }
@@ -205,84 +238,166 @@ export class MobStat extends React.Component {
     let dchar = {};
     let dduo = {};
     let dtrio = {};
-    if (this.state.form.target === '공격') {
-      for (let i in res) {
-        let tmp;
-        switch (res[i]['PropertyName']['S']) {
-          case 'attackChars':
-            tmp = res[i]['Stats']['L'];
-            for (let s in tmp) {
-              achar[tmp[s]['M']['Character']['S']] = {
-                entity: tmp[s]['M']['Character']['S'],
-                val: this.getValue(tmp[s]['M'])
-              };
-            }
-            charset = sortProperties(achar, 'val', true, true);
-            break;
-          case 'attackDuos':
-            tmp = res[i]['Stats']['L'];
-            for (let s in tmp) {
-              aduo[tmp[s]['M']['Deck']['S']] = {
-                entity: tmp[s]['M']['Deck']['S'],
-                val: this.getValue(tmp[s]['M'])
-              };
-            }
-            duoset = sortProperties(aduo, 'val', true, true);
-            break;
-          case 'attackTrios':
-            tmp = res[i]['Stats']['L'];
-            for (let s in tmp) {
-              atrio[tmp[s]['M']['Deck']['S']] = {
-                entity: tmp[s]['M']['Deck']['S'],
-                val: this.getValue(tmp[s]['M'])
-              };
-            }
-            trioset = sortProperties(atrio, 'val', true, true);
-            break;
-          default:
-            break;
+    if (this.state.form.date == '21일 이내') {
+      if (this.state.form.target === '공격') {
+        for (let i in res) {
+          let tmp;
+          switch (res[i]['PropertyName']['S']) {
+            case 'attackChars':
+              tmp = res[i]['Stats']['L'];
+              for (let s in tmp) {
+                achar[tmp[s]['M']['Character']['S']] = {
+                  entity: tmp[s]['M']['Character']['S'],
+                  val: this.getValue(tmp[s]['M'])
+                };
+              }
+              charset = sortProperties(achar, 'val', true, true);
+              break;
+            case 'attackDuos':
+              tmp = res[i]['Stats']['L'];
+              for (let s in tmp) {
+                aduo[tmp[s]['M']['Deck']['S']] = {
+                  entity: tmp[s]['M']['Deck']['S'],
+                  val: this.getValue(tmp[s]['M'])
+                };
+              }
+              duoset = sortProperties(aduo, 'val', true, true);
+              break;
+            case 'attackTrios':
+              tmp = res[i]['Stats']['L'];
+              for (let s in tmp) {
+                atrio[tmp[s]['M']['Deck']['S']] = {
+                  entity: tmp[s]['M']['Deck']['S'],
+                  val: this.getValue(tmp[s]['M'])
+                };
+              }
+              trioset = sortProperties(atrio, 'val', true, true);
+              break;
+            default:
+              break;
+          }
         }
       }
-    }
-    if (this.state.form.target === '방어') {
-      for (let i in res) {
-        let tmp;
-        switch (res[i]['PropertyName']['S']) {
-          case 'defenseChars':
-            tmp = res[i]['Stats']['L'];
-            for (let s in tmp) {
-              dchar[tmp[s]['M']['Character']['S']] = {
-                entity: tmp[s]['M']['Character']['S'],
-                val: this.getValue(tmp[s]['M'])
-              };
-            }
-            charset = sortProperties(dchar, 'val', true, true);
-            break;
-          case 'defenseDuos':
-            tmp = res[i]['Stats']['L'];
-            for (let s in tmp) {
-              dduo[tmp[s]['M']['Deck']['S']] = {
-                entity: tmp[s]['M']['Deck']['S'],
-                val: this.getValue(tmp[s]['M'])
-              };
-            }
-            duoset = sortProperties(dduo, 'val', true, true);
-            break;
-          case 'defenseTrios':
-            tmp = res[i]['Stats']['L'];
-            for (let s in tmp) {
-              dtrio[tmp[s]['M']['Deck']['S']] = {
-                entity: tmp[s]['M']['Deck']['S'],
-                val: this.getValue(tmp[s]['M'])
-              };
-            }
-            trioset = sortProperties(dtrio, 'val', true, true);
-            break;
-          default:
-            break;
+      if (this.state.form.target === '방어') {
+        for (let i in res) {
+          let tmp;
+          switch (res[i]['PropertyName']['S']) {
+            case 'defenseChars':
+              tmp = res[i]['Stats']['L'];
+              for (let s in tmp) {
+                dchar[tmp[s]['M']['Character']['S']] = {
+                  entity: tmp[s]['M']['Character']['S'],
+                  val: this.getValue(tmp[s]['M'])
+                };
+              }
+              charset = sortProperties(dchar, 'val', true, true);
+              break;
+            case 'defenseDuos':
+              tmp = res[i]['Stats']['L'];
+              for (let s in tmp) {
+                dduo[tmp[s]['M']['Deck']['S']] = {
+                  entity: tmp[s]['M']['Deck']['S'],
+                  val: this.getValue(tmp[s]['M'])
+                };
+              }
+              duoset = sortProperties(dduo, 'val', true, true);
+              break;
+            case 'defenseTrios':
+              tmp = res[i]['Stats']['L'];
+              for (let s in tmp) {
+                dtrio[tmp[s]['M']['Deck']['S']] = {
+                  entity: tmp[s]['M']['Deck']['S'],
+                  val: this.getValue(tmp[s]['M'])
+                };
+              }
+              trioset = sortProperties(dtrio, 'val', true, true);
+              break;
+            default:
+              break;
+          }
         }
       }
-    }
+     } else if (this.state.form.date == '7일 이내') {
+        if (this.state.form.target === '공격') {
+          for (let i in res) {
+            let tmp;
+            switch (res[i]['PropertyName']['S']) {
+              case 'attackCharsWeek':
+                tmp = res[i]['Stats']['L'];
+                for (let s in tmp) {
+                  achar[tmp[s]['M']['Character']['S']] = {
+                    entity: tmp[s]['M']['Character']['S'],
+                    val: this.getValue(tmp[s]['M'])
+                  };
+                }
+                charset = sortProperties(achar, 'val', true, true);
+                break;
+              case 'attackDuosWeek':
+                tmp = res[i]['Stats']['L'];
+                for (let s in tmp) {
+                  aduo[tmp[s]['M']['Deck']['S']] = {
+                    entity: tmp[s]['M']['Deck']['S'],
+                    val: this.getValue(tmp[s]['M'])
+                  };
+                }
+                duoset = sortProperties(aduo, 'val', true, true);
+                break;
+              case 'attackTriosWeek':
+                tmp = res[i]['Stats']['L'];
+                for (let s in tmp) {
+                  atrio[tmp[s]['M']['Deck']['S']] = {
+                    entity: tmp[s]['M']['Deck']['S'],
+                    val: this.getValue(tmp[s]['M'])
+                  };
+                }
+                trioset = sortProperties(atrio, 'val', true, true);
+                break;
+              default:
+                break;
+            }
+          }
+        }
+        if (this.state.form.target === '방어') {
+          for (let i in res) {
+            let tmp;
+            switch (res[i]['PropertyName']['S']) {
+              case 'defenseCharsWeek':
+                tmp = res[i]['Stats']['L'];
+                for (let s in tmp) {
+                  dchar[tmp[s]['M']['Character']['S']] = {
+                    entity: tmp[s]['M']['Character']['S'],
+                    val: this.getValue(tmp[s]['M'])
+                  };
+                }
+                charset = sortProperties(dchar, 'val', true, true);
+                break;
+              case 'defenseDuosWeek':
+                tmp = res[i]['Stats']['L'];
+                for (let s in tmp) {
+                  dduo[tmp[s]['M']['Deck']['S']] = {
+                    entity: tmp[s]['M']['Deck']['S'],
+                    val: this.getValue(tmp[s]['M'])
+                  };
+                }
+                duoset = sortProperties(dduo, 'val', true, true);
+                break;
+              case 'defenseTriosWeek':
+                tmp = res[i]['Stats']['L'];
+                for (let s in tmp) {
+                  dtrio[tmp[s]['M']['Deck']['S']] = {
+                    entity: tmp[s]['M']['Deck']['S'],
+                    val: this.getValue(tmp[s]['M'])
+                  };
+                }
+                trioset = sortProperties(dtrio, 'val', true, true);
+                break;
+              default:
+                break;
+            }
+          }
+        }
+      }
+    
     loaded = true;
     this.forceUpdate();
   }
@@ -420,8 +535,8 @@ export class MobStat extends React.Component {
         검색 설정
       </h2>
       <h3 style={smallText} className="ten">
-        <Form ref="form">
-          <Form.Row align="left">
+      <Form ref="form">
+          <Form.Row className="stat" align="left">
             <Form.Group as={Col} controlId="formGridPosition">
               <Form.Label>덱 유형</Form.Label>
               <Form.Control name="target" onChange={this.inputHandler} as="select">
@@ -429,19 +544,26 @@ export class MobStat extends React.Component {
                 <option>공격</option>
               </Form.Control>
             </Form.Group>
-            <Form.Group as={Col} controlId="formGridPosition">
+            <Form.Group as={Col} controlId="formGridPosition2">
               <Form.Label>결과</Form.Label>
               <Form.Control name="type" onChange={this.inputHandler} as="select">
                 <option>적폐</option>
                 <option>사기</option>
               </Form.Control>
             </Form.Group>
-            <Form.Group as={Col} controlId="formGridPosition">
+            <Form.Group as={Col} controlId="formGridPosition3">
               <Form.Label>아레나</Form.Label>
               <Form.Control name="arena" onChange={this.inputHandler} as="select">
                 <option>전체</option>
                 <option>배틀 아레나</option>
                 <option>프린세스 아레나</option>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridPosition4">
+              <Form.Label>기간</Form.Label>
+              <Form.Control name="date" onChange={this.inputHandler} as="select">
+                <option>7일 이내</option>
+                <option>21일 이내</option>
               </Form.Control>
             </Form.Group>
           </Form.Row>

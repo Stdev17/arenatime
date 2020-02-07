@@ -214,7 +214,7 @@ export class Register extends React.Component {
       this.errorShow();
       return false;
     }
-    if (!(this.state.form.attackPower < 70000)) {
+    if (!(this.state.form.attackPower < 100000)) {
       this.errorShow();
       return false;
     }
@@ -222,7 +222,7 @@ export class Register extends React.Component {
       this.errorShow();
       return false;
     }
-    if (!(this.state.form.defensePower < 70000)) {
+    if (!(this.state.form.defensePower < 100000)) {
       this.errorShow();
       return false;
     }

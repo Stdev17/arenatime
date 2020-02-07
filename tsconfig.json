@@ -6,7 +6,7 @@
       "checkJs": false,
       "jsx": "react",
       "outDir": "./build",
-      "rootDir": "./src",
+      "rootDir": ".",
       "removeComments": true,
       "noEmit": true,
       "pretty": true,
@@ -20,11 +20,11 @@
     "out": "docs"
   },
   "include": [
-      "./src/lambda/*"
+      "src/lambda/*"
   ],
   "exclude": [
       "node_modules",
-      "./src/util"
+      "src/util"
   ],
   "typeRoots": [
     "../node_modules/@types",

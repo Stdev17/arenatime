@@ -17,13 +17,13 @@ function validateProperties(f: any): boolean {
   if (!(f.attackPower > 100) && f.attackPower !== 0) {
     return false;
   }
-  if (!(f.attackPower < 70000)) {
+  if (!(f.attackPower < 100000)) {
     return false;
   }
   if (!(f.defensePower > 100) && f.defensePower !== 0) {
     return false;
   }
-  if (!(f.defensePower < 70000)) {
+  if (!(f.defensePower < 100000)) {
     return false;
   }
   //Arena

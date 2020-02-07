@@ -315,6 +315,8 @@ export class MobPart extends React.Component {
         {'부분 검색은 2, 3명 조합만 가능합니다.'}
         <br/>
         {'최대 50개까지만 표시됩니다.'}
+        <br/>
+        {'최대 10초 이상 소요될 수 있습니다.'}
       </p>
       <h2 style={subText} className="ten">
         검색 설정

@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1916692d1180ec8e0ab0476bb75b0335",
+    "revision": "8ee8df1dec04c022bae48642fdeb0a7c",
     "url": "/arenatime/index.html"
   },
   {
-    "revision": "9ccc26c87c87cb73552f",
+    "revision": "2d0d3ecdfae835338e47",
     "url": "/arenatime/static/css/2.7f84d840.chunk.css"
   },
   {
-    "revision": "e1e2e8fc8d27e41d06f8",
+    "revision": "ba4d61025f73bb31a8fd",
     "url": "/arenatime/static/css/main.75eb80bc.chunk.css"
   },
   {
-    "revision": "9ccc26c87c87cb73552f",
-    "url": "/arenatime/static/js/2.b3a0d6b9.chunk.js"
+    "revision": "2d0d3ecdfae835338e47",
+    "url": "/arenatime/static/js/2.e1b2fcb2.chunk.js"
   },
   {
-    "revision": "e1e2e8fc8d27e41d06f8",
-    "url": "/arenatime/static/js/main.8292a52e.chunk.js"
+    "revision": "ba4d61025f73bb31a8fd",
+    "url": "/arenatime/static/js/main.c956ce9b.chunk.js"
   },
   {
     "revision": "0803dd4244798aaf2acd",

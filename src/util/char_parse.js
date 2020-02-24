@@ -7,18 +7,28 @@ var char = {
     "쥰": "Jyun",
     //
     "카오리": "Kaori",
-    //
+    "신레이": "NewRei",
+    "뉴레이": "NewRei",
+    "레이(새해)": "NewRei",
+    "레이(신년)": "NewRei",
     "페코린느": "Pekorinne",
     "루카": "Ruka",
     "노조미": "Nozomi",
     "무이미": "Muimi",
     "마코토": "Makoto",
-    //
+    "뉴요리": "NewHiyori",
+    "히요리(새해)": "NewHiyori",
+    "히요리(신년)": "NewHiyori",
     //
     "아키노": "Akino",
     "마츠리": "Matsuri",
-    //
-    //
+    "발리코": "ValentineEriko",
+    "발렌타인에리코": "ValentineEriko",
+    "에리코(발렌타인)": "ValentineEriko",
+    "성야네": "ChristmasAyane",
+    "크야네": "ChristmasAyane",
+    "아야네(성탄절)": "ChristmasAyane",
+    "아야네(크리스마스)": "ChristmasAyane",
     "츠무기": "Tsumugi",
     "히요리": "Hiyori",
     "미소기": "Misogi",
@@ -37,11 +47,16 @@ var char = {
     "레이": "Rei",
     "시즈루": "Shizuru",
     "크리스티나": "Christina",
-    //
+    "성루미": "ChristmasKurumi",
+    "크루미": "ChristmasKurumi",
+    "쿠루미(성탄절)": "ChristmasKurumi",
+    "쿠루미(크리스마스)": "ChristmasKurumi",
     //중열
     "미미": "Mimi",
     "시노부": "Shinobu",
-    //
+    "발즈루": "ValentineShizuru",
+    "발렌타인시즈루": "ValentineShizuru",
+    "시즈루(발렌타인)": "ValentineShizuru",
     "마히루": "Mahiru",
     "유카리": "Yukari",
     "모니카": "Monika",
@@ -87,11 +102,16 @@ var char = {
     "카스미": "Kasumi",
     "미사토": "Misato",
     "나나카": "Nanaka",
-    //
+    "뉴이": "NewYui",
+    "유이(새해)": "NewYui",
+    "유이(신년)": "NewYui",
     "캬루": "Kyaru",
     "하츠네": "Hatsune",
     "미사키": "Misaki",
     //
+    "성치카": "ChirstmasChika",
+    "치카(성탄절)": "ChirstmasChika",
+    "치카(크리스마스)": "ChirstmasChika",
     "수즈메": "SummerSuzume",
     "수영복스즈메": "SummerSuzume",
     "스즈메(여름)": "SummerSuzume",

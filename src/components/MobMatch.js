@@ -25,7 +25,7 @@ import {
 import { Redirect } from 'react-router-dom';
 import char from '../util/char';
 import { dist } from '../util/distance.ts';
-import { getCoord } from './Block.tsx';
+import { getCoord, Yblank } from './Block.tsx';
 
 import '../css/daum.css';
 import '../css/mobile.css';
@@ -90,7 +90,7 @@ class Slot extends React.Component {
     if (this.props.character === "Empty") {
       this.setState({
         x: 1100,
-        y: 760
+        y: Yblank
       });
     } else {
       let c = this.props.character;

@@ -9,7 +9,7 @@ import { getChar } from '../util/distance.ts';
 var netX = 0;
 var netY = 0;
 var col = 10;
-var char = 70;
+var char = 77;
 
 function getX() {
   netX += 1;
@@ -35,7 +35,7 @@ export class Cutter extends Component {
     netX = 0;
     netY = 0;
     return (
-      <Stage width={767} height={480}>
+      <Stage width={767} height={545}>
         <Layer>
           {c.map((value, index) => {
             return <Block character={value} party={this.state.p} setX={getX()} setY={getY()} scale={57} key={index}/>

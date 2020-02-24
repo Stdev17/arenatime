@@ -13,7 +13,7 @@ import {
 import '../css/daum.css';
 import '../css/mobile.css';
 
-import { getCoord } from './Block.tsx';
+import { getCoord, Yblank } from './Block.tsx';
 import char from '../util/char';
 import { path } from '../util/dummy';
 
@@ -38,7 +38,7 @@ class Slot extends React.Component {
     if (this.props.character === "Empty") {
       this.setState({
         x: 1100,
-        y: 760
+        y: Yblank
       });
     } else {
       let c = this.props.character;
@@ -61,7 +61,7 @@ class Slot extends React.Component {
       if (newProps.character === "Empty") {
         this.setState({
           x: 1100,
-          y: 760
+          y: Yblank
         });
       } else {
         let c = newProps.character;

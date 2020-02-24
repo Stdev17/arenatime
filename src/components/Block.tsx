@@ -26,6 +26,8 @@ interface IBlockState {
   opacity: number
 }
 
+export const Yblank = 988;
+
 export class Block extends React.Component<IBlockProps, IBlockState> {
   constructor(props: any) {
     super(props);
@@ -128,7 +130,7 @@ export class Block extends React.Component<IBlockProps, IBlockState> {
 
 export function getCoord(num: number) {
   let x: number = (((num-1) % 8) * 76) * 2;
-  let y: number = (Math.floor((num-1) / 8) % 11) * 76;
+  let y: number = (Math.floor((num-1) / 8) % 14) * 76;
   let res: coord = {XCoord: x, YCoord: y};
   return res;
 }

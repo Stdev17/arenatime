@@ -9,7 +9,7 @@ import '../css/daum.css';
 import '../css/text.css';
 
 import { sort } from './Party.js';
-import { getCoord } from './Block.tsx';
+import { getCoord, Yblank } from './Block.tsx';
 import char from '../util/char';
 
 import primeChar from '../util/prime';
@@ -32,7 +32,7 @@ class Slot extends React.Component {
     if (this.props.character === "Empty") {
       this.setState({
         x: 1100,
-        y: 760
+        y: Yblank
       });
     } else {
       let c = this.props.character;
@@ -55,7 +55,7 @@ class Slot extends React.Component {
       if (newProps.character === "Empty") {
         this.setState({
           x: 1100,
-          y: 760
+          y: Yblank
         });
       } else {
         let c = newProps.character;

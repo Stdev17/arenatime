@@ -9,7 +9,7 @@ import { getChar } from '../util/distance.ts';
 var netX = 0;
 var netY = 0;
 var col = 7;
-var char = 70;
+var char = 77;
 
 function getX() {
   netX += 1;
@@ -35,7 +35,7 @@ export class MobCutter extends Component {
     netX = 0;
     netY = 0;
     return (
-      <Stage width={400} height={550}>
+      <Stage width={400} height={610}>
         <Layer>
           {c.map((value, index) => {
             return <Block character={value} party={this.state.p} setX={getX()} setY={getY()} scale={47} key={index}/>

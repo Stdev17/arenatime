@@ -10,7 +10,7 @@ module.exports = {
     },
     testMatch: [
         //'<rootDir>/*.spec.(js|jsx|ts|tsx)',
-        '<rootDir>/src/util/*.spec.(js|jsx|ts|tsx)',
+        '<rootDir>/src/lambda/*.spec.(js|jsx|ts|tsx)',
         '<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))'
     ],
     transformIgnorePatterns: ['<rootDir>/node_modules/'],

@@ -20,8 +20,12 @@ export const handler = async (event: any, context: any): Promise<any> => {
 
   const res: any = await dynamoQuery(params)
     .then((data: any) => {
+      let status = 200;
+      if (data.Count === 0) {
+        status = 404;
+      }
       const response = {
-        statusCode: 200,
+        statusCode: status,
         body: JSON.stringify({
           message: data,
           runtime: context,
@@ -36,7 +40,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
     })
     .catch(() => {
       const response = {
-        statusCode: 400,
+        statusCode: 500,
         body: JSON.stringify({
           message: 'Failed Comment Read',
           runtime: context,

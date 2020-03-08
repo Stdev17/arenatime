@@ -3,10 +3,7 @@ import * as dynamo from '../util/dynamo';
 
 const { dynamoQuery } = dynamo;
 
-const invalidEvent = {
-  queryStringParameters: ['invalid'],
-};
-const validEvent = {
+const testEvent = {
   queryStringParameters: ['valid'],
 };
 const context = {};
@@ -18,22 +15,47 @@ describe('getComment는', () => {
       Count: 2,
       ScannedCount: 2,
     };
-    const spy = jest.spyOn(dynamo, 'dynamoQuery').mockImplementation(params => {
-      return Promise.resolve(response);
+    const spy = jest.spyOn(dynamo, 'dynamoQuery');
+    beforeAll(() => {
+      spy.mockImplementation(params => {
+        return Promise.resolve(response);
+      });
     });
 
     test('코멘트 테이블에 해당 매치가 있으면 1개 이상의 코멘트를 받아 온다', async done => {
-      const res = await handler(validEvent, context);
+      const res = await handler(testEvent, context);
       const count: number = JSON.parse(res.body).message.Count;
       console.log(res);
-      expect(spy).toHaveBeenCalled();
       expect(count).toBe(2);
       done();
     });
     test('200을 반환한다', async done => {
-      const res = await handler(validEvent, context);
+      const res = await handler(testEvent, context);
       const status: number = res.statusCode;
       expect(status).toBe(200);
+      done();
+    });
+    afterAll(() => {
+      spy.mockRestore();
+    });
+  });
+  describe('실패할 시', () => {
+    test('결과가 없으면 404를 반환한다', async done => {
+      const res = await handler(testEvent, context);
+      const status: number = res.statusCode;
+      expect(status).toBe(404);
+      done();
+    });
+    test('에러가 생기면 500을 반환한다', async done => {
+      const spy = jest
+        .spyOn(dynamo, 'dynamoQuery')
+        .mockImplementation(params => {
+          return Promise.reject(new Error());
+        });
+      const res = await handler(testEvent, context);
+      const status: number = res.statusCode;
+      expect(status).toBe(500);
+      spy.mockRestore();
       done();
     });
   });

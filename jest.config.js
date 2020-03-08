@@ -1,24 +1,24 @@
 module.exports = {
-    moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'json'],
-    transform: {
-        '^.+\\.(js|jsx)?$': 'babel-jest',
-        '\\.ts$': ['ts-jest']
+  moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'json'],
+  transform: {
+    '^.+\\.(js|jsx)?$': 'babel-jest',
+    '\\.ts$': ['ts-jest'],
+  },
+  testEnvironment: 'node',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1',
+  },
+  testMatch: [
+    //'<rootDir>/*.spec.(js|jsx|ts|tsx)',
+    '<rootDir>/src/lambda/*.spec.(js|jsx|tsx)',
+    '<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))',
+  ],
+  transformIgnorePatterns: ['<rootDir>/node_modules/'],
+  globals: {
+    'ts-jest': {
+      diagnostics: false,
     },
-    testEnvironment: 'node',
-    moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/$1'
-    },
-    testMatch: [
-        //'<rootDir>/*.spec.(js|jsx|ts|tsx)',
-        '<rootDir>/src/lambda/*.spec.(js|jsx|ts|tsx)',
-        '<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))'
-    ],
-    transformIgnorePatterns: ['<rootDir>/node_modules/'],
-    globals: {
-        'ts-jest': {
-            diagnostics: false
-        }
-    }
+  },
 };
 /*
     collectCoverageFrom: ['src/@@/*.{js,jsx,ts,tsx}', '!src/@@/*.d.ts'],

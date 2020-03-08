@@ -1,27 +1,15 @@
-/* ***************** 
-*
-* fileName: Match
-* author: Leta
-* latestModified: 2019-07-30
-* Contact: https://github.com/Stdev17
-*
-********************/
+/* *****************
+ *
+ * fileName: Match
+ * author: Leta
+ * latestModified: 2019-07-30
+ * Contact: https://github.com/Stdev17
+ *
+ ********************/
 
 import React from 'react';
-import {
-  Form,
-  Col,
-  Button,
-  Modal,
-  Pagination
-} from 'react-bootstrap';
-import {
-  Stage,
-  Layer,
-  Image,
-  Group,
-  Text
-} from 'react-konva';
+import { Form, Col, Button, Modal, Pagination } from 'react-bootstrap';
+import { Stage, Layer, Image, Group, Text } from 'react-konva';
 import { Redirect } from 'react-router-dom';
 import char from '../util/char';
 import { dist } from '../util/distance.ts';
@@ -37,7 +25,7 @@ var fileType = require('file-type');
 var axios = require('axios');
 
 var fromSearch = false;
-var searchPath = "";
+var searchPath = '';
 var resultImageFile = null;
 var offset = 1;
 var max = 1;
@@ -48,22 +36,22 @@ const topicText = {
   fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 36,
-  fontColor: '#333333'
-}
+  fontColor: '#333333',
+};
 
 const subText = {
   fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 28,
-  fontColor: '#333333'
-}
+  fontColor: '#333333',
+};
 
 const smallText = {
   fontFamily: 'GyeonggiTitleM',
   fontStyle: 'normal',
   fontSize: 16,
-  fontColor: '#333333'
-}
+  fontColor: '#333333',
+};
 
 export function setSearchPath(str, f) {
   searchPath = str;
@@ -83,77 +71,77 @@ class Slot extends React.Component {
       image: null,
       x: getCoord(char.indexOf(c['char'])).XCoord,
       y: getCoord(char.indexOf(c['char'])).YCoord,
-      star: ""
+      star: '',
     };
   }
   setCoord() {
-    if (this.props.character === "Empty") {
+    if (this.props.character === 'Empty') {
       this.setState({
         x: 1100,
-        y: Yblank
+        y: Yblank,
       });
     } else {
       let c = this.props.character;
       this.setState({
         x: getCoord(char.indexOf(c['char'])).XCoord,
-        y: getCoord(char.indexOf(c['char'])).YCoord
+        y: getCoord(char.indexOf(c['char'])).YCoord,
       });
     }
-    let s = "";
+    let s = '';
     for (let i = 0; i < this.props.character['star']; i++) {
-      s += "★";
+      s += '★';
     }
     if (this.props.character['star'] < 6) {
       this.setState({
-        star: s
+        star: s,
       });
     }
   }
   componentDidMount() {
     const image = new window.Image();
-    image.src = "/arenatime/characters.jpg";
+    image.src = '/arenatime/characters.jpg';
     this.setCoord();
     image.onload = () => {
       // setState will redraw layer
       // because "image" property is changed
       this.setState({
-        image: image
+        image: image,
       });
     };
   }
   componentDidUpdate(oldProps) {
     const newProps = this.props;
-    if(newProps.character !== oldProps.character) {
+    if (newProps.character !== oldProps.character) {
       this.setCoord();
     }
   }
   render() {
     return (
       <Group>
-      <Image
-      x={this.props.setX+2}
-      y={2}
-      width={scale}
-      height={scale}
-      image={this.state.image}
-      crop = {{
-        x: this.state.x,
-        y: this.state.y,
-        width: 76,
-        height: 76
-      }}
-      stroke={'black'}
-      strokeWidth={2}
-      />
-      <Text
-      x={this.props.setX+2}
-      y={2+5+scale}
-      fontSize={14}
-      width={scale}
-      align='center'
-      fill={'#aaaa44'}
-      text={this.state.star}
-      />
+        <Image
+          x={this.props.setX + 2}
+          y={2}
+          width={scale}
+          height={scale}
+          image={this.state.image}
+          crop={{
+            x: this.state.x,
+            y: this.state.y,
+            width: 76,
+            height: 76,
+          }}
+          stroke={'black'}
+          strokeWidth={2}
+        />
+        <Text
+          x={this.props.setX + 2}
+          y={2 + 5 + scale}
+          fontSize={14}
+          width={scale}
+          align="center"
+          fill={'#aaaa44'}
+          text={this.state.star}
+        />
       </Group>
     );
   }
@@ -190,21 +178,21 @@ export class Match extends React.Component {
       downHighlighted: 0.5,
       imageWidth: 1124,
       imageHeight: 632,
-      upvotes: "",
-      downvotes: "",
-      attackPower: "",
-      defensePower: "",
+      upvotes: '',
+      downvotes: '',
+      attackPower: '',
+      defensePower: '',
       attackSorted: [],
       defenseSorted: [],
       link: false,
       fire: false,
       match: {},
-      date: "",
-      memo: "",
-      title_msg: "등록 중",
-      msg: "잠시만 기다려 주세요.",
+      date: '',
+      memo: '',
+      title_msg: '등록 중',
+      msg: '잠시만 기다려 주세요.',
       errShow: false,
-      comments: []
+      comments: [],
     };
 
     comments = [];
@@ -219,7 +207,7 @@ export class Match extends React.Component {
 
     this.checkSize = (w, h) => {
       let width, height;
-      let ratio = w/h;
+      let ratio = w / h;
       if (w > 1076) {
         width = 1076;
         height = 1076 / ratio;
@@ -232,16 +220,16 @@ export class Match extends React.Component {
       }
       this.setState({
         imageWidth: width,
-        imageHeight: height
-      })
+        imageHeight: height,
+      });
     };
   }
 
   updateOffset(num) {
     offset = num;
     comments = [];
-    for (let i = offset*unit-unit; i<offset*unit; i++) {
-      if (i > this.state.comments.length-1) {
+    for (let i = offset * unit - unit; i < offset * unit; i++) {
+      if (i > this.state.comments.length - 1) {
         break;
       }
       comments.push(this.state.comments[i]);
@@ -252,7 +240,7 @@ export class Match extends React.Component {
   inputHandler(e) {
     let eVal = e.target.value;
     this.setState({
-      memo: eVal
+      memo: eVal,
     });
   }
 
@@ -260,48 +248,48 @@ export class Match extends React.Component {
     if (this.props.match['imagePath']['S'] !== 'PlaceHolder') {
       return (
         <Image
-        x={1009}
-        y={54}
-        width={24}
-        height={24}
-        image={this.state.magImage}
-        onClick={this.goProfile}
-        onTap={this.goProfile}
-      />
+          x={1009}
+          y={54}
+          width={24}
+          height={24}
+          image={this.state.magImage}
+          onClick={this.goProfile}
+          onTap={this.goProfile}
+        />
       );
     }
   }
 
   getBack() {
     this.setState({
-      link: true
+      link: true,
     });
   }
 
   setVotes() {
     let uv, dv;
     if (this.state.match['upvotes']['N'] > 99) {
-      uv = "99+";
+      uv = '99+';
     } else {
-      uv = this.state.match['upvotes']['N'].toString()
+      uv = this.state.match['upvotes']['N'].toString();
     }
     if (this.state.match['downvotes']['N'] > 99) {
-      dv = "99+";
+      dv = '99+';
     } else {
-      dv = this.state.match['downvotes']['N'].toString()
+      dv = this.state.match['downvotes']['N'].toString();
     }
     this.setState({
       upvotes: uv,
-      downvotes: dv
+      downvotes: dv,
     });
   }
 
   getResult() {
     //
     this.setState({
-      fire: false
+      fire: false,
     });
-    if (searchPath === "") {
+    if (searchPath === '') {
       return;
     }
     (async _ => {
@@ -312,24 +300,24 @@ export class Match extends React.Component {
         url: mPath,
         params: str,
         headers: {
-          "Accept": "application/json"
-        }
+          Accept: 'application/json',
+        },
       });
       if (res.data.message === 'Getting Item Failed') {
-        searchPath = "";
+        searchPath = '';
         return;
       } else {
-        let msg = res.data.message;        
+        let msg = res.data.message;
         this.setState({
-          match: msg['Item']
+          match: msg['Item'],
         });
         if (res.data.vote === 'Upvoted') {
           this.setState({
-            upHighlighted: 1
+            upHighlighted: 1,
           });
         } else if (res.data.vote === 'Downvoted') {
           this.setState({
-            downHighlighted: 1
+            downHighlighted: 1,
           });
         }
       }
@@ -340,7 +328,7 @@ export class Match extends React.Component {
         let img = await axios({
           method: 'get',
           url: sPath,
-          params: str2
+          params: str2,
         });
         if (img.data.message === 'Getting Image Failed') {
           //
@@ -357,15 +345,15 @@ export class Match extends React.Component {
       const resImg = new window.Image();
       const delImg = new window.Image();
       //
-      let ap = "";
-      let dp = "";
+      let ap = '';
+      let dp = '';
       if (this.state.match['attackPower']['N'] > 0) {
-        ap = "투력 " + this.state.match['attackPower']['N'].toString();
-        dp = "투력 " + this.state.match['defensePower']['N'].toString();
+        ap = '투력 ' + this.state.match['attackPower']['N'].toString();
+        dp = '투력 ' + this.state.match['defensePower']['N'].toString();
       }
       this.setState({
         attackPower: ap,
-        defensePower: dp
+        defensePower: dp,
       });
       //
       let attackParty = [];
@@ -386,7 +374,7 @@ export class Match extends React.Component {
       let defs = this.state.match['defenseStar']['M'];
       this.setState({
         attackSorted: sort(attackParty.slice(), atts),
-        defenseSorted: sort(defenseParty.slice(), defs)
+        defenseSorted: sort(defenseParty.slice(), defs),
       });
 
       let result = this.state.match['matchResult']['S'];
@@ -404,75 +392,76 @@ export class Match extends React.Component {
       if (this.state.match['imagePath']['S'] !== 'PlaceHolder') {
         let fileMime = fileType(resultImageFile);
         if (fileMime.ext === 'png') {
-          resImg.src = 'data:image/png;base64,' + resultImageFile.toString('base64');
+          resImg.src =
+            'data:image/png;base64,' + resultImageFile.toString('base64');
         } else {
-          resImg.src = 'data:image/jpeg;base64,' + resultImageFile.toString('base64');
+          resImg.src =
+            'data:image/jpeg;base64,' + resultImageFile.toString('base64');
         }
         resImg.onload = () => {
           this.checkSize(resImg.width, resImg.height);
           this.setState({
-            resultImage: resImg
+            resultImage: resImg,
           });
         };
       }
       aImage.onload = () => {
         this.setState({
-          attackImage: aImage
+          attackImage: aImage,
         });
       };
       dImage.onload = () => {
         this.setState({
-          defenseImage: dImage
+          defenseImage: dImage,
         });
       };
       up.onload = () => {
         this.setState({
-          upImage: up
+          upImage: up,
         });
       };
       down.onload = () => {
         this.setState({
-          downImage: down
+          downImage: down,
         });
       };
       delImg.onload = () => {
         this.setState({
-          deleteImage: delImg
+          deleteImage: delImg,
         });
       };
       this.setState({
-        date: (this.state.match['uploadedDate']['S']).replace(/\s(\S)+/, "")
+        date: this.state.match['uploadedDate']['S'].replace(/\s(\S)+/, ''),
       });
       this.setComment();
     })();
   }
 
-
   showResult() {
     if (this.state.link) {
       if (fromSearch) {
-        return <Redirect to='/search'/>
+        return <Redirect to="/search" />;
       } else {
-        return <Redirect to='/part'/>
+        return <Redirect to="/part" />;
       }
     }
     if (this.state.match['imagePath']['S'] !== 'PlaceHolder') {
       return (
         <div>
-        <p style={subText} className="ten">
-          {'결과 이미지'}
-        </p>
-        <Stage width={1076} height={this.state.imageHeight}>
-          <Layer>
-            <Image
-              x={1}
-              y={0}
-              width={this.state.imageWidth}
-              height={this.state.imageHeight}
-              image={this.state.resultImage}
-            />
-          </Layer>
-        </Stage>
+          <p style={subText} className="ten">
+            {'결과 이미지'}
+          </p>
+          <Stage width={1076} height={this.state.imageHeight}>
+            <Layer>
+              <Image
+                x={1}
+                y={0}
+                width={this.state.imageWidth}
+                height={this.state.imageHeight}
+                image={this.state.resultImage}
+              />
+            </Layer>
+          </Stage>
         </div>
       );
     }
@@ -496,43 +485,41 @@ export class Match extends React.Component {
     return;
   }
 
-  checkMatch() {
+  checkMatch() {}
 
-  }
-
-  deleteMatch() {
-
-  }
+  deleteMatch() {}
 
   setComment() {
-
     let str = this.state.match['matchId']['S'];
     let mPath = path + 'api/get-comment';
-    (async _ => { 
+    (async _ => {
       let res = await axios({
         method: 'get',
         url: mPath,
         params: str,
         headers: {
-          Accept: "application/json"
-        }
+          Accept: 'application/json',
+        },
       });
+      if (res.data.statusCode === 500) {
+        return;
+      }
       if (res.data.message['Items'].length === 0) {
         return;
       }
       this.setState({
-        comments: res.data.message['Items']
+        comments: res.data.message['Items'],
       });
       comments = [];
-      max = Math.floor((res.data.message['Items'].length-1) / unit) + 1;
-      for (let i = offset*unit-unit; i<offset*unit; i++) {
-        if (i > this.state.comments.length-1) {
+      max = Math.floor((res.data.message['Items'].length - 1) / unit) + 1;
+      for (let i = offset * unit - unit; i < offset * unit; i++) {
+        if (i > this.state.comments.length - 1) {
           break;
         }
         comments.push(this.state.comments[i]);
       }
       this.setState({
-        comments: res.data.message['Items']
+        comments: res.data.message['Items'],
       });
       this.forceUpdate();
     })();
@@ -541,90 +528,109 @@ export class Match extends React.Component {
   showComment() {
     if (comments.length !== 0) {
       let items = [];
-      for (let num = offset-2; num <= offset+4; num++) {
+      for (let num = offset - 2; num <= offset + 4; num++) {
         if (num < 1) {
           continue;
         }
-        if (num > max || (num > 5 && num > offset+2)) {
+        if (num > max || (num > 5 && num > offset + 2)) {
           break;
         }
         items.push(
-          <Pagination.Item key={num} active={num === offset} onClick={() => this.updateOffset(num)}>
-            {num}           
+          <Pagination.Item
+            key={num}
+            active={num === offset}
+            onClick={() => this.updateOffset(num)}
+          >
+            {num}
           </Pagination.Item>,
         );
       }
       return (
         <div>
-        {comments.map((value, index) => {
-            return <Comment comment={value} setY={this.state.comments.indexOf(value)} matchId={this.state.match['matchId']['S']} key={index}/>
-        })}
-        <Pagination>
-        <Pagination.First onClick={() => {
-          offset = 1;
-          comments = [];
-          for (let i = offset*unit-unit; i<offset*unit; i++) {
-            if (i > this.state.comments.length-1) {
-              break;
-            }
-            comments.push(this.state.comments[i]);
-          }
-          this.forceUpdate();
-        }}/>
-        <Pagination.Prev onClick={() => {
-          if (offset > 1) {
-            offset -= 1;
-          }
-          comments = [];
-          for (let i = offset*unit-unit; i<offset*unit; i++) {
-            if (i > this.state.comments.length-1) {
-              break;
-            }
-            comments.push(this.state.comments[i]);
-          }
-          this.forceUpdate();
-        }}/>
-        <Pagination.Ellipsis />
-        {items}
-        <Pagination.Ellipsis />
-        <Pagination.Next onClick={() => {
-          if (offset < max) {
-            offset += 1;
-          }
-          comments = [];
-          for (let i = offset*unit-unit; i<offset*unit; i++) {
-            if (i > this.state.comments.length-1) {
-              break;
-            }
-            comments.push(this.state.comments[i]);
-          }
-          this.forceUpdate();
-        }}/>
-        <Pagination.Last onClick={() => {
-          offset = max;
-          comments = [];
-          for (let i = offset*unit-unit; i<offset*unit; i++) {
-            if (i > this.state.comments.length-1) {
-              break;
-            }
-            comments.push(this.state.comments[i]);
-          }
-          this.forceUpdate();
-        }}/>
-        </Pagination>
+          {comments.map((value, index) => {
+            return (
+              <Comment
+                comment={value}
+                setY={this.state.comments.indexOf(value)}
+                matchId={this.state.match['matchId']['S']}
+                key={index}
+              />
+            );
+          })}
+          <Pagination>
+            <Pagination.First
+              onClick={() => {
+                offset = 1;
+                comments = [];
+                for (let i = offset * unit - unit; i < offset * unit; i++) {
+                  if (i > this.state.comments.length - 1) {
+                    break;
+                  }
+                  comments.push(this.state.comments[i]);
+                }
+                this.forceUpdate();
+              }}
+            />
+            <Pagination.Prev
+              onClick={() => {
+                if (offset > 1) {
+                  offset -= 1;
+                }
+                comments = [];
+                for (let i = offset * unit - unit; i < offset * unit; i++) {
+                  if (i > this.state.comments.length - 1) {
+                    break;
+                  }
+                  comments.push(this.state.comments[i]);
+                }
+                this.forceUpdate();
+              }}
+            />
+            <Pagination.Ellipsis />
+            {items}
+            <Pagination.Ellipsis />
+            <Pagination.Next
+              onClick={() => {
+                if (offset < max) {
+                  offset += 1;
+                }
+                comments = [];
+                for (let i = offset * unit - unit; i < offset * unit; i++) {
+                  if (i > this.state.comments.length - 1) {
+                    break;
+                  }
+                  comments.push(this.state.comments[i]);
+                }
+                this.forceUpdate();
+              }}
+            />
+            <Pagination.Last
+              onClick={() => {
+                offset = max;
+                comments = [];
+                for (let i = offset * unit - unit; i < offset * unit; i++) {
+                  if (i > this.state.comments.length - 1) {
+                    break;
+                  }
+                  comments.push(this.state.comments[i]);
+                }
+                this.forceUpdate();
+              }}
+            />
+          </Pagination>
         </div>
       );
     }
   }
 
   putComment() {
-    if (this.state.memo !== "") {
+    if (this.state.memo !== '') {
       this.doComment('put');
     } else {
       this.setState({
         errShow: true,
-        title_msg: "등록 실패",
-        msg: "덧글을 입력해 주세요."
+        title_msg: '등록 실패',
+        msg: '덧글을 입력해 주세요.',
       });
     }
   }
@@ -635,39 +641,38 @@ export class Match extends React.Component {
     }
     this.setState({
       voting: true,
-      errShow: true
+      errShow: true,
     });
     let dat = {
       matchId: this.state.match['matchId']['S'],
       memo: this.state.memo,
-      action: param
-    }
+      action: param,
+    };
     let mPath = path + 'api/put-comment';
-    (async _ => { 
+    (async _ => {
       await axios({
         method: 'put',
         url: mPath,
         data: dat,
         headers: {
-          Accept: "application/json"
-        }
+          Accept: 'application/json',
+        },
       });
       this.setState({
         voting: false,
-        title_msg: "등록 완료",
-        msg: "덧글이 등록되었습니다."
+        title_msg: '등록 완료',
+        msg: '덧글이 등록되었습니다.',
       });
       this.setComment();
     })();
-    
   }
 
   upClicked() {
-    this.vote("up");
+    this.vote('up');
   }
 
   downClicked() {
-    this.vote("down");
+    this.vote('down');
   }
 
   vote(param) {
@@ -675,21 +680,21 @@ export class Match extends React.Component {
       return;
     }
     this.setState({
-      voting: true
+      voting: true,
     });
     let dat = {
       matchId: this.state.match['matchId']['S'],
-      vote: param
-    }
+      vote: param,
+    };
     let mPath = path + 'api/vote';
-    (async _ => { 
+    (async _ => {
       let res = await axios({
         method: 'put',
         url: mPath,
         data: dat,
         headers: {
-          Accept: "application/json"
-        }
+          Accept: 'application/json',
+        },
       });
       if (res.data.message === 'Vote Succeeded') {
         let v = res.data.vote;
@@ -698,33 +703,32 @@ export class Match extends React.Component {
           m['upvotes']['N'] = Number(m['upvotes']['N']) + 1;
           this.setState({
             upHighlighted: 1,
-            match: m
+            match: m,
           });
         } else if (v.up === 'unvote') {
           m['upvotes']['N'] = Number(m['upvotes']['N']) - 1;
           this.setState({
             upHighlighted: 0.5,
-            match: m
+            match: m,
           });
         }
         if (v.down === 'vote') {
           m['downvotes']['N'] = Number(m['downvotes']['N']) + 1;
           this.setState({
             downHighlighted: 1,
-            match: m
+            match: m,
           });
         } else if (v.down === 'unvote') {
           m['downvotes']['N'] = Number(m['downvotes']['N']) - 1;
           this.setState({
             downHighlighted: 0.5,
-            match: m
+            match: m,
           });
         }
         this.setState({
-          voting: false
+          voting: false,
         });
         this.setVotes();
-
       }
     })();
   }
@@ -740,131 +744,142 @@ export class Match extends React.Component {
   }
 
   render() {
-    if (searchPath === "" || this.state.match['matchId'] === undefined) {
+    if (searchPath === '' || this.state.match['matchId'] === undefined) {
       return (
         <div className="text">
-          <h1 style={topicText}>
-            대전 로드 중
-          </h1>
-        <h2 style={subText} className="twenty">
-          잠시만 기다려 주세요.
-        </h2>
+          <h1 style={topicText}>대전 로드 중</h1>
+          <h2 style={subText} className="twenty">
+            잠시만 기다려 주세요.
+          </h2>
         </div>
-      )
+      );
     }
     return (
       <div className="text">
-        <p style={topicText}>
-          {'대전 결과'}
-        </p>
+        <p style={topicText}>{'대전 결과'}</p>
         <Stage width={1124} height={122}>
-        <Layer>
-          {this.state.attackSorted.map((value, index) => {
-            return <Slot character={value} setX={getX()+attackDeckX} key={index}/>
-          })}
-          {this.state.defenseSorted.map((value, index) => {
-            return <Slot character={value} setX={getX()+defenseDeckX} key={index}/>
-          })}
-        </Layer>
-        <Layer>
-        <Image
-          x={0}
-          y={2}
-          width={110}
-          height={48}
-          image={this.state.attackImage}
-        />
-        <Image
-          x={525}
-          y={2}
-          width={110}
-          height={48}
-          image={this.state.defenseImage}
-        />
-        <Text
-          x={-5}
-          y={58}
-          fontSize={18}
-          width={120}
-          align='center'
-          text={this.state.attackPower}
-        />
-        <Text
-          x={520}
-          y={58}
-          fontSize={18}
-          width={120}
-          align='center'
-          text={this.state.defensePower}
-        />
-        <Text
-          x={804}
-          y={105}
-          fontSize={16}
-          width={160}
-          align='center'
-          text={this.state.date}
-        />
-        <Image
-          x={940}
-          y={103}
-          width={16}
-          height={16}
-          opacity={this.state.upHighlighted}
-          image={this.state.upImage}
-          onClick={this.upClicked}
-          onTap={this.upClicked}
-        />
-        <Image
-          x={1000}
-          y={105}
-          width={16}
-          height={16}
-          opacity={this.state.downHighlighted}
-          image={this.state.downImage}
-          onClick={this.downClicked}
-          onTap={this.downClicked}
-        />
-        <Text
-          x={953}
-          y={103}
-          fontSize={16}
-          width={48}
-          align='center'
-          text={this.state.upvotes}
-        />
-        <Text
-          x={1011}
-          y={103}
-          fontSize={16}
-          width={48}
-          align='center'
-          text={this.state.downvotes}
-        />
-        </Layer>
+          <Layer>
+            {this.state.attackSorted.map((value, index) => {
+              return (
+                <Slot
+                  character={value}
+                  setX={getX() + attackDeckX}
+                  key={index}
+                />
+              );
+            })}
+            {this.state.defenseSorted.map((value, index) => {
+              return (
+                <Slot
+                  character={value}
+                  setX={getX() + defenseDeckX}
+                  key={index}
+                />
+              );
+            })}
+          </Layer>
+          <Layer>
+            <Image
+              x={0}
+              y={2}
+              width={110}
+              height={48}
+              image={this.state.attackImage}
+            />
+            <Image
+              x={525}
+              y={2}
+              width={110}
+              height={48}
+              image={this.state.defenseImage}
+            />
+            <Text
+              x={-5}
+              y={58}
+              fontSize={18}
+              width={120}
+              align="center"
+              text={this.state.attackPower}
+            />
+            <Text
+              x={520}
+              y={58}
+              fontSize={18}
+              width={120}
+              align="center"
+              text={this.state.defensePower}
+            />
+            <Text
+              x={804}
+              y={105}
+              fontSize={16}
+              width={160}
+              align="center"
+              text={this.state.date}
+            />
+            <Image
+              x={940}
+              y={103}
+              width={16}
+              height={16}
+              opacity={this.state.upHighlighted}
+              image={this.state.upImage}
+              onClick={this.upClicked}
+              onTap={this.upClicked}
+            />
+            <Image
+              x={1000}
+              y={105}
+              width={16}
+              height={16}
+              opacity={this.state.downHighlighted}
+              image={this.state.downImage}
+              onClick={this.downClicked}
+              onTap={this.downClicked}
+            />
+            <Text
+              x={953}
+              y={103}
+              fontSize={16}
+              width={48}
+              align="center"
+              text={this.state.upvotes}
+            />
+            <Text
+              x={1011}
+              y={103}
+              fontSize={16}
+              width={48}
+              align="center"
+              text={this.state.downvotes}
+            />
+          </Layer>
         </Stage>
         {this.showResult()}
         {this.showMemo()}
         <div style={subText}>
-          <p className="ten">
-            {'덧글 목록'}
-          </p>
+          <p className="ten">{'덧글 목록'}</p>
           {this.showComment()}
-        <Form>
-          <Form.Row>
-            <Form.Group as={Col} controlId="formGridCity">
-              <Form.Label>덧글 입력</Form.Label>
-                <Form.Control as="textarea" name="memo" onChange={this.inputHandler} maxLength={200}/>
-            </Form.Group>
-          </Form.Row>
-        </Form>
+          <Form>
+            <Form.Row>
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label>덧글 입력</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name="memo"
+                  onChange={this.inputHandler}
+                  maxLength={200}
+                />
+              </Form.Group>
+            </Form.Row>
+          </Form>
         </div>
         <p style={subText} className="ten">
-          <Button variant='primary' onClick={this.putComment}>
+          <Button variant="primary" onClick={this.putComment}>
             {'덧글 등록'}
           </Button>
-          {"  "}
-          <Button variant='success' onClick={this.getBack}>
+          {'  '}
+          <Button variant="success" onClick={this.getBack}>
             {'돌아가기'}
           </Button>
         </p>
@@ -874,31 +889,26 @@ export class Match extends React.Component {
           dialogClassName="modal-web"
           aria-labelledby="example-custom-modal-styling-title"
         >
-
-            <Modal.Header>
-              <Modal.Title>
-                {this.state.title_msg}
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {this.state.msg}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="primary" onClick={this.errorHide}>확인</Button>
-            </Modal.Footer>
-
+          <Modal.Header>
+            <Modal.Title>{this.state.title_msg}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this.state.msg}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.errorHide}>
+              확인
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     );
   }
 }
 
-
 let netX = 0;
 
 function getX() {
   netX += 1;
-  return (((netX-1) % 5) * (72+10));
+  return ((netX - 1) % 5) * (72 + 10);
 }
 
 function sort(arr, stars) {
@@ -933,20 +943,20 @@ function sort(arr, stars) {
     star.push(0);
   }
   //
-  for (let i=0; i < dummy.length; i++) {
+  for (let i = 0; i < dummy.length; i++) {
     let max = 0;
-    let slot = "";
-    for (let j=0; j < tmp.length; j++) {
+    let slot = '';
+    for (let j = 0; j < tmp.length; j++) {
       if (max < dist[tmp[j]]) {
         max = dist[tmp[j]];
         slot = tmp[j];
       }
     }
-    res.push({'char': slot, 'star': star[i]});
+    res.push({ char: slot, star: star[i] });
     tmp.splice(tmp.indexOf(slot), 1);
   }
-  for (let i=res.length; i<5; i++) {
-    res.unshift("Empty");
+  for (let i = res.length; i < 5; i++) {
+    res.unshift('Empty');
   }
   return res;
 }

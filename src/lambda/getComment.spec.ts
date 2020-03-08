@@ -1,8 +1,6 @@
 import { handler } from './getComment';
 import * as dynamo from '../util/dynamo';
 
-const { dynamoQuery } = dynamo;
-
 const testEvent = {
   queryStringParameters: ['valid'],
 };
@@ -25,7 +23,6 @@ describe('getComment는', () => {
     test('코멘트 테이블에 해당 매치가 있으면 1개 이상의 코멘트를 받아 온다', async done => {
       const res = await handler(testEvent, context);
       const count: number = JSON.parse(res.body).message.Count;
-      console.log(res);
       expect(count).toBe(2);
       done();
     });

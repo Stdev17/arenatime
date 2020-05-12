@@ -1,17 +1,18 @@
 {
   "files": {
-    "main.css": "/arenatime/static/css/main.75eb80bc.chunk.css",
-    "main.js": "/arenatime/static/js/main.c956ce9b.chunk.js",
-    "main.js.map": "/arenatime/static/js/main.c956ce9b.chunk.js.map",
-    "runtime~main.js": "/arenatime/static/js/runtime~main.791c5b6c.js",
-    "runtime~main.js.map": "/arenatime/static/js/runtime~main.791c5b6c.js.map",
-    "static/css/2.7f84d840.chunk.css": "/arenatime/static/css/2.7f84d840.chunk.css",
-    "static/js/2.e1b2fcb2.chunk.js": "/arenatime/static/js/2.e1b2fcb2.chunk.js",
-    "static/js/2.e1b2fcb2.chunk.js.map": "/arenatime/static/js/2.e1b2fcb2.chunk.js.map",
+    "main.css": "/arenatime/static/css/main.e3b69ebf.chunk.css",
+    "main.js": "/arenatime/static/js/main.de66e738.chunk.js",
+    "main.js.map": "/arenatime/static/js/main.de66e738.chunk.js.map",
+    "runtime~main.js": "/arenatime/static/js/runtime~main.db6c03f6.js",
+    "runtime~main.js.map": "/arenatime/static/js/runtime~main.db6c03f6.js.map",
+    "static/css/2.9dafe002.chunk.css": "/arenatime/static/css/2.9dafe002.chunk.css",
+    "static/js/2.6ee684ea.chunk.js": "/arenatime/static/js/2.6ee684ea.chunk.js",
+    "static/js/2.6ee684ea.chunk.js.map": "/arenatime/static/js/2.6ee684ea.chunk.js.map",
     "index.html": "/arenatime/index.html",
-    "precache-manifest.1b2b8ab9379a80f59dea27ccfe2af78f.js": "/arenatime/precache-manifest.1b2b8ab9379a80f59dea27ccfe2af78f.js",
+    "precache-manifest.c542f708236d1ed4bcb72ec8bd47d92f.js": "/arenatime/precache-manifest.c542f708236d1ed4bcb72ec8bd47d92f.js",
     "service-worker.js": "/arenatime/service-worker.js",
-    "static/css/2.7f84d840.chunk.css.map": "/arenatime/static/css/2.7f84d840.chunk.css.map",
-    "static/css/main.75eb80bc.chunk.css.map": "/arenatime/static/css/main.75eb80bc.chunk.css.map"
+    "static/css/2.9dafe002.chunk.css.map": "/arenatime/static/css/2.9dafe002.chunk.css.map",
+    "static/css/main.e3b69ebf.chunk.css.map": "/arenatime/static/css/main.e3b69ebf.chunk.css.map",
+    "static/js/2.6ee684ea.chunk.js.LICENSE.txt": "/arenatime/static/js/2.6ee684ea.chunk.js.LICENSE.txt"
   }
 }

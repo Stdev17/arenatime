@@ -80,7 +80,7 @@
     "serialize-javascript": "^3.0.0",
     "serverless-optimizer-plugin": "^2.5.1",
     "serverless-plugin-existing-s3": "^2.4.0",
-    "set-value": "^3.0.1",
+    "set-value": "^4.0.1",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "^2.3.5",
     "ts-pnp": "1.1.2",

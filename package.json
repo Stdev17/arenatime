@@ -9,7 +9,7 @@
     "acorn": "^7.1.1",
     "athena-client": "^2.5.1",
     "athena-express": "^5.1.1",
-    "aws-sdk": "^2.635.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.19.2",
     "babel-eslint": "10.0.1",
     "babel-jest": "^25.1.0",

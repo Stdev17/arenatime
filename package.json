@@ -51,7 +51,7 @@
     "lodash.template": "^4.5.0",
     "mini-css-extract-plugin": "0.5.0",
     "mixin-deep": "^2.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "multimatch": "^4.0.0",
     "node-gzip": "^1.1.2",
     "nth-prime": "^1.0.4",

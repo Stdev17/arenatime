@@ -31,7 +31,7 @@
     "eslint-utils": "^1.4.3",
     "fetch": "^1.1.0",
     "file-loader": "3.0.1",
-    "file-type": "^12.4.2",
+    "file-type": "^16.5.4",
     "form-data": "^2.5.1",
     "fs": "0.0.1-security",
     "fs-extra": "7.0.1",
